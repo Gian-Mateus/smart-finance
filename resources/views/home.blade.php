@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Smart Finance</title>
+        <title>Smart Finance - @yield('title')</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,10 @@
         @vite(['resources/css/app.css','resources/js/app.js'])
 
     </head>
-    <body class="font-sans antialiased dark:bg-black dark:text-white/50">
+    <body class="font-sans antialiased">
        <x-sidebar/>
+       <main class="p-4 sm:ml-64">
+           @yield('content')
+       </main>
     </body>
 </html>
