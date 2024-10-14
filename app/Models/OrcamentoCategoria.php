@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class OrcamentoCategoria extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'categoria_id',
-        'valor_orcado',
-        'mes_referencia'
-    ];
+    // protected $fillable = [
+    //     'categoria_id',
+    //     'valor_orcado',
+    //     'mes_referencia'
+    // ];
 }

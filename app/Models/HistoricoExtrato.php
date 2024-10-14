@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class HistoricoExtrato extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'transacoes_id',
-        'data',
-        'nome_arquivo'
-    ];
+    // protected $fillable = [
+    //     'transacoes_id',
+    //     'data',
+    //     'nome_arquivo'
+    // ];
 }

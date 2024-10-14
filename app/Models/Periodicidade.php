@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Periodicidade extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'nome'
-    ];
+    // protected $fillable = [
+    //     'nome'
+    // ];
 }

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Configuration;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
@@ -60,5 +61,9 @@ class CategoriaController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function categorias(){
+        return view('configuracoes.categorias');
     }
 }

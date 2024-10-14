@@ -1,5 +1,5 @@
 @extends('home')
-@section('title', 'Importações')
+@section('title', ' - Importações')
 @section('content')
 <div class="container text-text">
     <form class="max-w-lg mx-auto">

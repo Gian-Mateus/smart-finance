@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Configuration;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class OrcamentoSubcategoriaController extends Controller
+class ConfigurationController extends Controller
 {
     /**
      * Display a listing of the resource.
