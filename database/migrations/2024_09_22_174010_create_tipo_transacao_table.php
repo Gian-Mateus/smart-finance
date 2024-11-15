@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipo_transacao', function (Blueprint $table) {
+        Schema::create('transaction_type', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->string('nome', 50); // nome VARCHAR(50) NOT NULL
+            $table->string('name', 50); // name VARCHAR(50) NOT NULL
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipo_transacao');
+        Schema::dropIfExists('transaction_type');
     }
 };

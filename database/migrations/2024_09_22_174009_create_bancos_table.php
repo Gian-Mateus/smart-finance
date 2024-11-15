@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bancos', function (Blueprint $table) {
+        Schema::create('banks', function (Blueprint $table) {
             $table->id();
-            $table->string('nome', 100);
-            $table->integer('agencia')->nullable();
-            $table->integer('conta')->nullable();
+            $table->string('name', 100);
+            $table->integer('agency')->nullable();
+            $table->integer('account')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bancos');
+        Schema::dropIfExists('banks');
     }
 };

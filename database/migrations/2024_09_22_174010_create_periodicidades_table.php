@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('periodicidade', function (Blueprint $table) {
+        Schema::create('periodicities', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->string('nome', 50); // nome VARCHAR(50) NOT NULL
-            $table->integer('intervalo')->nullable();
+            $table->string('name', 50); // name VARCHAR(50) NOT NULL
+            $table->integer('interval')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('periodicidades');
+        Schema::dropIfExists('periodicities');
     }
 };

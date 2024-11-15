@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transacoes', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->date('data'); // data DATE NOT NULL
-            $table->string('descricao', 255); // descricao VARCHAR(255) NOT NULL
-            $table->decimal('valor', 10, 2); // valor DECIMAL(10,2) NOT NULL
-            $table->text('observacao')->nullable(); // observacao TEXT NULL
-            $table->foreignId('subcategoria_id')->nullable()->constrained('subcategorias')->nullOnDelete(); // FOREIGN KEY subcategoria_id
-            $table->foreignId('periodicidade_id')->constrained('periodicidade'); // FOREIGN KEY periodicidade_id
-            $table->foreignId('tipo_transacao_id')->constrained('tipo_transacao'); // FOREIGN KEY tipo_transacao_id
-            $table->foreignId('banco_id')->constrained('bancos'); // FOREIGN KEY banco_id
+            $table->date('date'); // data DATE NOT NULL
+            $table->string('description', 255); // descricao VARCHAR(255) NOT NULL
+            $table->decimal('value', 10, 2); // valor DECIMAL(10,2) NOT NULL
+            $table->text('observation')->nullable(); // observacao TEXT NULL
+            $table->foreignId('subcategory_id')->nullable()->constrained('subcategories')->nullOnDelete(); // FOREIGN KEY subcategoria_id
+            $table->foreignId('periodicity_id')->constrained('periodicities'); // FOREIGN KEY periodicidade_id
+            $table->foreignId('transaction_type_id')->constrained('transaction_type'); // FOREIGN KEY tipo_transacao_id
+            $table->foreignId('bank_id')->constrained('banks'); // FOREIGN KEY banco_id
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transacaos');
+        Schema::dropIfExists('transactions');
     }
 };
