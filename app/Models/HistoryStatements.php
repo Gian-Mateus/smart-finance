@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Periodicidade extends Model
+class HistoryStatements extends Model
 {
     use HasFactory;
     // protected $fillable = [
-    //     'nome'
+    //     'transacoes_id',
+    //     'data',
+    //     'nome_arquivo'
     // ];
 }
