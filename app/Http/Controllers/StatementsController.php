@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ExtratoController extends Controller
+class StatementsController extends Controller
 {
     //
 }

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
+/* @layer base{
     :root {
         --primary: #C47AC0;
         --secondary: #E39EC1;
@@ -11,4 +11,4 @@
         --foreground-secondary: #77567A;
       }
 
-}
+} */

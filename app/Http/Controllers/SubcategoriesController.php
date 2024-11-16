@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Configuration;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class CategoriaController extends Controller
+class SubcategoriesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -61,9 +61,5 @@ class CategoriaController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-    public function categorias(){
-        return view('configuracoes.categorias');
     }
 }

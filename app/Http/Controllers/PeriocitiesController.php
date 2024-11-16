@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Configuration;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ConfigurationController extends Controller
+class PeriocitiesController extends Controller
 {
     /**
      * Display a listing of the resource.
