@@ -7,12 +7,15 @@ export default {
 		 "./vendor/robsontenorio/mary/src/View/Components/**/*.php"
     ],
     daisyui: {
-        themes: ["coffee"],
+        themes: ["cupcake"],
     },
+    safelist: [
+    'text-3xl',
+  ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Open Sans', 'sans-serif'],
+        sans: ['Nunito', 'sans-serif'],
       }
     },
   },

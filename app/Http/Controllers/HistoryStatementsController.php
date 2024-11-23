@@ -11,7 +11,7 @@ class HistoryStatementsController extends Controller
      */
     public function index()
     {
-        //
+        return view('statements.imports');
     }
 
     /**

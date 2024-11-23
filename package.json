@@ -15,5 +15,8 @@
         "prettier-plugin-tailwindcss": "^0.6.8",
         "tailwindcss": "^3.4.15",
         "vite": "^5.0"
+    },
+    "dependencies": {
+        "flatpickr": "^4.6.13"
     }
 }

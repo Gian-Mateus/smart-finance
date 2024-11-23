@@ -1,3 +1,3 @@
 <x-layouts.app>
-    <h1>Teste</h1>
+	<livewire:statements.statements />
 </x-layouts.app>

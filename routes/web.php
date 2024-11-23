@@ -38,7 +38,7 @@ Route::resource('tipos-transacoes', TransactionTypeController::class);
 Route::resource('categorias', CategoriesController::class);
 
 // Rota para Importação de Histórico de Extrato
-Route::get('/importacoes/historico', [HistoryStatementsController::class, 'importar'])->name('importacoes.historico-extrato');
+Route::get('/importacoes', [HistoryStatementsController::class, 'index'])->name('importacoes.historico-extrato');
 
 // Rota do Dashboard (Home)
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

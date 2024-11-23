@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
 
         User::factory()->create([
             'name' => 'Test User',
@@ -23,7 +22,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
                     CategoriesSeed::class,
                     SubcategoriesSeed::class,
-                    PeriodicitiesSeed::class
+                    PeriodicitiesSeed::class,
+                    BankSeeder::class
                 ]);
 
     }
