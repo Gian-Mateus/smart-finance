@@ -101,12 +101,12 @@
 	@endphp
 
 	<section class="p-4 bg-rose-950/90 max-w-3xl rounded-lg shadow-sm">
-        <x-header title="Importações" size="text-4xl" class="mb-3"/>
+        <x-mary-header title="Importações" size="text-4xl" class="mb-3"/>
         <div>
-            <x-table :headers="$headers" :rows="$extratoBancario" striped class="[&>thead]:text-lg [&>thead]:uppercase [&>thead]:text-slate-300 bg-base-100 rounded">
+            <x-mary-table :headers="$headers" :rows="$extratoBancario" striped class="[&>thead]:text-lg [&>thead]:uppercase [&>thead]:text-slate-300 bg-base-100 rounded">
 {{--                 @scope('headers_id', $headers)
                     {{ $headers['id'] }}
                 @endscope --}}
-            </x-table>
+            </x-mary-table>
         </div>
 	</section>

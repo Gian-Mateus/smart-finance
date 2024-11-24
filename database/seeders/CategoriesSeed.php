@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Categories;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CategoriesSeed extends Seeder
 {
@@ -30,7 +30,7 @@ class CategoriesSeed extends Seeder
         ];
 
         foreach($categories as $cat){
-            Categories::create([
+            Category::create([
                 'name' => $cat,
             ]);
         }

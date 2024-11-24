@@ -11,7 +11,7 @@ class TransactionsController
      */
     public function index()
     {
-        //
+        return view('transactions.index');
     }
 
     /**

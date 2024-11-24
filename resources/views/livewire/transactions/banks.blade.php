@@ -99,25 +99,25 @@
 	];
 
 @endphp
-    <x-tabs wire:model="selectedTab" label-class="text-2xl mt-3" selected="nubank-tab">
-		<x-tab name="nubank-tab" label="Nubank">
+    <x-mary-tabs wire:model="selectedTab" label-class="text-2xl mt-3" selected="nubank-tab">
+		<x-mary-tab name="nubank-tab" label="Nubank">
 
 			<form class="flex gap-6 p-6">
-				<x-datetime label="Dê" wire:model="myDate1" value="{{ now()->startOfMonth()->format('Y-m-d') }}" />
-				<x-datetime label="Até" wire:model="myDate1" value="{{ now()->endOfMonth()->format('Y-m-d') }}" />
+				<x-mary-datetime label="Dê" wire:model="myDate1" value="{{ now()->startOfMonth()->format('Y-m-d') }}" />
+				<x-mary-datetime label="Até" wire:model="myDate1" value="{{ now()->endOfMonth()->format('Y-m-d') }}" />
 
 				<div class="flex items-end">
-					<x-button type="submit" class="btn-square bg-base-content shadow-lg">
-						<x-icon name="o-magnifying-glass" class="text-base-100" />
-					</x-button>
+					<x-mary-button type="submit" class="btn-square bg-base-content shadow-lg">
+						<x-mary-icon name="o-magnifying-glass" class="text-base-100" />
+					</x-mary-button>
 				</div>
 			</form>
 
 			<div class="rounded-lg bg-base-300 p-4 shadow-lg">
-				<x-table :headers="$headers" :rows="$extratoBancario" striped
+				<x-mary-table :headers="$headers" :rows="$extratoBancario" striped
 					class="rounded [&>thead]:uppercase [&>thead]:text-base-content">
-				</x-table>
+				</x-mary-table>
 			</div>
-		</x-tab>
-	</x-tabs>
+		</x-mary-tab>
+	</x-mary-tabs>
 

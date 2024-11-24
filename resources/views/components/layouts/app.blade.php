@@ -15,64 +15,57 @@
 		@livewireStyles
 		@vite(['resources/css/app.css', 'resources/js/app.js'])
 
-		{{-- flatpickr --}}
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-		<script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
-		<script>
-			flatpickr.localize(flatpickr.l10ns.pt);
-		</script>
 	</head>
 
 	<body class="min-h-screen bg-base-200/50 font-sans antialiased dark:bg-base-200">
 		{{-- NAVBAR mobile only --}}
-		<x-nav sticky class="lg:hidden">
-			<x-slot:brand>
+		<x-mary-nav sticky class="lg:hidden">
+			<x-mary-slot:brand>
 				<div class="ml-5 pt-5 text-lg font-semibold">Smart Finance</div>
-			</x-slot:brand>
-			<x-slot:actions>
+			</x-mary-slot:brand>
+			<x-mary-slot:actions>
 				<label for="main-drawer" class="mr-3 lg:hidden">
-					<x-icon name="o-bars-3" class="cursor-pointer" />
+					<x-mary-icon name="o-bars-3" class="cursor-pointer" />
 				</label>
-			</x-slot:actions>
-		</x-nav>
+			</x-mary-slot:actions>
+		</x-mary-nav>
 
 		{{-- MAIN --}}
-		<x-main full-width>
+		<x-mary-main full-width>
 			{{-- SIDEBAR --}}
-			<x-slot:sidebar drawer="main-drawer" collapsible collapse-text="Ocultar" class="bg-base-100 lg:bg-inherit">
+			<x-mary-slot:sidebar drawer="main-drawer" collapsible collapse-text="Ocultar" class="bg-base-100 lg:bg-inherit">
 
 				{{-- BRAND --}}
 				<div class="ml-4 flex items-center pt-4">
-					<x-icon name="s-currency-dollar" class="w-10" />
-					<div class="px-2 font-bold">SMART FINANCE</div>
+					<x-mary-icon name="s-currency-dollar" class="w-10" />
+					<div class="px-mary-2 font-bold">SMART FINANCE</div>
 				</div>
 
 				{{-- MENU --}}
-				<x-menu activate-by-route>
-					<x-menu-item title="Dahsboard" icon="o-chart-pie" link="/" />
-					<x-menu-item title="Extrato" icon="c-arrows-up-down" link="{{ route('extrato.index') }}" />
-					<x-menu-item title="Recorrentes" icon="o-clock" link="/" />
-					<x-menu-item title="Importar arquivo" icon="o-document-arrow-up"
-						link="{{ route('importacoes.historico-extrato') }}" />
-					<x-menu-item title="Perfil" icon="o-user-circle" />
-					<x-menu-sub title="Configurações" icon="o-cog-6-tooth">
-						<x-menu-item title="Categorias/Subcategorias" icon="c-squares-plus" link="/" />
-						<x-menu-item title="Orçamentos" icon="o-document-currency-dollar" link="/" />
-						<x-menu-item title="Periodicidades" icon="m-calendar" link="/" />
-						<x-menu-item title="Tipos de Transção" icon="c-list-bullet" link="/" />
-					</x-menu-sub>
-				</x-menu>
-			</x-slot:sidebar>
+				<x-mary-menu activate-by-route>
+					<x-mary-menu-item title="Dahsboard" icon="o-chart-pie" link="/" />
+					<x-mary-menu-item title="Extrato" icon="c-arrows-up-down" link="{{ route('extratos.index') }}" />
+					<x-mary-menu-item title="Recorrentes" icon="o-clock" link="/" />
+					<x-mary-menu-item title="Importar arquivo" icon="o-document-arrow-up"
+						link="/" />
+					<x-mary-menu-item title="Perfil" icon="o-user-circle" />
+					<x-mary-menu-sub title="Configurações" icon="o-cog-6-tooth">
+						<x-mary-menu-item title="Bancos" icon="c-building-library" link="/" />
+						<x-mary-menu-item title="Categorias/Subcategorias" icon="c-squares-plus" link="/" />
+						<x-mary-menu-item title="Orçamentos" icon="o-document-currency-dollar" link="/" />
+						<x-mary-menu-item title="Periodicidades" icon="m-calendar" link="/" />
+					</x-mary-menu-sub>
+				</x-mary-menu>
+			</x-mary-slot:sidebar>
 
 			{{-- The `$slot` goes here --}}
-			<x-slot:content>
+			<x-mary-slot:content>
 				{{ isset($slot) ? $slot : 'Nada aqui' }}
-			</x-slot:content>
-		</x-main>
+			</x-mary-slot:content>
+		</x-mary-main>
 
 		{{-- Toast --}}
-		<x-toast />
+		<x-mary-toast />
 
 		@livewireScripts
 	</body>

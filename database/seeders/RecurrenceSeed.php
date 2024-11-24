@@ -1,11 +1,11 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\Periodicities;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\RecurrenceType;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class PeriodicitiesSeed extends Seeder
+class RecurrenceSeed extends Seeder
 {
     /**
      * Run the database seeds.
@@ -24,7 +24,7 @@ class PeriodicitiesSeed extends Seeder
         ];
 
         foreach($periodicities as $p){
-            Periodicities::create([
+            RecurrenceType::create([
                 'name' => $p
             ]);
         }
