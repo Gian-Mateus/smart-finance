@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('history_statements', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->foreignId('transaction_id')->constrained('transactions'); // FOREIGN KEY transacao_id
-            $table->date('date'); // data DATE NOT NULL
-            $table->string('archive_name', 50); // nome_arquivo VARCHAR(50) NOT NULL
+            $table->foreignId('user_id')->constrained('users'); // user_id INT NOT NULL
+            $table->string('name', 100); // name VARCHAR(100) NOT NULL
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('history_statements');
+        Schema::dropIfExists('categories');
     }
 };

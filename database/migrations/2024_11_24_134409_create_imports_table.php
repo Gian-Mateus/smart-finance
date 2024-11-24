@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories_budget', function (Blueprint $table) {
+        Schema::create('imports', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->foreignId('category_id')->constrained('categories'); // FOREIGN KEY categoria_id
-            $table->decimal('budgeted_amount', 10, 2); // valor_orcado DECIMAL(10,2) NOT NULL
-            $table->date('month_reference'); // mes_referencia DATE NOT NULL
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('file_name', 50); // nome_arquivo VARCHAR(50) NOT NULL
+            $table->string('file_type', 50); // tipo_arquivo VARCHAR(50) NOT NULL
+            $table->timestamp('imported_at');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories_budget');
+        Schema::dropIfExists('history_statements');
     }
 };

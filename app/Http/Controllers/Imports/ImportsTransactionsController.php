@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Imports;
 
 use Illuminate\Http\Request;
 
-class HistoryStatementsController extends Controller
+class ImportsTransactionsController
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('statements.imports');
+        //
     }
 
     /**

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Imports;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class TransactionTypeController extends Controller
+class ImportsController
 {
     /**
      * Display a listing of the resource.

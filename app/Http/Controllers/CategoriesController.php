@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class CategoriesController extends Controller
+class CategoriesController
 {
     /**
      * Display a listing of the resource.
@@ -61,9 +60,5 @@ class CategoriesController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-    public function categorias(){
-        return view('configuracoes.categorias');
     }
 }

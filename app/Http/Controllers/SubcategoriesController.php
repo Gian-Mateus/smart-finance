@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class SubcategoriesController extends Controller
+class SubcategoriesController
 {
     /**
      * Display a listing of the resource.

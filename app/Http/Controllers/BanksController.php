@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class SubcategoriesBudgetController extends Controller
+class BanksController
 {
     /**
      * Display a listing of the resource.

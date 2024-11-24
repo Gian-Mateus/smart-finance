@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaction_type', function (Blueprint $table) {
+        Schema::create('subcategories', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->string('name', 50); // name VARCHAR(50) NOT NULL
+            $table->foreignId('category_id')->constrained('categories'); // FOREIGN KEY (categories_id)
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('name', 100); // name VARCHAR(100) NOT NULL
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaction_type');
+        Schema::dropIfExists('subcategories');
     }
 };

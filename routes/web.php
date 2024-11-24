@@ -26,19 +26,4 @@ use App\Http\Controllers\Dashboard\DashboardController;
 */
 
 // Rotas Resource
-Route::resource('bancos', BankController::class);
-Route::resource('categorias', CategoriesController::class);
-Route::resource('extrato', StatementsController::class);
-Route::resource('historico-extratos', HistoryStatementsController::class);
-Route::resource('orcamento-categorias', CategoriesBudgetController::class);
-Route::resource('orcamento-subcategorias', SubcategoriesBudgetController::class);
-Route::resource('periodicidades', PeriocitiesController::class);
-Route::resource('subcategorias', SubcategoriesController::class);
-Route::resource('tipos-transacoes', TransactionTypeController::class);
-Route::resource('categorias', CategoriesController::class);
-
-// Rota para Importação de Histórico de Extrato
-Route::get('/importacoes', [HistoryStatementsController::class, 'index'])->name('importacoes.historico-extrato');
-
-// Rota do Dashboard (Home)
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::resource('');

@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->string('name', 100); // name VARCHAR(100) NOT NULL
-            $table->timestamps();
+        Schema::create('imports_transactions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('import_id')->constrained('imports');
+            $table->foreignId('transaction_id')->constrained('transactions');
         });
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('imports_transactions');
     }
 };
