@@ -31,6 +31,7 @@ class CategoriesSeed extends Seeder
 
         foreach($categories as $cat){
             Category::create([
+                'user_id' => 1,
                 'name' => $cat,
             ]);
         }

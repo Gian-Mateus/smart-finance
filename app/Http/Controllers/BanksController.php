@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bank;
 use Illuminate\Http\Request;
 
 class BanksController
@@ -11,7 +12,8 @@ class BanksController
      */
     public function index()
     {
-        //
+        $banks = Bank::all();
+        return view('bank.index', compact('banks'));
     }
 
     /**

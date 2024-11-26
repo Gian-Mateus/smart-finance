@@ -1,7 +1,11 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BanksController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TransactionsController;
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -9,11 +13,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     /** Route Home */
-    Route::get('/', function () {
-        return view('index');
-    })->name('index');
-    
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::resource('dashboard', DashboardController::class);
     /** Routes Resource */
+    Route::resource('extratos', TransactionsController::class);
+    Route::resource('bancos', BanksController::class);
 });
 
 require __DIR__.'/auth.php';

@@ -146,6 +146,7 @@ class SubcategoriesSeed extends Seeder
             $id = 1;
             foreach($sub as $subcat){
                 Subcategory::create([
+                    'user_id' => 1,
                     'name' => $subcat,
                     'category_id' => $id,
                 ]);

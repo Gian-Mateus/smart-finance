@@ -4,6 +4,6 @@
 
 	<x-mary-header title="Extratos" size="text-4xl" class="mb-3" />
 
-	<livewire:transactions.banks/>
+	{{-- <livewire:transactions.banks/> --}}
 
 </section>

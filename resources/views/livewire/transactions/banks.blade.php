@@ -97,27 +97,35 @@
 	        'format' => ['currency', '2,.', 'R$ '],
 	    ],
 	];
-
 @endphp
-    <x-mary-tabs wire:model="selectedTab" label-class="text-2xl mt-3" selected="nubank-tab">
-		<x-mary-tab name="nubank-tab" label="Nubank">
+<x-mary-tabs wire:model="selectedTab" label-class="text-2xl mt-3">
+	{{-- O erro da tab duplicada foi parcialmente resolvido definindo um atributo publico nesse componente setando o selected --}}
+	{{-- Esse componente está quebrando a aplicação, quando é acessado ele crava aqui e não sai mais --}}
+	<x-mary-tab name="nubank-tab" label="Nubank">
 
-			<form class="flex gap-6 p-6">
+
+		<div class="flex justify-between items-center flex-wrap">
+			<div class="flex-1 sm:flex-initial w-full sm:w-auto">
+				<x-mary-button class="btn-success" icon="o-plus">Receita</x-mary-button>
+				<x-mary-button class="btn-error" icon="o-plus">Despesa</x-mary-button>
+			</div>
+
+			<form class="flex gap-4 p-2 w-full sm:w-auto">
 				<x-mary-datetime label="Dê" wire:model="myDate1" value="{{ now()->startOfMonth()->format('Y-m-d') }}" />
 				<x-mary-datetime label="Até" wire:model="myDate1" value="{{ now()->endOfMonth()->format('Y-m-d') }}" />
-
+	
 				<div class="flex items-end">
 					<x-mary-button type="submit" class="btn-square bg-base-content shadow-lg">
 						<x-mary-icon name="o-magnifying-glass" class="text-base-100" />
 					</x-mary-button>
 				</div>
 			</form>
+		</div>
 
-			<div class="rounded-lg bg-base-300 p-4 shadow-lg">
-				<x-mary-table :headers="$headers" :rows="$extratoBancario" striped
-					class="rounded [&>thead]:uppercase [&>thead]:text-base-content">
-				</x-mary-table>
-			</div>
-		</x-mary-tab>
-	</x-mary-tabs>
-
+		<div class="rounded-lg bg-base-300 p-4 shadow-lg">
+			<x-mary-table :headers="$headers" :rows="$extratoBancario" striped
+				class="rounded [&>thead]:uppercase [&>thead]:text-base-content">
+			</x-mary-table>
+		</div>
+	</x-mary-tab>
+</x-mary-tabs>
