@@ -7,15 +7,17 @@ export default {
 		 './storage/framework/views/*.php',
 		 './resources/**/*.blade.php',
 		 './resources/**/*.js',
-		 './resources/**/*.vue',
 		 "./vendor/robsontenorio/mary/src/View/Components/**/*.php"
 	],
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
         },
+    },
+    daisyui: {
+        theme: ['cupcake']
     },
     plugins: [
 		require("daisyui")
