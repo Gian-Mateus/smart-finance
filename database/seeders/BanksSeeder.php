@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Banks;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class BanksSeeder extends Seeder
 {
@@ -20,7 +21,7 @@ class BanksSeeder extends Seeder
         ];
 
         foreach($banks as $bank){
-            Bank::create([
+            Banks::create([
                 'name' => $bank,
             ]);
 

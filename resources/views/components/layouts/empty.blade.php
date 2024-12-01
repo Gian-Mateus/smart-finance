@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="cupcake">
 
 	<head>
 		<meta charset="utf-8">
@@ -12,12 +12,10 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
 			rel="stylesheet">
-
-		@livewireStyles
 		@vite(['resources/css/app.css', 'resources/js/app.js'])
 	</head>
 
-	<body class="min-h-screen bg-base-200/50 font-sans antialiased dark:bg-base-200">
+	<body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
 
 		{{-- MAIN --}}
 		<x-main full-width>
@@ -25,8 +23,5 @@
 				{{ $slot }}
 			</x-slot:content>
 		</x-main>
-
-		@livewireScripts
 	</body>
-
 </html>

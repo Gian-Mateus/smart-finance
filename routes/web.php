@@ -1,6 +1,9 @@
 <?php
 
 use App\Livewire\Welcome;
+use App\Livewire\Auth\Login;
+use App\Livewire\Auth\Register;
+use App\Livewire\Pages\Dashboard\Index as Dashboard;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,17 +17,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', Welcome::class);
+Route::middleware('guest')->group(function () {
+    Route::get('/login', Login::class)->name('login');
+    Route::get('/register', Register::class)->name('register'); 
+});
 
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware('auth')->group(function () {
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-//     /** Route Home */
-//     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
-//     Route::resource('dashboard', DashboardController::class);
-//     /** Routes Resource */
-//     Route::resource('extratos', TransactionsController::class);
-//     Route::resource('bancos', BanksController::class);
-// });
+    /** Route Home */
+    Route::get('/', [Dashboard::class, 'render'])->name('dashboard.index');
+    // Route::resource('dashboard', Dashboard::class);
+    /** Routes Resource */
+    Route::resource('extratos', TransactionsController::class);
+    Route::resource('bancos', BanksController::class);
+});

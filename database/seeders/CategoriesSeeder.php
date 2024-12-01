@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
+use App\Models\Categories;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CategoriesSeeder extends Seeder
 {
@@ -29,8 +31,8 @@ class CategoriesSeeder extends Seeder
         ];
 
         foreach($categories as $cat){
-            Category::create([
-                'user_id' => 1,
+            Categories::create([
+                'user_id' => User::first()->id,
                 'name' => $cat,
             ]);
         }
