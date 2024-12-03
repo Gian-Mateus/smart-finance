@@ -13,7 +13,7 @@ export default {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
     ],
     daisyui: {
-        theme: ["cupcake"]
+        themes: ["cupcake"]
     },
     theme: {
         extend: {

@@ -4,6 +4,7 @@ use App\Livewire\Welcome;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Pages\Dashboard\Index as Dashboard;
+use App\Livewire\Pages\Settings\Categories\CategoriesIndex;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,14 +24,11 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     /** Route Home */
     Route::get('/', [Dashboard::class, 'render'])->name('dashboard.index');
-    // Route::resource('dashboard', Dashboard::class);
+
     /** Routes Resource */
-    Route::resource('extratos', TransactionsController::class);
-    Route::resource('bancos', BanksController::class);
+    Route::resource('statements', TransactionsController::class);
+    Route::resource('banks', BanksController::class);
+    Route::get('/categorias-subcategorias', CategoriesIndex::class)->name('categories');
 });

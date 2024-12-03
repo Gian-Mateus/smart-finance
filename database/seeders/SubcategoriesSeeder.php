@@ -142,16 +142,14 @@ class SubcategoriesSeeder extends Seeder
             ]
         ];
 
-        foreach($subcategories as $sub){
-            $id = 1;
-            foreach($sub as $subcat){
+        for($i = 0; $i < count($subcategories); $i++){
+            for($j = 0; $j < count($subcategories[$i]); $j++){
                 Subcategories::create([
                     'user_id' => 1,
-                    'name' => $subcat,
-                    'category_id' => $id,
+                    'name' => $subcategories[$i][$j],
+                    'category_id' => $i + 1,
                 ]);
             }
-            $id++;
-        };
+        }
     }
 }

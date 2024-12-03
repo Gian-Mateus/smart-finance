@@ -9,4 +9,10 @@ class Categories extends Model
 {
     /** @use HasFactory<\Database\Factories\CategoriesFactory> */
     use HasFactory;
+    
+    public function subcategories()
+    {
+        return $this->hasMany(Subcategories::class, 'category_id');
+    }
 }
+
