@@ -63,7 +63,6 @@
 				{{ isset($slot) ? $slot : 'Nada aqui' }}
 			</x-slot:content>
 		</x-main>
-
 		{{-- Toast --}}
 		<x-toast />
 
