@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Subcategories;
+use App\Models\Subcategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -144,7 +144,7 @@ class SubcategoriesSeeder extends Seeder
 
         for($i = 0; $i < count($subcategories); $i++){
             for($j = 0; $j < count($subcategories[$i]); $j++){
-                Subcategories::create([
+                Subcategory::create([
                     'user_id' => 1,
                     'name' => $subcategories[$i][$j],
                     'category_id' => $i + 1,

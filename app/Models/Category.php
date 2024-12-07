@@ -7,45 +7,52 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Budget;
-use App\Models\Transaction;
+use App\Models\Subcategory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Class RecurrenceType
+ * Class Category
  * 
  * @property int $id
+ * @property int $user_id
  * @property string $name
- * @property int|null $interval
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
+ * @property User $user
  * @property Collection|Budget[] $budgets
- * @property Collection|Transaction[] $transactions
+ * @property Collection|Subcategory[] $subcategories
  *
  * @package App\Models
  */
-class RecurrenceType extends Model
+class Category extends Model
 {
-	protected $table = 'recurrence_types';
+	protected $table = 'categories';
 
 	protected $casts = [
-		'interval' => 'int'
+		'user_id' => 'int'
 	];
 
 	protected $fillable = [
-		'name',
-		'interval'
+		'user_id',
+		'name'
 	];
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
 
 	public function budgets()
 	{
 		return $this->hasMany(Budget::class);
 	}
 
-	public function transactions()
+	public function subcategories()
 	{
-		return $this->hasMany(Transaction::class, 'recurrence_types_id');
+		return $this->hasMany(Subcategory::class);
 	}
 }

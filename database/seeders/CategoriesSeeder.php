@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Categories;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -31,7 +31,7 @@ class CategoriesSeeder extends Seeder
         ];
 
         foreach($categories as $cat){
-            Categories::create([
+            Category::create([
                 'user_id' => User::first()->id,
                 'name' => $cat,
             ]);
