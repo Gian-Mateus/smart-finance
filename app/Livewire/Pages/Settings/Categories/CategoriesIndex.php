@@ -19,13 +19,13 @@ class CategoriesIndex extends Component
             ->where('user_id', Auth::id())
             ->get();
     }
-    public function mount()
-    {
-        $this->categories = Category::with('subcategories')->where('user_id', Auth::id())->get();
-    }
 
     public function render()
     {
-        return view('livewire.pages.settings.categories.categories-index');    
+        return view('livewire.pages.settings.categories.categories-index')->with([
+            'categories' => $this->categories = Category::with('subcategories')
+            ->where('user_id', Auth::id())
+            ->get()
+        ]);    
     }
 }

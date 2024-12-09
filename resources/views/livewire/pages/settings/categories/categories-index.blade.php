@@ -1,21 +1,37 @@
 <div
 	class="ml-4 max-w-3xl"
-	x-data="{ selectDelete: false }"
+	x-data="{ selectDelete: false, selectAll: false }"
 >
 	<x-header
 		title="Categorias e Subcategorias"
 		separator
 	/>
 
-	<div class="flex items-center gap-2">
-		<livewire:pages.settings.categories.partials.search />
-		<x-dropdown icon="o-cog-6-tooth">
+	<div class="grid">
+		<div class="flex grid-cols-1 items-center gap-2">
+			<livewire:pages.settings.categories.partials.search />
+			<x-dropdown icon="o-cog-6-tooth">
+				<x-button
+					label="Excluir"
+					icon="o-trash"
+					@click="selectDelete = ! selectDelete"
+				/>
+			</x-dropdown>
+		</div>
+		<div
+			class="m-2 flex items-center gap-x-2"
+			x-show="selectDelete"
+		>
+			<x-checkbox
+				label="Selecionar tudo"
+				@click="selectAll = ! selectAll"
+			/>
 			<x-button
+				class="btn-md"
 				label="Excluir"
 				icon="o-trash"
-				@click="selectDelete = ! selectDelete"
 			/>
-		</x-dropdown>
+		</div>
 	</div>
 
 	<livewire:pages.settings.categories.partials.add
@@ -48,7 +64,8 @@
 					/>
 				</div>
 				<x-checkbox
-					class="z-20"
+					class="z-20 mr-4"
+					x-bind:checked="selectAll"
 					x-show="selectDelete"
 					right
 				/>
@@ -78,12 +95,14 @@
 							>
 								<x-button
 									class="btn-sm"
+									x-show="!selectDelete"
 									icon="c-pencil"
 									responsive
 								/>
 							</div>
 							<x-checkbox
-								class="z-20"	
+								class="z-20 mr-4"
+								x-bind:checked="selectAll"
 								x-show="selectDelete"
 								right
 							/>
