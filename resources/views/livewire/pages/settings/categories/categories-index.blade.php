@@ -46,6 +46,7 @@
 			class="group m-0.5 bg-base-100"
 			wire:key="category-{{ $cat->id }}"
 			separator
+			x-data="{ checkCategory: false }"
 		>
 			<x-slot:heading
 				class="flex items-center justify-between"
@@ -68,6 +69,7 @@
 					x-bind:checked="selectAll"
 					x-show="selectDelete"
 					right
+					@click="checkCategory = ! checkCategory"
 				/>
 			</x-slot:heading>
 			<x-slot:content>
@@ -102,7 +104,7 @@
 							</div>
 							<x-checkbox
 								class="z-20 mr-4"
-								x-bind:checked="selectAll"
+								x-bind:checked="selectAll || checkCategory"
 								x-show="selectDelete"
 								right
 							/>
