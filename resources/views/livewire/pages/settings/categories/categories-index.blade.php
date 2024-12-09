@@ -1,70 +1,94 @@
-<div class="ml-4 max-w-3xl">
-	<x-header title="Categorias e Subcategorias" separator />
+<div
+	class="ml-4 max-w-3xl"
+	x-data="{ selectDelete: false }"
+>
+	<x-header
+		title="Categorias e Subcategorias"
+		separator
+	/>
 
-	{{-- input search (categories and subcategories) and create categories button --}}
-	<x-input placeholder="Pesquisar" icon="m-magnifying-glass" class="rounded-md p-4" />
+	<div class="flex items-center gap-2">
+		<livewire:pages.settings.categories.partials.search />
+		<x-dropdown icon="o-cog-6-tooth">
+			<x-button
+				label="Excluir"
+				icon="o-trash"
+				@click="selectDelete = ! selectDelete"
+			/>
+		</x-dropdown>
+	</div>
 
-	<x-form class="relative p-4" x-data="{ show: false }" wire:submit="saveCategory">
-		<div x-show="!show" x-transition class="flex transition-all duration-300 ease-in-out">
-			<x-button label="Adicionar categoria" icon="m-plus-small" class="w-full bg-neutral-content"
-				x-on:click="show = true" />
-		</div>
+	<livewire:pages.settings.categories.partials.add
+		type="category"
+		labelButton="Nova categoria"
+		placeholderInput="Nome da categoria"
+		wire:key="add-category"
+	/>
 
-		<div x-show="show" x-transition class="flex gap-1 transition-all duration-300 ease-in-out">
-			<div class="flex-1">
-				<x-input placeholder="Nova categoria" type="text" wire:model="category_name" />
-			</div>
-			<div>
-				<x-button class="btn-primary" icon="c-check" type="submit" responsive />
-				<x-button class="btn-secondary" icon="c-x-mark" x-on:click="show = false" responsive />
-			</div>
-		</div>
-	</x-form>
-
-	{{-- Categories and Subcategories view --}}
 	@foreach ($categories as $cat)
-		<x-collapse wire:key="{{ $cat->id }}" separator class="group m-0.5 bg-base-100">
-			<x-slot:heading class="flex items-center justify-between">
+		<x-collapse
+			class="group m-0.5 bg-base-100"
+			wire:key="category-{{ $cat->id }}"
+			separator
+		>
+			<x-slot:heading
+				class="flex items-center justify-between"
+			>
 				<div>
 					{{ $cat->name }}
 				</div>
 				<div
-					class="absolute right-12 top-1/2 z-10 -translate-y-1/2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-					<x-button class="btn-outline btn-primary" icon="c-pencil" responsive />
-					<x-button class="btn-outline btn-secondary" icon="c-x-mark" responsive />
+					class="absolute right-12 flex items-center gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+				>
+					<x-button
+						class="btn-sm"
+						x-show="!selectDelete"
+						icon="c-pencil"
+						responsive
+					/>
 				</div>
+				<x-checkbox
+					class="z-20"
+					x-show="selectDelete"
+					right
+				/>
 			</x-slot:heading>
 			<x-slot:content>
 				<ul>
-					<li x-data="{ show: false }" class="m-3">
-						<div x-show="!show">
-							<x-button label="Adicionar subcategoria" icon="m-plus-small" class="mb-1 flex w-full justify-start"
-								x-on:click="show = true" />
-						</div>
-						<div x-show="show" x-transition class="flex gap-1 transition-all duration-300 ease-in-out">
-							<div class="flex-1">
-								<x-input placeholder="Nova subcategoria" type="text" />
-							</div>
-							<div>
-								<x-button class="btn-primary" icon="c-check" />
-								<x-button class="btn-secondary" icon="m-x-mark" x-on:click="show = false" />
-							</div>
-						</div>
+					<li>
+						<livewire:pages.settings.categories.partials.add
+							type="subcategory"
+							labelButton="Nova subcategoria"
+							placeholderInput="Nome da subcategoria"
+							:category_id="$cat->id"
+							wire:key="add-subcategory-{{ $cat->id }}"
+						/>
 					</li>
 
 					@foreach ($cat->subcategories as $sub)
-						<li class="group/subcat relative flex items-center justify-between rounded p-2 hover:bg-base-300">
+						<li
+							class="group/subcat relative flex items-center justify-between rounded p-2 hover:bg-base-300"
+							wire:key="subcategory-{{ $sub->id }}"
+						>
 							<div>
 								{{ $sub->name }}
 							</div>
 							<div
-								class="absolute right-12 top-1/2 z-10 my-auto -translate-y-1/2 opacity-0 transition-opacity duration-300 group-hover/subcat:opacity-100">
-								<x-button class="btn-outline btn-primary btn-sm" icon="c-pencil" responsive />
-								<x-button class="btn-outline btn-secondary btn-sm" icon="c-x-mark" responsive />
+								class="absolute right-12 flex items-center opacity-0 transition-opacity duration-300 group-hover/subcat:opacity-100"
+							>
+								<x-button
+									class="btn-sm"
+									icon="c-pencil"
+									responsive
+								/>
 							</div>
+							<x-checkbox
+								class="z-20"	
+								x-show="selectDelete"
+								right
+							/>
 						</li>
 					@endforeach
-
 				</ul>
 			</x-slot:content>
 		</x-collapse>
