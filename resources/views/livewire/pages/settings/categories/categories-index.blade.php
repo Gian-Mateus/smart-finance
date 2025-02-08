@@ -10,13 +10,10 @@
 	<div class="grid">
 		<div class="flex grid-cols-1 items-center gap-2">
 			<livewire:pages.settings.categories.partials.search />
-			<x-dropdown icon="o-cog-6-tooth">
-				<x-button
-					label="Excluir"
-					icon="o-trash"
-					@click="selectDelete = ! selectDelete"
-				/>
-			</x-dropdown>
+			<x-button
+				icon="o-trash"
+				@click="selectDelete = ! selectDelete"
+			/>
 		</div>
 		<div
 			class="m-2 flex items-center gap-x-2"
