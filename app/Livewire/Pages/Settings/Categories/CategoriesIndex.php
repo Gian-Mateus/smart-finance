@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class CategoriesIndex extends Component
 {  
     public $categories;
+    public $selected = [];
 
     protected $listeners = ['refreshCategories'];
 
@@ -18,6 +19,10 @@ class CategoriesIndex extends Component
         $this->categories = Category::with('subcategories')
             ->where('user_id', Auth::id())
             ->get();
+    }
+
+    public function delete(){
+        dd($this->selected);
     }
 
     public function render()

@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
     /** Route Home */
     Route::get('/', [Dashboard::class, 'render'])->name('dashboard.index');
 
-    /** Routes Resource */
+    /** Routes General */
     Route::resource('statements', TransactionsController::class);
     Route::resource('banks', BanksController::class);
     Route::get('/categorias-subcategorias', CategoriesIndex::class)->name('categories');

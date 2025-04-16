@@ -9,7 +9,7 @@
 		x-transition
 	>
 		<x-button
-			class="w-full bg-neutral-content"
+			class="w-full bg-primary"
 			label="{{ $labelButton }}"
 			icon="m-plus-small"
 			x-on:click="show = true"

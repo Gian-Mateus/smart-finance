@@ -26,10 +26,10 @@ class DatabaseSeeder extends Seeder
        ]);
 
         $this->call([
-                    CategoriesSeeder::class,
-                    SubcategoriesSeeder::class,
-                    RecurrenceTypeSeeder::class,
-                    BanksSeeder::class
-                ]);
+            CategoriesSeeder::class,
+            SubcategoriesSeeder::class,
+            RecurrenceTypeSeeder::class,
+            BanksSeeder::class
+        ]);
     }
 } 

@@ -27,6 +27,7 @@
 				class="btn-md"
 				label="Excluir"
 				icon="o-trash"
+
 			/>
 		</div>
 	</div>
@@ -45,15 +46,13 @@
 			separator
 			x-data="{ checkCategory: false }"
 		>
-			<x-slot:heading
-				class="flex items-center justify-between"
-			>
+			<x-slot:heading class="flex items-center justify-between">
 				<div>
 					{{ $cat->name }}
 				</div>
-				<div
-					class="absolute right-12 flex items-center gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-				>
+				<div class="absolute right-12 flex items-center gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+
+					{{-- Button Edit Category --}}
 					<x-button
 						class="btn-sm"
 						x-show="!selectDelete"
@@ -68,45 +67,26 @@
 					right
 					@click="checkCategory = ! checkCategory"
 				/>
-			</x-slot:heading>
-			<x-slot:content>
-				<ul>
-					<li>
-						<livewire:pages.settings.categories.partials.add
-							type="subcategory"
-							labelButton="Nova subcategoria"
-							placeholderInput="Nome da subcategoria"
-							:category_id="$cat->id"
-							wire:key="add-subcategory-{{ $cat->id }}"
-						/>
-					</li>
-
-					@foreach ($cat->subcategories as $sub)
-						<li
-							class="group/subcat relative flex items-center justify-between rounded p-2 hover:bg-base-300"
-							wire:key="subcategory-{{ $sub->id }}"
-						>
-							<div>
-								{{ $sub->name }}
-							</div>
-							<div
-								class="absolute right-12 flex items-center opacity-0 transition-opacity duration-300 group-hover/subcat:opacity-100"
-							>
-								<x-button
-									class="btn-sm"
-									x-show="!selectDelete"
-									icon="c-pencil"
-									responsive
-								/>
-							</div>
-							<x-checkbox
-								class="z-20 mr-4"
-								x-bind:checked="selectAll || checkCategory"
-								x-show="selectDelete"
-								right
-							/>
-						</li>
-					@endforeach
+		</x-slot:heading>
+		<x-slot:content>
+			<ul>
+				{{-- Add Subcategory --}}
+				<li>
+					<livewire:pages.settings.categories.partials.add
+						type="subcategory"
+						labelButton="Nova subcategoria"
+						placeholderInput="Nome da subcategoria"
+						:category_id="$cat->id"
+						wire:key="add-subcategory-{{ $cat->id }}"
+					/>
+				</li>
+				@foreach ($cat->subcategories as $sub)
+					{{-- List Subcategories --}}
+					<livewire:pages.settings.categories.partials.subcategories
+						:subcategories="$sub"
+						:category_id="$cat->id"
+					/>
+				@endforeach
 				</ul>
 			</x-slot:content>
 		</x-collapse>
