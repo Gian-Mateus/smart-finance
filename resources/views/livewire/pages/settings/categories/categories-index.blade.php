@@ -1,20 +1,32 @@
 <div
-	class="ml-4 max-w-3xl"
+	class="ml-4 max-w-3xl mt-10"
 	x-data="{ selectDelete: false, selectAll: false }"
 >
 	<x-header
 		title="Categorias e Subcategorias"
 		separator
 	/>
-
+	{{-- Search, Delete and Add --}}
 	<div class="grid">
 		<div class="flex grid-cols-1 items-center gap-2">
-			<livewire:pages.settings.categories.partials.search />
-			<x-button
-				icon="o-trash"
-				@click="selectDelete = ! selectDelete"
-			/>
+			{{-- Search --}}
+			<div class="flex-1">
+				<x-input
+					class="p-2"
+					placeholder="Pesquisar"
+					icon="m-magnifying-glass"
+				/>
+			</div>
+			{{-- Delete Categories--}}
+			<x-dropdown>
+				<x-slot:trigger>
+					<x-button icon="o-ellipsis-vertical" class="btn-circle" />
+				</x-slot:trigger>
+
+				<x-menu-item title="Excluir todos" @click="selectDelete = true" />
+			</x-dropdown>
 		</div>
+		{{-- Select for delete Categories --}}
 		<div
 			class="m-2 flex items-center gap-x-2"
 			x-show="selectDelete"
@@ -27,15 +39,21 @@
 				class="btn-md"
 				label="Excluir"
 				icon="o-trash"
-
+				wire:click="deleteSelected"
+			/>
+			<x-button
+				class="btn-md"
+				label="Cancelar"
+				icon="o-x-mark"
+				@click="selectDelete = false; selectAll = false"
 			/>
 		</div>
 	</div>
 
 	<livewire:pages.settings.categories.partials.add
 		type="category"
-		labelButton="Nova categoria"
-		placeholderInput="Nome da categoria"
+		labelButton="Nova Categoria"
+		placeholderInput="Nome da Categoria"
 		wire:key="add-category"
 	/>
 
@@ -46,47 +64,27 @@
 			separator
 			x-data="{ checkCategory: false }"
 		>
-			<x-slot:heading class="flex items-center justify-between">
-				<div>
-					{{ $cat->name }}
-				</div>
-				<div class="absolute right-12 flex items-center gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-
-					{{-- Button Edit Category --}}
-					<x-button
-						class="btn-sm"
-						x-show="!selectDelete"
-						icon="c-pencil"
-						responsive
-					/>
-				</div>
-				<x-checkbox
-					class="z-20 mr-4"
-					x-bind:checked="selectAll"
-					x-show="selectDelete"
-					right
-					@click="checkCategory = ! checkCategory"
-				/>
-		</x-slot:heading>
-		<x-slot:content>
-			<ul>
-				{{-- Add Subcategory --}}
-				<li>
-					<livewire:pages.settings.categories.partials.add
-						type="subcategory"
-						labelButton="Nova subcategoria"
-						placeholderInput="Nome da subcategoria"
-						:category_id="$cat->id"
-						wire:key="add-subcategory-{{ $cat->id }}"
-					/>
-				</li>
-				@foreach ($cat->subcategories as $sub)
-					{{-- List Subcategories --}}
-					<livewire:pages.settings.categories.partials.subcategories
-						:subcategories="$sub"
-						:category_id="$cat->id"
-					/>
-				@endforeach
+			<x-slot:heading>
+				{{ $cat->name }}
+			</x-slot:heading>
+			<x-slot:content>
+				<ul>
+					<li>
+						<livewire:pages.settings.categories.partials.add
+							type="subcategory"
+							labelButton="Nova Subcategoria"
+							placeholderInput="Nome da Subcategoria"
+							:category_id="$cat->id"
+							:key="'add-subcategory-'.$cat->id"
+						/>
+					</li>
+					{{-- Subcategories --}}
+					@foreach ($cat->subcategories as $subcategory)
+						<livewire:pages.settings.categories.partials.subcategories 
+							:subcategory="$subcategory"
+							:key="$subcategory->id"
+						/>
+					@endforeach
 				</ul>
 			</x-slot:content>
 		</x-collapse>
