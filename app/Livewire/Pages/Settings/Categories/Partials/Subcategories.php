@@ -11,10 +11,7 @@ class Subcategories extends Component
     public Subcategory $subcategory;
 
     public function delete()
-    {
-        // Armazena o ID da categoria pai antes de excluir
-        $categoryId = $this->subcategory->category_id;
-        
+    {   
         // Exclui a subcategoria
         $this->subcategory->delete();
 

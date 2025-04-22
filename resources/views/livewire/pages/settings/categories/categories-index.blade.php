@@ -23,7 +23,7 @@
 					<x-button icon="o-ellipsis-vertical" class="btn-circle" />
 				</x-slot:trigger>
 
-				<x-menu-item title="Excluir todos" @click="selectDelete = true" />
+				<x-menu-item title="Excluir vários" @click="selectDelete = true" />
 			</x-dropdown>
 		</div>
 		{{-- Select for delete Categories --}}
