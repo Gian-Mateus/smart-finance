@@ -11,8 +11,13 @@ class SearchIcons extends Component
 
     public function mount()
     {
-        $this->path = "/vendor/blade-ui-kit/blade-heroicons/resources/svg";
+        $this->path = __DIR__."/../../../vendor/blade-ui-kit/blade-heroicons/resources/svg";
+    
         $this->icons = scandir($this->path);
+
+        $this->icons = array_filter($this->icons, function ($el) {
+            return $el != "." && $el != "..";
+        });
     }
     
     public function render()
