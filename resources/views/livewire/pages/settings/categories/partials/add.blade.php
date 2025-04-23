@@ -17,10 +17,14 @@
 	</div>
 
 	<div
-		class="flex gap-1 transition-all duration-300 ease-in-out"
+		class="flex gap-3 transition-all duration-300 ease-in-out"
 		x-show="show"
 		x-transition
 	>
+	{{-- Search and select Icons --}}
+		<div>
+			<livewire:utils.search-icons />
+		</div>
 		<div class="flex-1">
 			<x-input
 				type="text"

@@ -71,7 +71,6 @@
 						x-show="selectCategory" 
 						x-bind:checked="selectAllCategory"
 						wire:model="deleteCategories.{{ $cat->id }}"
-						value="{{ $cat->id }}"
 					/>
 				</div>
 			</x-slot:heading>

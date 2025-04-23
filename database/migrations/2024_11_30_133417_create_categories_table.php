@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
             $table->foreignId('user_id')->constrained('users'); // user_id INT NOT NULL
             $table->string('name', 100); // name VARCHAR(100) NOT NULL
+            $table->string('icon', 50)->nullable(); // icon VARCHAR(50) NOT NULL
             $table->timestamps();
         });
     }

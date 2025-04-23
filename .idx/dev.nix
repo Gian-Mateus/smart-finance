@@ -1,7 +1,7 @@
 {pkgs}: {
   channel = "stable-24.05";
   packages = [
-    pkgs.nodejs_20
+    pkgs.nodejs_20.php83.composer
   ];
   idx.extensions = [
     "svelte.svelte-vscode"
