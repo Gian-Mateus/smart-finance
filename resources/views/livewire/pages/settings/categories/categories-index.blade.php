@@ -1,6 +1,6 @@
 <div
 	class="ml-4 max-w-3xl mt-10"
-	x-data="{ selectDelete: false, selectAll: false }"
+	x-data="{ selectCategory: false, selectAllCategory: false }"
 >
 	<x-header
 		title="Categorias e Subcategorias"
@@ -23,29 +23,29 @@
 					<x-button icon="o-ellipsis-vertical" class="btn-circle" />
 				</x-slot:trigger>
 
-				<x-menu-item title="Excluir vários" @click="selectDelete = true" />
+				<x-menu-item title="Excluir Categorias" @click="selectCategory = true" />
 			</x-dropdown>
 		</div>
 		{{-- Select for delete Categories --}}
 		<div
 			class="m-2 flex items-center gap-x-2"
-			x-show="selectDelete"
+			x-show="selectCategory"
 		>
 			<x-checkbox
 				label="Selecionar tudo"
-				@click="selectAll = ! selectAll"
+				@click="selectAllCategory = ! selectAllCategory"
 			/>
 			<x-button
 				class="btn-md"
 				label="Excluir"
 				icon="o-trash"
-				wire:click="deleteSelected"
+				@click="$wire.modalConfirmDelete = true"
 			/>
 			<x-button
 				class="btn-md"
 				label="Cancelar"
 				icon="o-x-mark"
-				@click="selectDelete = false; selectAll = false"
+				@click="selectCategory = false; selectAllCategory = false"
 			/>
 		</div>
 	</div>
@@ -62,10 +62,18 @@
 			class="group m-0.5 bg-base-100"
 			wire:key="category-{{ $cat->id }}"
 			separator
-			x-data="{ checkCategory: false }"
 		>
 			<x-slot:heading>
-				{{ $cat->name }}
+				<div class="flex justify-between items-center">
+					{{ $cat->name }}
+					<x-checkbox 
+						class="z-10" 
+						x-show="selectCategory" 
+						x-bind:checked="selectAllCategory"
+						wire:model="deleteCategories.{{ $cat->id }}"
+						value="{{ $cat->id }}"
+					/>
+				</div>
 			</x-slot:heading>
 			<x-slot:content>
 				<ul>
@@ -90,4 +98,11 @@
 		</x-collapse>
 	@endforeach
 
+	<x-modal wire:model="modalConfirmDelete" title="Excluir Categoria(s)" class="backdrop-blur">
+		Ao excluir uma categoria, todas as suas subcategorias serão excluídas.
+    <x-slot:actions>
+        <x-button label="Cancelar" @click="$wire.modalConfirmDelete = false" />
+        <x-button label="Confirmar" @click="$wire.delete"/>
+    </x-slot:actions>
+</x-modal>
 </div>

@@ -12,10 +12,10 @@ class Subcategories extends Component
 
     public function delete()
     {   
-        // Exclui a subcategoria
+        // Delete subcategory
         $this->subcategory->delete();
 
-        // Emite evento para o componente pai atualizar
+        // Dispatch event to refresh categories
         $this->dispatch('refreshCategories');
     }
 

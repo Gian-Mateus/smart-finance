@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pages\Settings\Categories\Partials;
 
+use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\Subcategory;
@@ -17,7 +18,9 @@ class Add extends Component
     public string $type;
     public string $name;
 
-    public ?int $category_id = null;    
+    public ?int $category_id = null;
+    
+    use Toast;
 
     public function save()
     {
@@ -25,7 +28,10 @@ class Add extends Component
             Category::create([
                 'user_id' => Auth::id(),
                 'name' => $this->name
-            ]); 
+            ]);
+            
+            // Toast success
+            $this->success('Categoria criada com sucesso!');
         } 
         elseif($this->type == "subcategory"){
             Subcategory::create([
@@ -33,7 +39,14 @@ class Add extends Component
                 'name' => $this->name,
                 'category_id' => $this->category_id
             ]);
+
+            // Toast success
+            $this->success('Subcategoria criada com sucesso!');
+        } else{
+            // Toast error
+            $this->error('Erro ao criar categoria ou subcategoria!');
         }
+
         $this->reset(['name']);
         $this->dispatch('refreshCategories');
     }

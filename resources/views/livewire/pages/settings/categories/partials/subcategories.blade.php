@@ -6,22 +6,14 @@
         {{-- Button Edit SubCategory --}}
         <x-button
             class="btn-sm"
-            x-show="!selectDelete"
             icon="c-pencil"
             responsive
         />
         <x-button
             class="btn-sm"
-            x-show="!selectDelete"
             icon="o-trash"
             responsive
             wire:click="delete"
         />
     </div>
-    <x-checkbox
-        class="z-20 mr-4"
-        x-bind:checked="selectAll || checkCategory"
-        x-show="selectDelete"
-        right
-    />
 </li>
