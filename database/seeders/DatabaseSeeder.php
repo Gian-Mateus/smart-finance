@@ -6,6 +6,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\BanksSeeder;
+use Database\Seeders\IconsSeeder;
 use Database\Seeders\CategoriesSeeder;
 use Database\Seeders\SubcategoriesSeeder;
 use Database\Seeders\RecurrenceTypeSeeder;
@@ -29,7 +30,8 @@ class DatabaseSeeder extends Seeder
             CategoriesSeeder::class,
             SubcategoriesSeeder::class,
             RecurrenceTypeSeeder::class,
-            BanksSeeder::class
+            BanksSeeder::class,
+            IconsSeeder::class,
         ]);
     }
 } 
