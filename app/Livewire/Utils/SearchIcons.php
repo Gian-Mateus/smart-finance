@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class SearchIcons extends Component
 {
-    public array $icons = [
+    private array $icons = [
         "c-academic-cap",
         "c-adjustments-horizontal",
         "c-adjustments-vertical",
@@ -1296,9 +1296,39 @@ class SearchIcons extends Component
         "s-x-circle",
         "s-x-mark",
     ];
+    public int $perPage = 50;
+    public int $loadAmount = 20;
+    public string $search = '';    
+
+    public function loadMore()
+    {
+        $this->perPage += $this->loadAmount;        
+        $this->dispatch('load-more');
+    }
+
+    public function updatedSearch()
+    {
+        $this->perPage = 50;
+    }
+    
+    public function getIconsProperty(array $icons) : array
+    {
+        if (empty($this->search)) {
+            return array_slice($icons, 0, $this->perPage);
+        }
+        
+        return collect($icons)
+            ->filter(function($icon){
+                return str_contains($icon, $this->search);
+            })
+            ->slice(0, $this->perPage)
+            ->toArray();
+    }    
     
     public function render()
     {
-        return view('livewire.utils.search-icons');
+        return view('livewire.utils.search-icons', [
+            'icons' => $this->getIconsProperty($this->icons),
+        ]);
     }
 }
