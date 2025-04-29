@@ -7,13 +7,17 @@
         <x-menu-item>
             <x-input @click.stop="" placeholder="Pesquisar" icon="o-magnifying-glass" wire:model.live="search" />
         </x-menu-item>
+        
+        @if (empty($results))
+            <x-menu-item title="Nenhum item encontrado."/>
+        @else
         <div class="grid grid-cols-4 overflow-y-scroll max-h-52">
-            @foreach ($icons as $icon)
+            @foreach ($results as $icon)
                 <x-menu-item wire:key="{{ $icon->id }}">
                     <x-icon name="{{ $icon->name }}" />
                 </x-menu-item>
             @endforeach
-            <div x-data="{
+            {{-- <div x-data="{
                     more(){
                         const observer = new IntersectionObserver((items) => {
                             items.forEach((item) => {
@@ -26,7 +30,9 @@
                     }
                 }" 
                 x-init="more()"
-            ></div>
+            ></div> --}}
         </div>
+        @endif
+        
     </x-dropdown>
 </div>

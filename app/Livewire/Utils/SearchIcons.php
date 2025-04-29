@@ -21,7 +21,7 @@ class SearchIcons extends Component
         $results = [];
         
         if(strlen($this->search) >= 1){
-            $results = Icons::where('name', 'like', '%'.$this->search.'%');
+            $results = Icons::where('name', 'like', '%'.$this->search.'%')->get();
         }
         
         return view('livewire.utils.search-icons', [
