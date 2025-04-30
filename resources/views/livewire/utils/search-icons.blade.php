@@ -12,12 +12,12 @@
             <x-menu-item title="Nenhum item encontrado."/>
         @else
         <div class="grid grid-cols-4 overflow-y-scroll max-h-52">
-            @foreach ($results as $icon)
+            @foreach ($icons as $icon)
                 <x-menu-item wire:key="{{ $icon->id }}">
-                    <x-icon name="{{ $icon->name }}" />
+                    <x-button icon="{{ $icon->name }}" class="btn-circle btn-outline" wire:model="iconSelect"/>
                 </x-menu-item>
             @endforeach
-            {{-- <div x-data="{
+            <div x-data="{
                     more(){
                         const observer = new IntersectionObserver((items) => {
                             items.forEach((item) => {
@@ -30,7 +30,7 @@
                     }
                 }" 
                 x-init="more()"
-            ></div> --}}
+            ></div>
         </div>
         @endif
         
