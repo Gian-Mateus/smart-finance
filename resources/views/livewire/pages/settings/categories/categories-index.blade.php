@@ -65,7 +65,12 @@
 		>
 			<x-slot:heading>
 				<div class="flex justify-between items-center">
-					{{ $cat->name }}
+					<div>
+						@if ($cat->icon)
+						<x-icon name="{{ $cat->icon }}"/>
+						@endif
+						{{ $cat->name }}
+					</div>
 					<x-checkbox 
 						class="z-10" 
 						x-show="selectCategory" 

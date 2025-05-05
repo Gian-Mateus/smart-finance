@@ -6,6 +6,8 @@ use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\Subcategory;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Pages\Settings\Categories\CategoriesIndex;
 
@@ -17,17 +19,25 @@ class Add extends Component
     #[Validate('required|min:3|max:50')]
     public string $type;
     public string $name;
+    public ?string $icon = null;
 
     public ?int $category_id = null;
     
     use Toast;
+
+    #[On('iconSelected')]
+    public function iconSelected($icon)
+    {
+        $this->icon = $icon;
+    }
 
     public function save()
     {
         if($this->type == "category"){
             Category::create([
                 'user_id' => Auth::id(),
-                'name' => $this->name
+                'name' => $this->name,
+                'icon' => $this->icon
             ]);
             
             // Toast success
@@ -49,6 +59,7 @@ class Add extends Component
 
         $this->reset(['name']);
         $this->dispatch('refreshCategories');
+        $this->dispatch('resetIcon');
     }
 
     public function render()
