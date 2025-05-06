@@ -2,7 +2,6 @@
     <x-dropdown>
         <x-slot:trigger>
             <x-button icon="{{ $iconSelect ? $iconSelect : 'o-photo' }}" class="btn"/>
-            {{ $iconSelect }}
         </x-slot:trigger>
      
         <div class="p-4">

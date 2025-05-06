@@ -16,7 +16,6 @@ class CategoriesIndex extends Component
 
     use Toast;
 
-    // Definindo os listeners para eventos
     #[On('refreshCategories')]
     public function refreshCategories()
     {

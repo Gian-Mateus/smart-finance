@@ -4,6 +4,7 @@ namespace App\Livewire\Utils;
 
 use App\Models\Icons;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class SearchIcons extends Component
 {
@@ -22,6 +23,7 @@ class SearchIcons extends Component
     {
         $this->iconSelect = null;
     }
+    
     public function defineIcon($iconSelect)
     {
         $this->iconSelect = $iconSelect;

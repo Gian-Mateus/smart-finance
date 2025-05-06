@@ -43,8 +43,6 @@ class Add extends Component
             // Toast success
             $this->success('Categoria criada com sucesso!');
 
-            $this->dispatch('resetIcon');
-            $this->reset(['icon']);
         } 
         elseif($this->type == "subcategory"){
             Subcategory::create([
@@ -52,15 +50,16 @@ class Add extends Component
                 'name' => $this->name,
                 'category_id' => $this->category_id
             ]);
-
+            
             // Toast success
             $this->success('Subcategoria criada com sucesso!');
         } else{
             // Toast error
             $this->error('Erro ao criar categoria ou subcategoria!');
         }
-
-        $this->reset(['name']);
+        
+        $this->reset(['name', 'icon']);
+        $this->dispatch('resetIcon');
         $this->dispatch('refreshCategories');
     }
 
