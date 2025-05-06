@@ -40,7 +40,6 @@ class CategoriesIndex extends Component
         $deleteCategoriesCount = Category::whereIn("id", $categoriesForDelete)->where('user_id', Auth::id())->delete();
         
         $this->dispatch('refreshCategories');
-        $this->dispatch('resetIcon');
         $this->modalConfirmDelete = false;
 
         // Toast success

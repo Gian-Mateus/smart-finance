@@ -2,6 +2,7 @@
     <x-dropdown>
         <x-slot:trigger>
             <x-button icon="{{ $iconSelect ? $iconSelect : 'o-photo' }}" class="btn"/>
+            {{ $iconSelect }}
         </x-slot:trigger>
      
         <div class="p-4">
@@ -11,11 +12,9 @@
         </div>
 
         @if(empty($search) && empty($results))
-            <div class="grid grid-cols-4 overflow-y-scroll max-h-52">
+            <div class="grid grid-cols-4 overflow-y-scroll max-h-52 p-2 gap-2">
                 @foreach ($icons as $icon)
-                    <x-menu-item wire:key="{{ $icon->id }}">
-                        <x-button icon="{{ $icon->name }}" class="btn-circle btn-outline" wire:click="defineIcon('{{ $icon->name }}')"/>
-                    </x-menu-item>
+                  <x-button icon="{{ $icon->name }}" class="btn-circle btn-outline" wire:click="defineIcon('{{ $icon->name }}')" wire:key="{{ $icon->id }}"/> 
                 @endforeach
                 <div x-data="{
                         more(){
@@ -34,16 +33,15 @@
             </div>
 
         @elseif(empty($results))
-            <x-menu-item title="Nenhum item encontrado."/>
-
+            <span>Nenhum item encontrado.</span>
         @else
+
         <div class="grid grid-cols-4 overflow-y-scroll max-h-52">
             @foreach ($results as $icon)
-                <x-menu-item wire:key="{{ $icon->id }}">
-                    <x-button icon="{{ $icon->name }}" class="btn-circle btn-outline" wire:click="defineIcon('{{ $icon->name }}')"/>
-                </x-menu-item>
+                <x-button icon="{{ $icon->name }}" class="btn-circle btn-outline" wire:click="defineIcon('{{ $icon->name }}')" wire:key="{{ $icon->id }}"/>
             @endforeach
-            </div>
+        </div>
+
         @endif
     </x-dropdown>
 </div>

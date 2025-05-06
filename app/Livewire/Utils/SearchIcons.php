@@ -17,16 +17,14 @@ class SearchIcons extends Component
         $this->perPage += 10;        
     }
 
+    #[On('resetIcon')]
+    public function resetIconSelect()
+    {
+        $this->iconSelect = null;
+    }
     public function defineIcon($iconSelect)
     {
         $this->iconSelect = $iconSelect;
-        $this->dispatch('iconSelected', icon: $this->iconSelect);
-    }
-
-    #[On('resetIcon')]
-    public function resetIcon()
-    {
-        $this->iconSelect = null;
         $this->dispatch('iconSelected', icon: $this->iconSelect);
     }
     
