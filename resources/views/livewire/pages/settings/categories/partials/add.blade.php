@@ -22,9 +22,11 @@
 		x-transition
 	>
 	{{-- Search and select Icons --}}
+	@if ($type == 'category')
 		<div>
-			<livewire:utils.search-icons />
+			<livewire:utils.search-icons/>
 		</div>
+	@endif
 		<div class="flex-1">
 			<x-input
 				type="text"

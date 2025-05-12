@@ -53,13 +53,15 @@
 	<livewire:pages.settings.categories.partials.add
 		type="category"
 		labelButton="Nova Categoria"
-		placeholderInput="Nome da Categoria"
-		wire:key="add-category"
+		placeholderInput="Nome da Categoria"	
+		wire:key="add-subcategory"
+		id="idIcon"
 	/>
 
 	@foreach ($categories as $cat)
 		<x-collapse
 			class="group m-0.5 bg-base-100"
+			name="category-{{ $cat->id }}"
 			wire:key="category-{{ $cat->id }}"
 			separator
 		>
@@ -76,6 +78,8 @@
 						x-show="selectCategory" 
 						x-bind:checked="selectAllCategory"
 						wire:model="deleteCategories.{{ $cat->id }}"
+						wire:key="delete-category-{{ $cat->id }}"
+						id="delete-category-{{ $cat->id }}"
 					/>
 				</div>
 			</x-slot:heading>
@@ -87,14 +91,14 @@
 							labelButton="Nova Subcategoria"
 							placeholderInput="Nome da Subcategoria"
 							:category_id="$cat->id"
-							:key="'add-subcategory-'.$cat->id"
+							wire:key="add-subcategory-{{ $cat->id }}"
 						/>
 					</li>
 					{{-- Subcategories --}}
 					@foreach ($cat->subcategories as $subcategory)
 						<livewire:pages.settings.categories.partials.subcategories 
 							:subcategory="$subcategory"
-							:key="$subcategory->id"
+							wire:key="subcategory-{{ $subcategory->id }}"
 						/>
 					@endforeach
 				</ul>

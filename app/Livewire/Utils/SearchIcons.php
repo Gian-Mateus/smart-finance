@@ -12,6 +12,7 @@ class SearchIcons extends Component
     public int $perPage = 50;
     public ?string $search = null;
     public ?string $iconSelect = null;
+    public string $targetId;
 
     public function loadMore()
     {
@@ -24,6 +25,9 @@ class SearchIcons extends Component
         $this->iconSelect = null;
     }
     
+    /*
+    Esse método que dispara esse evento provoca uma bagunça no snapshot do componente Add, ai ele não encontra o id correto do componente. Ele deveria disparar somente para o primeiro Add
+    */
     public function defineIcon($iconSelect)
     {
         $this->iconSelect = $iconSelect;
