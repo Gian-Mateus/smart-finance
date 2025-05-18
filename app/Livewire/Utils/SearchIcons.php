@@ -28,6 +28,7 @@ class SearchIcons extends Component
     public function resetIcon()
     {
         $this->iconSelect = null;
+        $this->dispatch("iconSelected", $this->iconSelect);
     }
     
     public function render()

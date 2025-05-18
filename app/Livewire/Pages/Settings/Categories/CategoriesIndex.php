@@ -12,8 +12,11 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoriesIndex extends Component
 {  
-    public $deleteCategories = [];
+    public array $deleteCategories = [];
     public bool $modalConfirmDelete = false;
+    public bool $modalEdit = false;
+    public $editing = null;
+    public ?string $editingIcon = null;
 
     use Toast;
 
@@ -25,6 +28,37 @@ class CategoriesIndex extends Component
     #[Computed]
     public function categories(){
         return Category::with('subcategories')->where('user_id', Auth::id())->get()->sortByDesc('created_at');
+    }
+
+    #[On('iconSelected')]
+    public function iconSelected($icon){
+        $this->editingIcon = $icon;
+    }
+
+    public function openModalEdit($editing){
+        $this->modalEdit = true;
+        //dd($editing);
+        $this->editing = $editing;
+    }
+
+    public function update(){
+        if (!$this->editing) return;
+
+        if($this->editing['subcategories']){
+            Category::where('user_id', Auth::id())->where('id', $this->editing['id'])->update([
+                'name' => $this->editing['name'],
+                'icon' => $this->editingIcon
+            ]);
+            $this->success('Categoria atualizada com sucesso!');
+        } else{
+            Subcategory::where('user_id', Auth::id())->where('id', $this->editing['id'])->update([
+                'name' => $this->editing['name'],
+            ]);
+            $this->success('Subcategoria atualizada com sucesso!');
+        }
+        
+        $this->modalEdit = false;
+        $this->dispatch('refreshCategories');
     }
 
     public function deleteSubcategory($id){

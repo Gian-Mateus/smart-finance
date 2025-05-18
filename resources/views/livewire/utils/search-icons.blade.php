@@ -11,7 +11,7 @@
         </div>
 
         @if(empty($search) && empty($results))
-            <div class="grid grid-cols-4 overflow-y-scroll max-h-52 p-2 gap-2">
+            <div class="grid grid-cols-4 overflow-y-scroll max-h-52 p-2 gap-2 z-100">
                 @foreach ($icons as $icon)
                   <x-button icon="{{ $icon->name }}" class="btn-circle btn-outline" wire:click="defineIcon('{{ $icon->name }}')"/> 
                 @endforeach

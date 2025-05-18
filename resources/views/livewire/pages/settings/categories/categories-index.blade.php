@@ -56,27 +56,34 @@
 		placeholderInput="Nome da Categoria"
 	/>
 
-	@foreach ($this->categories as $cat)
+	@foreach ($this->categories as $category)
 		<x-collapse
 			class="group m-0.5 bg-base-100"
 			separator
 			id="{{ uniqid() }}"
 		>
 			<x-slot:heading>
-				<div class="flex justify-between items-center">
+				<div class="flex justify-between items-center group">
 					<div>
-						@if ($cat->icon)
-						<x-icon name="{{ $cat->icon }}"/>
+						@if ($category->icon)
+							<x-icon name="{{ $category->icon }}"/>
 						@endif
-						{{ $cat->name }}
+						{{ $category->name }}
 					</div>
 					<x-checkbox 
 						class="z-10" 
 						x-show="selectCategory" 
 						x-bind:checked="selectAllCategory"
-						wire:model="deleteCategories.{{ $cat->id }}"
+						wire:model="deleteCategories.{{ $category->id }}"
 						:key="uniqid()"
 						id="{{ uniqid() }}"
+					/>
+					<x-button 
+						class="btn-sm bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10"
+						icon="c-pencil"
+						responsive
+						x-show="!selectCategory"
+						wire:click="openModalEdit({{ $category }})"
 					/>
 				</div>
 			</x-slot:heading>
@@ -87,15 +94,15 @@
 							type="subcategory"
 							labelButton="Nova Subcategoria"
 							placeholderInput="Nome da Subcategoria"
-							:category_id="$cat->id"
+							:category_id="$category->id"
 							:key="uniqid()"
 						/>
 					</li>
 					{{-- Subcategories --}}
-					@foreach ($cat->subcategories as $sub)
+					@foreach ($category->subcategories as $subcategory)
 					<li class="group/subcat relative flex items-center justify-between rounded p-2 hover:bg-base-300">
 						<div>
-							{{ $sub->name }}
+							{{ $subcategory->name }}
 						</div>
 						<div class="flex items-center justify-between pr-6 gap-2 opacity-0 transition-opacity duration-300 group-hover/subcat:opacity-100">
 							{{-- Button Edit SubCategory --}}
@@ -103,12 +110,13 @@
 								class="btn-sm"
 								icon="c-pencil"
 								responsive
+								wire:click="openModalEdit({{ $subcategory }})"
 							/>
 							<x-button
 								class="btn-sm"
 								icon="o-trash"
 								responsive
-								wire:click="deleteSubcategory({{ $sub->id }})"
+								wire:click="deleteSubcategory({{ $subcategory->id }})"
 							/>
 						</div>
 					</li>
@@ -118,6 +126,7 @@
 		</x-collapse>
 	@endforeach
 
+	{{-- Modal Confirm Delete --}}
 	<x-modal 
 		wire:model="modalConfirmDelete" 
 		title="Excluir Categoria(s)" 
@@ -129,11 +138,43 @@
 				label="Cancelar"
 				wire:click="$set('modalConfirmDelete', false)"
 			/>
-
 			<x-button
 				label="Confirmar"
 				wire:click="delete"
 			/>
 		</x-slot:actions>
+	</x-modal>
+
+	{{-- Modal Confirm Edit/Update --}}
+	<x-modal 
+		wire:model="modalEdit" 
+		title="Editando..." 
+		subtitle="{{ $editing['name'] ?? '' }}"
+		class="backdrop-blur"
+	>
+		<x-form no-separator>
+			<div class="flex items-center gap-2">
+				<livewire:utils.search-icons />
+				
+				<div class="w-full">
+					<x-input
+						type="text"
+						value="{{ $editing['name'] ?? '' }}"
+						wire:model="editing.name"
+					/>
+				</div>
+			</div>
+
+			<x-slot:actions>
+				<x-button
+					label="Cancelar"
+					wire:click="$set('modalEdit', false)"
+				/>
+				<x-button
+					label="Confirmar"
+					wire:click="update"
+				/>
+			</x-slot:actions>
+		</x-form>
 	</x-modal>
 </div>
