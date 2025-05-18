@@ -16,11 +16,10 @@ class Add extends Component
     public string $labelButton;
     public string $placeholderInput;
     
-    #[Validate('required|min:3|max:50')]
     public string $type;
+    #[Validate('required|min:3|max:50')]
     public string $name;
     public ?string $icon = null;
-    public ?int $idICon = null;
     public ?int $category_id = null;
     
     use Toast;
@@ -30,7 +29,7 @@ class Add extends Component
     {
         $this->icon = $icon;
     }
-
+    
     public function save()
     {
         if($this->type == "category"){
@@ -40,7 +39,6 @@ class Add extends Component
                 'icon' => $this->icon
             ]);
             
-            $this->reset(['icon']);
             // Toast success
             $this->success('Categoria criada com sucesso!');
         } 
@@ -58,7 +56,7 @@ class Add extends Component
             $this->error('Erro ao criar categoria ou subcategoria!');
         }
         
-        $this->reset(['name']);
+        $this->reset(['name', 'icon']);
         $this->dispatch('resetIcon');
         $this->dispatch('refreshCategories');
     }

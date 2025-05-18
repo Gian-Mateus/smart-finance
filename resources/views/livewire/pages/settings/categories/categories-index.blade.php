@@ -53,17 +53,14 @@
 	<livewire:pages.settings.categories.partials.add
 		type="category"
 		labelButton="Nova Categoria"
-		placeholderInput="Nome da Categoria"	
-		wire:key="add-subcategory"
-		id="idIcon"
+		placeholderInput="Nome da Categoria"
 	/>
 
-	@foreach ($categories as $cat)
+	@foreach ($this->categories as $cat)
 		<x-collapse
 			class="group m-0.5 bg-base-100"
-			name="category-{{ $cat->id }}"
-			wire:key="category-{{ $cat->id }}"
 			separator
+			id="{{ uniqid() }}"
 		>
 			<x-slot:heading>
 				<div class="flex justify-between items-center">
@@ -78,8 +75,8 @@
 						x-show="selectCategory" 
 						x-bind:checked="selectAllCategory"
 						wire:model="deleteCategories.{{ $cat->id }}"
-						wire:key="delete-category-{{ $cat->id }}"
-						id="delete-category-{{ $cat->id }}"
+						:key="uniqid()"
+						id="{{ uniqid() }}"
 					/>
 				</div>
 			</x-slot:heading>
@@ -91,26 +88,52 @@
 							labelButton="Nova Subcategoria"
 							placeholderInput="Nome da Subcategoria"
 							:category_id="$cat->id"
-							wire:key="add-subcategory-{{ $cat->id }}"
+							:key="uniqid()"
 						/>
 					</li>
 					{{-- Subcategories --}}
-					@foreach ($cat->subcategories as $subcategory)
-						<livewire:pages.settings.categories.partials.subcategories 
-							:subcategory="$subcategory"
-							wire:key="subcategory-{{ $subcategory->id }}"
-						/>
+					@foreach ($cat->subcategories as $sub)
+					<li class="group/subcat relative flex items-center justify-between rounded p-2 hover:bg-base-300">
+						<div>
+							{{ $sub->name }}
+						</div>
+						<div class="flex items-center justify-between pr-6 gap-2 opacity-0 transition-opacity duration-300 group-hover/subcat:opacity-100">
+							{{-- Button Edit SubCategory --}}
+							<x-button
+								class="btn-sm"
+								icon="c-pencil"
+								responsive
+							/>
+							<x-button
+								class="btn-sm"
+								icon="o-trash"
+								responsive
+								wire:click="deleteSubcategory({{ $sub->id }})"
+							/>
+						</div>
+					</li>
 					@endforeach
 				</ul>
 			</x-slot:content>
 		</x-collapse>
 	@endforeach
 
-	<x-modal wire:model="modalConfirmDelete" title="Excluir Categoria(s)" class="backdrop-blur">
+	<x-modal 
+		wire:model="modalConfirmDelete" 
+		title="Excluir Categoria(s)" 
+		class="backdrop-blur"
+	>
 		Ao excluir uma categoria, todas as suas subcategorias serão excluídas.
-    <x-slot:actions>
-        <x-button label="Cancelar" @click="$wire.modalConfirmDelete = false" />
-        <x-button label="Confirmar" @click="$wire.delete"/>
-    </x-slot:actions>
-</x-modal>
+		<x-slot:actions>
+			<x-button
+				label="Cancelar"
+				wire:click="$set('modalConfirmDelete', false)"
+			/>
+
+			<x-button
+				label="Confirmar"
+				wire:click="delete"
+			/>
+		</x-slot:actions>
+	</x-modal>
 </div>

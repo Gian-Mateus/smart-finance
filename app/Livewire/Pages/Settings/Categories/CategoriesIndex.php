@@ -5,30 +5,38 @@ namespace App\Livewire\Pages\Settings\Categories;
 use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Category;
+use App\Models\Subcategory;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Auth;
 
 class CategoriesIndex extends Component
 {  
-    public $categories;
     public $deleteCategories = [];
     public bool $modalConfirmDelete = false;
 
     use Toast;
 
     #[On('refreshCategories')]
-    public function refreshCategories()
-    {
-        $this->mount();
+    public function refreshCategories(){
+
     }
 
-    public function mount()
-    {
-        $this->categories = Category::with('subcategories')->where('user_id', Auth::id())->get()->sortByDesc('created_at');
+    #[Computed]
+    public function categories(){
+        return Category::with('subcategories')->where('user_id', Auth::id())->get()->sortByDesc('created_at');
+    }
+
+    public function deleteSubcategory($id){
+
+        Subcategory::where('id', $id)->where('user_id', Auth::id())->delete();
+
+        $this->success('Subcategoria excluída com sucesso!');
     }
 
     public function delete()
     {
+        //dd(array_keys($this->deleteCategories));
         if(empty($this->deleteCategories)){
            $this->error('Selecione uma categoria para excluir!');
            return;
@@ -38,7 +46,6 @@ class CategoriesIndex extends Component
 
         $deleteCategoriesCount = Category::whereIn("id", $categoriesForDelete)->where('user_id', Auth::id())->delete();
         
-        $this->dispatch('refreshCategories');
         $this->modalConfirmDelete = false;
 
         // Toast success
