@@ -3,9 +3,11 @@
 use App\Livewire\Welcome;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
+use Illuminate\Support\Facades\Route;
+use App\Livewire\Pages\Settings\Banks\BankIndex;
+use App\Livewire\Pages\Settings\Banks\AddAccount;
 use App\Livewire\Pages\Dashboard\Index as Dashboard;
 use App\Livewire\Pages\Settings\Categories\CategoriesIndex;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
     Route::get('/login', Login::class)->name('login');
     Route::get('/register', Register::class)->name('register'); 
+    /**
+     * Criar uma landing page top e deixar na rota "/"
+    */
 });
 
 Route::middleware('auth')->group(function () {
@@ -28,7 +33,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [Dashboard::class, 'render'])->name('dashboard.index');
 
     /** Routes General */
-    Route::resource('statements', TransactionsController::class);
-    Route::resource('banks', BanksController::class);
     Route::get('/categorias-subcategorias', CategoriesIndex::class)->name('categories');
+    Route::name('banks.')->group(function(){
+        Route::get('/bancos', BankIndex::class)->name('index');
+        Route::get('/bancos/adicionar-conta', AddAccount::class)->name('addAccount');
+    });
+    //Route::get('/extratos', TransactionsController::class)->name('statements');
 });
