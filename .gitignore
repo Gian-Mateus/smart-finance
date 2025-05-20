@@ -22,3 +22,4 @@ yarn-error.log
 /.zed
 /.idx
 /.sqlite
+smartfinance.sqlite
