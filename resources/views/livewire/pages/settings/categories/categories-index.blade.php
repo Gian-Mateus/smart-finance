@@ -1,6 +1,10 @@
 <div
 	class="ml-4 max-w-3xl mt-10"
-	x-data="{ selectCategory: false, selectAllCategory: false }"
+	x-data='{ 
+		selectCategory: false, 
+		selectAllCategory: false, 
+		search: ""
+	}'
 >
 	<x-header
 		title="Categorias e Subcategorias"
@@ -13,6 +17,7 @@
 			<div class="flex-1">
 				<x-input
 					class="p-2"
+					x-model="search"
 					placeholder="Pesquisar"
 					icon="m-magnifying-glass"
 				/>
@@ -50,6 +55,8 @@
 		</div>
 	</div>
 
+	<div class="w-full h-0.5 rounded-full mt-6 mb-2 bg-base-content/10"></div>
+
 	<livewire:pages.settings.categories.partials.add
 		type="category"
 		labelButton="Nova Categoria"
@@ -61,6 +68,10 @@
 			class="group m-0.5 bg-base-100"
 			separator
 			id="{{ uniqid() }}"
+			x-data="{
+				name: '{{ strtolower($category->name) }}'
+			}"
+			x-show="$data.name.includes($data.search.toLowerCase())"
 		>
 			<x-slot:heading>
 				<div class="flex justify-between items-center group">
@@ -72,8 +83,8 @@
 					</div>
 					<x-checkbox 
 						class="z-10" 
-						x-show="selectCategory" 
-						x-bind:checked="selectAllCategory"
+						x-show="$data.selectCategory" 
+						x-bind:checked="$data.selectAllCategory"
 						wire:model="deleteCategories.{{ $category->id }}"
 						:key="uniqid()"
 						id="{{ uniqid() }}"
@@ -82,7 +93,7 @@
 						class="btn-sm bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10"
 						icon="c-pencil"
 						responsive
-						x-show="!selectCategory"
+						x-show="!$data.selectCategory"
 						wire:click="openModalEdit({{ $category }})"
 					/>
 				</div>

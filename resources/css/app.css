@@ -18,3 +18,8 @@
 @source "../**/*.blade.php"; 
 @source "../**/*.js"; 
 @source "../**/*.vue"; 
+
+/* Custom styles */
+@utility modal-box {
+    @apply overflow-y-visible;
+}

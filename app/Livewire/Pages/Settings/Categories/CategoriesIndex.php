@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoriesIndex extends Component
 {  
-    public array $deleteCategories = [];
+    public $deleteCategories = [];
     public bool $modalConfirmDelete = false;
     public bool $modalEdit = false;
     public $editing = null;
@@ -27,7 +27,14 @@ class CategoriesIndex extends Component
 
     #[Computed]
     public function categories(){
-        return Category::with('subcategories')->where('user_id', Auth::id())->get()->sortByDesc('created_at');
+        return Category::where('user_id', Auth::id())
+            ->select('id', 'name', 'icon')
+            ->with(['subcategories' => function($q) {
+                $q->where('user_id', Auth::id())
+                  ->select('id', 'name', 'category_id');
+            }])
+            ->orderByDesc('created_at')
+            ->get();
     }
 
     #[On('iconSelected')]
@@ -37,14 +44,14 @@ class CategoriesIndex extends Component
 
     public function openModalEdit($editing){
         $this->modalEdit = true;
-        //dd($editing);
+       //dd($editing);
         $this->editing = $editing;
     }
 
     public function update(){
         if (!$this->editing) return;
 
-        if($this->editing['subcategories']){
+        if(isset($this->editing['subcategories'])){
             Category::where('user_id', Auth::id())->where('id', $this->editing['id'])->update([
                 'name' => $this->editing['name'],
                 'icon' => $this->editingIcon
@@ -70,10 +77,17 @@ class CategoriesIndex extends Component
 
     public function delete()
     {
-        //dd(array_keys($this->deleteCategories));
+        //dd($this->deleteCategories);
         if(empty($this->deleteCategories)){
            $this->error('Selecione uma categoria para excluir!');
            return;
+        }
+
+        if(array_all($this->deleteCategories, function($category){
+            return $category == false;
+        })){
+            $this->error('Selecione uma categoria para excluir!');
+            return;
         }
 
         $categoriesForDelete = array_keys($this->deleteCategories);

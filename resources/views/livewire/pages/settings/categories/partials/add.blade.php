@@ -5,20 +5,20 @@
 >
 	<div
 		class="flex transition-all duration-300 ease-in-out"
-		x-show="!show"
+		x-show="!$data.show"
 		x-transition
 	>
 		<x-button
 			class="w-full bg-primary"
 			label="{{ $labelButton }}"
 			icon="m-plus-small"
-			x-on:click="show = true"
+			x-on:click="$data.show = true"
 		/>
 	</div>
 
 	<div
 		class="flex gap-3 transition-all duration-300 ease-in-out"
-		x-show="show"
+		x-show="$data.show"
 		x-transition
 	>
 		{{-- Search and select Icons --}}
@@ -43,7 +43,7 @@
 			<x-button
 				class="btn-secondary"
 				icon="c-x-mark"
-				x-on:click="show = false"
+				x-on:click="$data.show = false"
 				responsive
 			/>
 		</div>
