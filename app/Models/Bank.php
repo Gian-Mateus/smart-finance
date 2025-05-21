@@ -32,7 +32,8 @@ class Bank extends Model
 		'ispb',
 		'name',
 		'code',
-		'fullName',
+		'full_name',
+		'ispb'
 	];
 
 	public function banks_accounts()

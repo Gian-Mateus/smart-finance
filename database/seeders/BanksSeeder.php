@@ -6,6 +6,7 @@ use App\Models\Bank;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\Http;
 
 class BanksSeeder extends Seeder
 {
@@ -287,20 +288,13 @@ class BanksSeeder extends Seeder
         }
         $banksAPI = $response->json();
         foreach ($banksAPI as $bank) {
-            Bank::create([
-                "ispb" => $bank['ispb'],
-                "name" => $bank['name'],
-                "code" => $bank['code'],
-                "fullName" => $bank['fullName']
-            ]);
-        }
-        // for($i = 0; $i < count($banksAPI); $i++) {
-        //     Bank::create([
-        //         "ispb" => $banksAPI[$i]["ispb"],
-        //         "name" => $banksAPI[$i]["name"],
-        //         "code" => $banksAPI[$i]["code"],
-        //         "fullName" => $banksAPI[$i]["fullName"]
-        //     ]);
-        // }
+            if (isset($bank['name'])) {
+                Bank::create([
+                    'ispb' => $bank['ispb'] ?? null,
+                    'name' => $bank['name'],
+                    'code' => $bank['code'] ?? null,
+                    'full_name' => $bank['fullName'] ?? null
+                ]);
+            }
     }
 }
