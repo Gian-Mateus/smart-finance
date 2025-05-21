@@ -32,6 +32,8 @@ class Add extends Component
     
     public function save()
     {
+        $this->validate();
+        
         if($this->type == "category"){
             Category::create([
                 'user_id' => Auth::id(),
@@ -58,7 +60,6 @@ class Add extends Component
         
         $this->reset(['name', 'icon']);
         $this->dispatch('resetIcon');
-        $this->dispatch('refreshCategories');
     }
 
     public function render()
