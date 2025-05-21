@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/categorias-subcategorias', CategoriesIndex::class)->name('categories');
     Route::name('banks.')->group(function(){
         Route::get('/bancos', BankIndex::class)->name('index');
-        Route::get('/bancos/adicionar-conta', AddAccount::class)->name('addAccount');
+        // Route::get('/bancos/adicionar-conta', AddAccount::class)->name('addAccount');
     });
     //Route::get('/extratos', TransactionsController::class)->name('statements');
 });
