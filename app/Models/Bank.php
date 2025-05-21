@@ -29,8 +29,10 @@ class Bank extends Model
 	protected $table = 'banks';
 
 	protected $fillable = [
+		'ispb',
 		'name',
-		'code'
+		'code',
+		'fullName',
 	];
 
 	public function banks_accounts()
