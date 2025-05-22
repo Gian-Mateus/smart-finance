@@ -22,6 +22,7 @@ class BankIndex extends Component
     public string $name;
     public ?int $account_number;
     public ?int $bankSearchableID = null;
+    public ?int $bankEditing = null;
     public Collection $results;
     public $accountEditing = null;
 
@@ -44,18 +45,36 @@ class BankIndex extends Component
         $this->modalAddAccount = false;
     }
 
+    public function update(){
+        //bankSearchableID sempre está null, mesmo mudando o banco na edição, porém bankEditing é alterado conforme a seleção do usuário.
+        //dd($this->bankSearchableID, $this->bankEditing);
+
+        $this->validate();
+        if(Auth::id() !== $this->accountEditing['user_id']){
+            return $this->error('Você não tem permissão para editar essa conta!');
+        }
+        
+        BanksAccount::where('id', $this->accountEditing['id'])->update([
+            'bank_id' => $this->bankEditing,
+            'name' => $this->accountEditing['name'],
+            'account_number' => $this->accountEditing['account_number'] ?? null,
+        ]);
+    }
+
     public function openModalEdit($editing){
         $this->modalEditAccount = true;
         $this->accountEditing = $editing;
+        $this->bankEditing = $editing["bank_id"];
+        $this->search();
     }
     
     public function search(string $value = ''){
 
-        if($this->accountEditing){
-            $selectedOption = Bank::where('id', $this->accountEditing)->get();
-        } else{
-            $selectedOption = Bank::where('id', $this->bankSearchableID)->get();
-        }
+       if($this->bankEditing !== null){
+           $selectedOption = Bank::where('id', $this->bankEditing)->get();
+       } else{
+           $selectedOption = Bank::where('id', $this->bankSearchableID)->get();
+       }
         
         $this->results = Bank::where('name', 'like', '%'.$value.'%')
                                 ->orWhere('full_name', 'like', '%'.$value.'%')

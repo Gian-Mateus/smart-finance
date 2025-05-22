@@ -41,7 +41,11 @@
     </div>
 
     {{-- Modal to Add Account --}}
-    <x-modal wire:model="modalAddAccount" title="Adicionar Conta">
+    <x-modal 
+        wire:model="modalAddAccount" 
+        title="Adicionar Conta" 
+
+    >
         <x-form no-separator wire:submit="save">
             <x-input 
                 label="Nome" 
@@ -85,18 +89,20 @@
     </x-modal>
 
     {{-- Modal to Edit Account --}}
-    <x-modal wire:model="modalEditAccount" title="Editando: {{ $accountEditing['name'] ?? '' }}">
-        <x-form no-separator wire:submit="save">
+    <x-modal 
+        wire:model="modalEditAccount" 
+        title="Editando: {{ $accountEditing['name'] ?? '' }}"
+    >
+        <x-form no-separator wire:submit="update">
             <x-input 
                 label="Nome" 
                 value="{{ $accountEditing['name'] ?? '' }}" 
                 wire:model="accountEditing.name"
             />
-
             <x-choices 
-                label="Banco" 
-                wire:model="accountEditing" 
-                :options="$results" 
+                label="Banco"
+                wire:model="bankEditing" 
+                :options="$results"
                 single 
                 clearable 
                 searchable
@@ -116,11 +122,11 @@
                 hint="Campo opcional"
                 type="number"
                 placeholder="00000"
-                wire:model="account_number"
+                wire:model="accountEditing.account_number"
             />
 
             <x-slot:actions>
-                <x-button label="Cancelar" @click="$wire.modalAddAccount = false" />
+                <x-button label="Cancelar" @click="$wire.modalEditAccount = false" />
                 <x-button label="Adicionar" class="btn-primary" type="submit" spinner="save" />
             </x-slot:actions>
         </x-form>
