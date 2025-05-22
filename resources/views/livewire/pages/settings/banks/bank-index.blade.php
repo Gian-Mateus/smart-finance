@@ -127,7 +127,7 @@
 
             <x-slot:actions>
                 <x-button label="Cancelar" @click="$wire.modalEditAccount = false" />
-                <x-button label="Adicionar" class="btn-primary" type="submit" spinner="save" />
+                <x-button label="Salvar" class="btn-primary" type="submit" spinner="update" />
             </x-slot:actions>
         </x-form>
     </x-modal>

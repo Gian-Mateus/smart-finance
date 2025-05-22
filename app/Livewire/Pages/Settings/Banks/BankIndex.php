@@ -48,8 +48,8 @@ class BankIndex extends Component
     public function update(){
         //bankSearchableID sempre está null, mesmo mudando o banco na edição, porém bankEditing é alterado conforme a seleção do usuário.
         //dd($this->bankSearchableID, $this->bankEditing);
+        //dd($this->accountEditing['id'], $this->accountEditing['name'], $this->accountEditing['account_number']);
 
-        $this->validate();
         if(Auth::id() !== $this->accountEditing['user_id']){
             return $this->error('Você não tem permissão para editar essa conta!');
         }
@@ -59,6 +59,9 @@ class BankIndex extends Component
             'name' => $this->accountEditing['name'],
             'account_number' => $this->accountEditing['account_number'] ?? null,
         ]);
+
+        $this->modalEditAccount = false;
+        $this->success('Conta atualizada com sucesso!');
     }
 
     public function openModalEdit($editing){
