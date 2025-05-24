@@ -6,7 +6,6 @@ use App\Models\Bank;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Support\Facades\Http;
 
 class BanksSeeder extends Seeder
 {
@@ -296,5 +295,6 @@ class BanksSeeder extends Seeder
                     'full_name' => $bank['fullName'] ?? null
                 ]);
             }
+        }
     }
 }
