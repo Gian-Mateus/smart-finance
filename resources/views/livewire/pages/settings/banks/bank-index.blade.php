@@ -12,12 +12,19 @@
         {{-- List Accounts Created --}}
 
         @foreach ($this->bankAccount as $ba)     
-        <x-card title="{{ $ba->name }}" shadow separator class="relative group/card">
-            <x-button 
-                icon="c-pencil" 
-                class="btn-circle absolute top-2 right-4 group-hover/card:opacity-100 opacity-0 transition-all durantion-300 ease-in"
-                @click="$wire.openModalEdit({{ $ba }}); $wire.modalEditAccount = true"
-            />
+        <x-card title="{{ $ba->name }}" shadow separator class="relative">
+            <div class="absolute top-2 right-2">
+                <x-button 
+                    icon="c-pencil" 
+                    class="btn-circle btn-ghost btn-sm"
+                    @click="$wire.openModalEdit({{ $ba }}); $wire.modalEditAccount = true"
+                />
+                <x-button 
+                    icon="o-trash" 
+                    class="btn-circle btn-ghost btn-sm"
+                    @click="$wire.openModalDelete({{ $ba }}); $wire.modalDeleteAccount = true"
+                />
+            </div>
             <x-list-item :item="$ba">
                 <x-slot:avatar>
                     <x-icon name="o-user" class="bg-primary/10 p-2 w-9 h-9 rounded-full" />
@@ -44,7 +51,6 @@
     <x-modal 
         wire:model="modalAddAccount" 
         title="Adicionar Conta" 
-
     >
         <x-form no-separator wire:submit="save">
             <x-input 
@@ -91,13 +97,13 @@
     {{-- Modal to Edit Account --}}
     <x-modal 
         wire:model="modalEditAccount" 
-        title="Editando: {{ $accountEditing['name'] ?? '' }}"
+        title="Editando: {{ $accountEditOrDelete['name'] ?? '' }}"
     >
         <x-form no-separator wire:submit="update">
             <x-input 
                 label="Nome" 
-                value="{{ $accountEditing['name'] ?? '' }}" 
-                wire:model="accountEditing.name"
+                value="{{ $accountEditOrDelete['name'] ?? '' }}" 
+                wire:model="accountEditOrDelete.name"
             />
             <x-choices 
                 label="Banco"
@@ -122,7 +128,7 @@
                 hint="Campo opcional"
                 type="number"
                 placeholder="00000"
-                wire:model="accountEditing.account_number"
+                wire:model="accountEditOrDelete.account_number"
             />
 
             <x-slot:actions>
@@ -131,5 +137,15 @@
             </x-slot:actions>
         </x-form>
     </x-modal>
+
+    <x-modal wire:model="modalDeleteAccount" title="Exclíndo conta: {{ $accountEditOrDelete['name'] ?? '' }}">
+    <x-form no-separator wire:submit="delete">
+        Ao excluir essa conta, todos as transações vinculadas há ela serão excluídas também!
+        <x-slot:actions>
+            <x-button label="Cancelar" @click="$wire.modalDeleteAccount = false" />
+            <x-button label="Excluir" class="btn-primary" type="submit" spinner="delete" />
+        </x-slot:actions>
+    </x-form>
+</x-modal>
 
 </div>
