@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->foreignId('bank_account_id')->constrained('banks_accounts'); // FOREIGN KEY banco_id
+            $table->foreignId('bank_account_id')->constrained('banks_accounts')->cascadeOnDelete(); // FOREIGN KEY banco_id
             $table->foreignId('subcategory_id')->nullable()->constrained('subcategories')->nullOnDelete(); // FOREIGN KEY subcategoria_id
             $table->foreignId('recurrence_types_id')->constrained('recurrence_types'); // FOREIGN KEY periodicidade_id
             $table->decimal('value', 10, 2); // valor DECIMAL(10,2) NOT NULL
