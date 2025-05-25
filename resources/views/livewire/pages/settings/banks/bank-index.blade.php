@@ -8,7 +8,7 @@
         @click="$wire.modalAddAccount = true"
     />
     
-    <div class="grid gap-4 grid-cols-2 mt-10">
+    <div class="grid gap-4 grid-cols-1 md:grid-cols-2 mt-10">
         {{-- List Accounts Created --}}
 
         @foreach ($this->bankAccount as $ba)     

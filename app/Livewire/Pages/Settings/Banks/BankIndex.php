@@ -68,6 +68,7 @@ class BankIndex extends Component
         $this->validate([
             'accountEditOrDelete.name' => 'required|min:3',
             'accountEditOrDelete.account_number' => 'nullable|min:3|integer',
+            'bankEditing' => 'required'
         ], [
             'required' => "Este campo é obrigatório.",
             'min' => "Este campo deve ter pelo menos :min caracteres.",
