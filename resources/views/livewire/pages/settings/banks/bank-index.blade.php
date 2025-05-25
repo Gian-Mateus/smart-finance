@@ -17,12 +17,14 @@
                 <x-button 
                     icon="c-pencil" 
                     class="btn-circle btn-ghost btn-sm"
-                    @click="$wire.openModalEdit({{ $ba }}); $wire.modalEditAccount = true"
+                    @click="$wire.modalEditAccount = true"
+                    wire:click="openModalEdit({{ $ba }})"
                 />
                 <x-button 
                     icon="o-trash" 
                     class="btn-circle btn-ghost btn-sm"
-                    @click="$wire.openModalDelete({{ $ba }}); $wire.modalDeleteAccount = true"
+                    @click="$wire.modalDeleteAccount = true"
+                    wire:click="openModalDelete({{ $ba }})"
                 />
             </div>
             <x-list-item :item="$ba">

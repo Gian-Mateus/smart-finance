@@ -36,7 +36,8 @@ class BanksAccount extends Model
 
 	protected $casts = [
 		'user_id' => 'int',
-		'bank_id' => 'int'
+		'bank_id' => 'int',
+		'account_number' => 'int'
 	];
 
 	protected $fillable = [

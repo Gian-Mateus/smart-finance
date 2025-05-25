@@ -65,9 +65,10 @@ class BankIndex extends Component
 
     public function update(){
         //bankSearchableID sempre está null, mesmo mudando o banco na edição, porém bankEditing é alterado conforme a seleção do usuário.
+        //dd($this->accountEditOrDelete);
         $this->validate([
             'accountEditOrDelete.name' => 'required|min:3',
-            'accountEditOrDelete.account_number' => 'nullable|min:3|integer',
+            'accountEditOrDelete.account_number' => 'nullable|min:4',
             'bankEditing' => 'required'
         ], [
             'required' => "Este campo é obrigatório.",
@@ -86,6 +87,7 @@ class BankIndex extends Component
         ]);
 
         $this->modalEditAccount = false;
+        //$this->reset();
         $this->success('Conta atualizada com sucesso!');
     }
 
