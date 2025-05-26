@@ -50,9 +50,9 @@
 						link="/" />
 					<x-menu-item title="Perfil" icon="o-user-circle" />
 					<x-menu-sub title="Configurações" icon="o-cog-6-tooth">
-						<x-menu-item title="Bancos/Contas" icon="c-building-library" link="{{ route('banks.index') }}" />
+						<x-menu-item title="Bancos/Contas" icon="c-building-library" link="{{ route('banks') }}" />
 						<x-menu-item title="Categorias/Subcategorias" icon="c-squares-plus" link="{{ route('categories') }}" />
-						<x-menu-item title="Orçamentos" icon="o-document-currency-dollar" link="/" />
+						<x-menu-item title="Orçamentos/Metas" icon="o-document-currency-dollar" link="{{ route('budgets') }}" />
 						<x-menu-item title="Periodicidades" icon="m-calendar" link="/" />
 					</x-menu-sub>
 				</x-menu>

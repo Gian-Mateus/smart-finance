@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Pages\Settings\Banks\BankIndex;
 use App\Livewire\Pages\Settings\Banks\AddAccount;
 use App\Livewire\Pages\Dashboard\Index as Dashboard;
+use App\Livewire\Pages\Settings\Budgets\BudgetsIndex;
 use App\Livewire\Pages\Settings\Categories\CategoriesIndex;
 
 /*
@@ -34,9 +35,7 @@ Route::middleware('auth')->group(function () {
 
     /** Routes General */
     Route::get('/categorias-subcategorias', CategoriesIndex::class)->name('categories');
-    Route::name('banks.')->group(function(){
-        Route::get('/bancos', BankIndex::class)->name('index');
-        // Route::get('/bancos/adicionar-conta', AddAccount::class)->name('addAccount');
-    });
+    Route::get('/bancos-contas', BankIndex::class)->name('banks');
+    Route::get('/orcamentos', BudgetsIndex::class)->name('budgets');
     //Route::get('/extratos', TransactionsController::class)->name('statements');
 });
