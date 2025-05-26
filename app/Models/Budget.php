@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\MoneyBRL;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Category;
@@ -35,6 +36,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Budget extends Model
 {
+	use MoneyBRL;
 	protected $table = 'budgets';
 	public $timestamps = false;
 
@@ -43,7 +45,7 @@ class Budget extends Model
 		'category_id' => 'int',
 		'subcategory_id' => 'int',
 		'recurrence_type_id' => 'int',
-		'target_value' => 'float',
+		'target_value' => 'int',
 		'start_date' => 'datetime',
 		'end_date' => 'datetime'
 	];
@@ -59,6 +61,26 @@ class Budget extends Model
 		'end_date'
 	];
 
+	// Accessor para obter o valor formatado
+	public function getFormattedTargetValueAttribute()
+	{
+		// Primeiro converte para decimal, depois formata
+		$decimalValue = $this->toDecimal($this->attributes['target_value']);
+		return $this->showBRL($decimalValue);
+	}
+	
+	// Accessor para converter automaticamente ao acessar
+	public function getTargetValueAttribute($value)
+	{
+		return $this->toDecimal($value);
+	}
+	
+	// Mutator para converter automaticamente ao salvar
+	public function setTargetValueAttribute($value)
+	{
+		$this->attributes['target_value'] = $this->toInteger($value);
+	}
+
 	public function category()
 	{
 		return $this->belongsTo(Category::class);
@@ -69,11 +91,11 @@ class Budget extends Model
 		return $this->belongsTo(RecurrenceType::class);
 	}
 
-	public function subcategory()
+	/* public function subcategory()
 	{
 		return $this->belongsTo(Subcategory::class);
 	}
-
+ */
 	public function user()
 	{
 		return $this->belongsTo(User::class);

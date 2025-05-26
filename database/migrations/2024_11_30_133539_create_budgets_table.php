@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('category_id')->constrained('categories');
-            $table->foreignId('subcategory_id')->constrained('subcategories');
+            // The foreign key for subcategory is no longer necessary, as all related information can be retrieved through the category.            
+            //$table->foreignId('subcategory_id')->constrained('subcategories');
             $table->foreignId('recurrence_type_id')->nullable()->constrained('recurrence_types')->nullOnDelete();
-            $table->decimal('target_value', 10, 2);
+            $table->integer('target_value')->default(00000);
             $table->enum('types', ['budget', 'goal']);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
