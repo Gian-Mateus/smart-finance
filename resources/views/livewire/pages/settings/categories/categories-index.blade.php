@@ -8,6 +8,7 @@
 >
 	<x-header
 		title="Categorias e Subcategorias"
+		subtitle="Categorise seus gastos e receitas"
 		separator
 	/>
 	{{-- Search, Delete and Add --}}
@@ -54,8 +55,6 @@
 			/>
 		</div>
 	</div>
-
-	<div class="w-full h-0.5 rounded-full mt-6 mb-2 bg-base-content/10"></div>
 
 	<livewire:pages.settings.categories.partials.add
 		type="category"
