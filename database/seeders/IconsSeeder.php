@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Icons;
+use App\Models\Icon;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -1305,7 +1305,7 @@ class IconsSeeder extends Seeder
         ];
 
         foreach($icons as $i){
-            Icons::create([
+            Icon::create([
                 'name' => $i
             ]);
         }
