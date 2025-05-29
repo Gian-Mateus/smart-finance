@@ -1,51 +1,143 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
+declare(strict_types=1);
 
 namespace App\Models;
 
 use Carbon\Carbon;
-use App\Models\Budget;
-use App\Models\Transaction;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class RecurrenceType
- * 
+ *
  * @property int $id
  * @property string $name
  * @property int|null $interval
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
+ * @property Collection|Category[] $budgetsCategories
+ * @property Collection|Subcategory[] $budgetsSubcategories
+ * @property Collection|User[] $budgetsUsers
+ * @property Collection|BanksAccount[] $transactionsBanksAccounts
+ * @property Collection|PaymentMethod[] $transactionsPaymentMethods
+ * @property Collection|Subcategory[] $transactionsSubcategories
  * @property Collection|Budget[] $budgets
  * @property Collection|Transaction[] $transactions
- *
- * @package App\Models
  */
 class RecurrenceType extends Model
 {
-	protected $table = 'recurrence_types';
+    protected $table = 'recurrence_types';
 
-	protected $casts = [
-		'interval' => 'int'
-	];
+    protected $primaryKey = 'id';
 
-	protected $fillable = [
-		'name',
-		'interval'
-	];
+    public $timestamps = true;
 
-	public function budgets()
-	{
-		return $this->hasMany(Budget::class);
-	}
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'id',
+        'name',
+        '`interval`',
+    ];
 
-	public function transactions()
-	{
-		return $this->hasMany(Transaction::class, 'recurrence_types_id');
-	}
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+    ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'name' => 'string',
+            'interval' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * @return HasMany<Budget, $this>
+     */
+    public function budgets(): HasMany
+    {
+        return $this->hasMany(Budget::class, 'recurrence_type_id', 'id');
+    }
+
+    /**
+     * @return HasMany<Transaction, $this>
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'recurrence_types_id', 'id');
+    }
+
+    /**
+     * @return BelongsToMany<Category, $this>
+     */
+    public function budgetsCategories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'budgets', 'id', 'id')
+            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
+    }
+
+    /**
+     * @return BelongsToMany<Subcategory, $this>
+     */
+    public function budgetsSubcategories(): BelongsToMany
+    {
+        return $this->belongsToMany(Subcategory::class, 'budgets', 'id', 'id')
+            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
+    }
+
+    /**
+     * @return BelongsToMany<User, $this>
+     */
+    public function budgetsUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'budgets', 'id', 'id')
+            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
+    }
+
+    /**
+     * @return BelongsToMany<BanksAccount, $this>
+     */
+    public function transactionsBanksAccounts(): BelongsToMany
+    {
+        return $this->belongsToMany(BanksAccount::class, 'transactions', 'id', 'id')
+            ->withPivot('bank_account_id', 'subcategory_id', 'recurrence_types_id', 'payment_methods_id', 'value', 'date', 'description', 'observation', 'type')
+            ->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany<PaymentMethod, $this>
+     */
+    public function transactionsPaymentMethods(): BelongsToMany
+    {
+        return $this->belongsToMany(PaymentMethod::class, 'transactions', 'id', 'id')
+            ->withPivot('bank_account_id', 'subcategory_id', 'recurrence_types_id', 'payment_methods_id', 'value', 'date', 'description', 'observation', 'type')
+            ->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany<Subcategory, $this>
+     */
+    public function transactionsSubcategories(): BelongsToMany
+    {
+        return $this->belongsToMany(Subcategory::class, 'transactions', 'id', 'id')
+            ->withPivot('bank_account_id', 'subcategory_id', 'recurrence_types_id', 'payment_methods_id', 'value', 'date', 'description', 'observation', 'type')
+            ->withTimestamps();
+    }
 }

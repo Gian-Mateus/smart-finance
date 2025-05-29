@@ -1,59 +1,134 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
+declare(strict_types=1);
 
 namespace App\Models;
 
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Budget;
-use App\Models\Subcategory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Category
- * 
+ *
  * @property int $id
  * @property int $user_id
  * @property string $name
+ * @property string|null $icon
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
  * @property User $user
+ * @property Collection|RecurrenceType[] $budgetsRecurrenceTypes
+ * @property Collection|Subcategory[] $budgetsSubcategories
+ * @property Collection|User[] $budgetsUsers
+ * @property Collection|User[] $subcategoriesUsers
  * @property Collection|Budget[] $budgets
  * @property Collection|Subcategory[] $subcategories
- *
- * @package App\Models
  */
 class Category extends Model
 {
-	protected $table = 'categories';
+    protected $table = 'categories';
 
-	protected $casts = [
-		'user_id' => 'int'
-	];
+    protected $primaryKey = 'id';
 
-	protected $fillable = [
-		'user_id',
-		'name',
-		'icon'
-	];
+    public $timestamps = true;
 
-	public function user()
-	{
-		return $this->belongsTo(User::class);
-	}
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'id',
+        'user_id',
+        'name',
+        'icon',
+    ];
 
-	public function budgets()
-	{
-		return $this->hasMany(Budget::class);
-	}
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+    ];
 
-	public function subcategories()
-	{
-		return $this->hasMany(Subcategory::class);
-	}
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'user_id' => 'integer',
+            'name' => 'string',
+            'icon' => 'string',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * @return HasMany<Budget, $this>
+     */
+    public function budgets(): HasMany
+    {
+        return $this->hasMany(Budget::class, 'category_id', 'id');
+    }
+
+    /**
+     * @return HasMany<Subcategory, $this>
+     */
+    public function subcategories(): HasMany
+    {
+        return $this->hasMany(Subcategory::class, 'category_id', 'id');
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * @return BelongsToMany<RecurrenceType, $this>
+     */
+    public function budgetsRecurrenceTypes(): BelongsToMany
+    {
+        return $this->belongsToMany(RecurrenceType::class, 'budgets', 'id', 'id')
+            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
+    }
+
+    /**
+     * @return BelongsToMany<Subcategory, $this>
+     */
+    public function budgetsSubcategories(): BelongsToMany
+    {
+        return $this->belongsToMany(Subcategory::class, 'budgets', 'id', 'id')
+            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
+    }
+
+    /**
+     * @return BelongsToMany<User, $this>
+     */
+    public function budgetsUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'budgets', 'id', 'id')
+            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
+    }
+
+    /**
+     * @return BelongsToMany<User, $this>
+     */
+    public function subcategoriesUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'subcategories', 'id', 'id')
+            ->withPivot('category_id', 'user_id', 'name')
+            ->withTimestamps();
+    }
 }

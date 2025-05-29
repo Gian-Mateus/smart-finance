@@ -4,26 +4,24 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Job
+ * Class Icon
  *
  * @property int $id
- * @property string $queue
- * @property string $payload
- * @property bool $attempts
- * @property int|null $reserved_at
- * @property int $available_at
- * @property int $created_at
+ * @property string $name
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
-class Job extends Model
+class Icon extends Model
 {
-    protected $table = 'jobs';
+    protected $table = 'icons';
 
     protected $primaryKey = 'id';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     /**
      * The attributes that are mass assignable.
@@ -32,11 +30,7 @@ class Job extends Model
      */
     protected $fillable = [
         'id',
-        'queue',
-        'payload',
-        'attempts',
-        'reserved_at',
-        'available_at',
+        'name',
     ];
 
     /**
@@ -54,12 +48,9 @@ class Job extends Model
     {
         return [
             'id' => 'integer',
-            'queue' => 'string',
-            'payload' => 'string',
-            'attempts' => 'boolean',
-            'reserved_at' => 'integer',
-            'available_at' => 'integer',
-            'created_at' => 'integer',
+            'name' => 'string',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 }

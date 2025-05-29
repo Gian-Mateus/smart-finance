@@ -1,103 +1,111 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
+declare(strict_types=1);
 
 namespace App\Models;
 
-use App\MoneyBRL;
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Category;
-use App\Models\Subcategory;
-use App\Models\RecurrenceType;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Budget
- * 
+ *
  * @property int $id
  * @property int $user_id
  * @property int $category_id
  * @property int $subcategory_id
  * @property int|null $recurrence_type_id
- * @property float $target_value
+ * @property int $target_value
  * @property string $types
  * @property Carbon|null $start_date
  * @property Carbon|null $end_date
- * 
  * @property Category $category
- * @property RecurrenceType|null $recurrence_type
+ * @property RecurrenceType $recurrenceType
  * @property Subcategory $subcategory
  * @property User $user
- *
- * @package App\Models
  */
 class Budget extends Model
 {
-	use MoneyBRL;
-	protected $table = 'budgets';
-	public $timestamps = false;
+    protected $table = 'budgets';
 
-	protected $casts = [
-		'user_id' => 'int',
-		'category_id' => 'int',
-		'subcategory_id' => 'int',
-		'recurrence_type_id' => 'int',
-		'target_value' => 'int',
-		'start_date' => 'datetime',
-		'end_date' => 'datetime'
-	];
+    protected $primaryKey = 'id';
 
-	protected $fillable = [
-		'user_id',
-		'category_id',
-		'subcategory_id',
-		'recurrence_type_id',
-		'target_value',
-		'types',
-		'start_date',
-		'end_date'
-	];
+    public $timestamps = false;
 
-	// Accessor para obter o valor formatado
-	public function getFormattedTargetValueAttribute()
-	{
-		// Primeiro converte para decimal, depois formata
-		$decimalValue = $this->toDecimal($this->attributes['target_value']);
-		return $this->showBRL($decimalValue);
-	}
-	
-	// Accessor para converter automaticamente ao acessar
-	public function getTargetValueAttribute($value)
-	{
-		return $this->toDecimal($value);
-	}
-	
-	// Mutator para converter automaticamente ao salvar
-	public function setTargetValueAttribute($value)
-	{
-		$this->attributes['target_value'] = $this->toInteger($value);
-	}
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'id',
+        'user_id',
+        'category_id',
+        'subcategory_id',
+        'recurrence_type_id',
+        'target_value',
+        'types',
+        'start_date',
+        'end_date',
+    ];
 
-	public function category()
-	{
-		return $this->belongsTo(Category::class);
-	}
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        '$target_value' => '0',
+    ];
 
-	public function recurrence_type()
-	{
-		return $this->belongsTo(RecurrenceType::class);
-	}
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'user_id' => 'integer',
+            'category_id' => 'integer',
+            'subcategory_id' => 'integer',
+            'recurrence_type_id' => 'integer',
+            'target_value' => 'integer',
+            'types' => 'string',
+            'start_date' => 'datetime',
+            'end_date' => 'datetime',
+        ];
+    }
 
-	/* public function subcategory()
-	{
-		return $this->belongsTo(Subcategory::class);
-	}
- */
-	public function user()
-	{
-		return $this->belongsTo(User::class);
-	}
+    /**
+     * @return BelongsTo<Category, $this>
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    /**
+     * @return BelongsTo<RecurrenceType, $this>
+     */
+    public function recurrenceType(): BelongsTo
+    {
+        return $this->belongsTo(RecurrenceType::class, 'recurrence_type_id');
+    }
+
+    /**
+     * @return BelongsTo<Subcategory, $this>
+     */
+    public function subcategory(): BelongsTo
+    {
+        return $this->belongsTo(Subcategory::class, 'subcategory_id');
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

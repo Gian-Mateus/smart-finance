@@ -1,8 +1,6 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -10,32 +8,60 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Session
- * 
+ *
  * @property string $id
  * @property int|null $user_id
  * @property string|null $ip_address
  * @property string|null $user_agent
  * @property string $payload
  * @property int $last_activity
- *
- * @package App\Models
  */
 class Session extends Model
 {
-	protected $table = 'sessions';
-	public $incrementing = false;
-	public $timestamps = false;
+    protected $table = 'sessions';
 
-	protected $casts = [
-		'user_id' => 'int',
-		'last_activity' => 'int'
-	];
+    protected $primaryKey = 'id';
 
-	protected $fillable = [
-		'user_id',
-		'ip_address',
-		'user_agent',
-		'payload',
-		'last_activity'
-	];
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
+    public $timestamps = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'id',
+        'user_id',
+        'ip_address',
+        'user_agent',
+        'payload',
+        'last_activity',
+    ];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+    ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'string',
+            'user_id' => 'integer',
+            'ip_address' => 'string',
+            'user_agent' => 'string',
+            'payload' => 'string',
+            'last_activity' => 'integer',
+        ];
+    }
 }

@@ -1,20 +1,19 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
+declare(strict_types=1);
 
 namespace App\Models;
 
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Transaction;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Import
- * 
+ *
  * @property int $id
  * @property int $user_id
  * @property string $file_name
@@ -22,36 +21,77 @@ use Illuminate\Database\Eloquent\Collection;
  * @property Carbon $imported_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
  * @property User $user
  * @property Collection|Transaction[] $transactions
- *
- * @package App\Models
+ * @property Collection|ImportsTransaction[] $importsTransactions
  */
 class Import extends Model
 {
-	protected $table = 'imports';
+    protected $table = 'imports';
 
-	protected $casts = [
-		'user_id' => 'int',
-		'imported_at' => 'datetime'
-	];
+    protected $primaryKey = 'id';
 
-	protected $fillable = [
-		'user_id',
-		'file_name',
-		'file_type',
-		'imported_at'
-	];
+    public $timestamps = true;
 
-	public function user()
-	{
-		return $this->belongsTo(User::class);
-	}
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'id',
+        'user_id',
+        'file_name',
+        'file_type',
+        'imported_at',
+    ];
 
-	public function transactions()
-	{
-		return $this->belongsToMany(Transaction::class, 'imports_transactions')
-					->withPivot('id');
-	}
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+    ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'user_id' => 'integer',
+            'file_name' => 'string',
+            'file_type' => 'string',
+            'imported_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * @return HasMany<ImportsTransaction, $this>
+     */
+    public function importsTransactions(): HasMany
+    {
+        return $this->hasMany(ImportsTransaction::class, 'import_id', 'id');
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * @return BelongsToMany<Transaction, $this>
+     */
+    public function transactions(): BelongsToMany
+    {
+        return $this->belongsToMany(Transaction::class, 'imports_transactions', 'id', 'id')
+            ->withPivot('import_id', 'transaction_id');
+    }
 }

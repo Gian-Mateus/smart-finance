@@ -1,43 +1,88 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
+declare(strict_types=1);
 
 namespace App\Models;
 
 use Carbon\Carbon;
-use App\Models\BanksAccount;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Bank
- * 
+ *
  * @property int $id
  * @property string $name
+ * @property string|null $full_name
+ * @property string|null $ispb
  * @property string|null $code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
- * @property Collection|BanksAccount[] $banks_accounts
- *
- * @package App\Models
+ * @property Collection|User[] $accountsUsers
+ * @property Collection|BanksAccount[] $banksAccounts
  */
 class Bank extends Model
 {
-	protected $table = 'banks';
+    protected $table = 'banks';
 
-	protected $fillable = [
-		'ispb',
-		'name',
-		'code',
-		'full_name',
-		'ispb'
-	];
+    protected $primaryKey = 'id';
 
-	public function banks_accounts()
-	{
-		return $this->hasMany(BanksAccount::class);
-	}
+    public $timestamps = true;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'id',
+        'name',
+        'full_name',
+        'ispb',
+        'code',
+    ];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+    ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'name' => 'string',
+            'full_name' => 'string',
+            'ispb' => 'string',
+            'code' => 'string',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * @return HasMany<BanksAccount, $this>
+     */
+    public function banksAccounts(): HasMany
+    {
+        return $this->hasMany(BanksAccount::class, 'bank_id', 'id');
+    }
+
+    /**
+     * @return BelongsToMany<User, $this>
+     */
+    public function accountsUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'banks_accounts', 'id', 'id')
+            ->withPivot('user_id', 'bank_id', 'name', 'account_number')
+            ->withTimestamps();
+    }
 }

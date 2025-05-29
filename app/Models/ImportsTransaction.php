@@ -1,49 +1,73 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
+declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Models\Import;
-use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class ImportsTransaction
- * 
+ *
  * @property int $id
  * @property int $import_id
  * @property int $transaction_id
- * 
  * @property Import $import
  * @property Transaction $transaction
- *
- * @package App\Models
  */
 class ImportsTransaction extends Model
 {
-	protected $table = 'imports_transactions';
-	public $timestamps = false;
+    protected $table = 'imports_transactions';
 
-	protected $casts = [
-		'import_id' => 'int',
-		'transaction_id' => 'int'
-	];
+    protected $primaryKey = 'id';
 
-	protected $fillable = [
-		'import_id',
-		'transaction_id'
-	];
+    public $timestamps = false;
 
-	public function import()
-	{
-		return $this->belongsTo(Import::class);
-	}
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'id',
+        'import_id',
+        'transaction_id',
+    ];
 
-	public function transaction()
-	{
-		return $this->belongsTo(Transaction::class);
-	}
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+    ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'id' => 'integer',
+            'import_id' => 'integer',
+            'transaction_id' => 'integer',
+        ];
+    }
+
+    /**
+     * @return BelongsTo<Import, $this>
+     */
+    public function import(): BelongsTo
+    {
+        return $this->belongsTo(Import::class, 'import_id');
+    }
+
+    /**
+     * @return BelongsTo<Transaction, $this>
+     */
+    public function transaction(): BelongsTo
+    {
+        return $this->belongsTo(Transaction::class, 'transaction_id');
+    }
 }
