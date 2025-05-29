@@ -17,9 +17,6 @@
                         {{ $budget->formatted_target_value }}
                     </span>
                 </div>
-                <span>
-                    <x-progress value="12" max="100" class="progress-warning h-3" />
-                </span>
             </x-slot:heading>
             <x-slot:content>
                 <ul>
