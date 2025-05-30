@@ -31,7 +31,7 @@ class BudgetsSeeder extends Seeder
                 'user_id' => 1, // Assuming user_id 1 exists
                 'category_id' => \App\Models\Category::where('name', $categoryName)->first()->id,
                 'subcategory_id' => null, // Assuming no subcategory for now
-                'recurrence_type_id' => null, // Assuming no recurrence type for now
+                'recurrence' => null, // Assuming no recurrence type for now
                 'target_value' => $targetValue,
                 'types' => 'budget',
                 'start_date' => now(),

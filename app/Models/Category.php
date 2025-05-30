@@ -21,9 +21,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property User $user
- * @property Collection|User[] $budgetsUsers
  * @property Collection|Subcategory[] $budgetsSubcategories
- * @property Collection|RecurrenceType[] $budgetsRecurrenceTypes
+ * @property Collection|User[] $budgetsUsers
  * @property Collection|User[] $subcategoriesUsers
  * @property Collection|Budget[] $budgets
  * @property Collection|Subcategory[] $subcategories
@@ -96,30 +95,21 @@ class Category extends Model
     }
 
     /**
-     * @return BelongsToMany<User, $this>
-     */
-    public function budgetsUsers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'budgets', 'id', 'id')
-            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
-    }
-
-    /**
      * @return BelongsToMany<Subcategory, $this>
      */
     public function budgetsSubcategories(): BelongsToMany
     {
         return $this->belongsToMany(Subcategory::class, 'budgets', 'id', 'id')
-            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
+            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence', 'target_value', 'types', 'start_date', 'end_date');
     }
 
     /**
-     * @return BelongsToMany<RecurrenceType, $this>
+     * @return BelongsToMany<User, $this>
      */
-    public function budgetsRecurrenceTypes(): BelongsToMany
+    public function budgetsUsers(): BelongsToMany
     {
-        return $this->belongsToMany(RecurrenceType::class, 'budgets', 'id', 'id')
-            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
+        return $this->belongsToMany(User::class, 'budgets', 'id', 'id')
+            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence', 'target_value', 'types', 'start_date', 'end_date');
     }
 
     /**

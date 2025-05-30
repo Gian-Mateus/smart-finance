@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $import_id
  * @property int $transaction_id
- * @property Transaction $transaction
  * @property Import $import
+ * @property Transaction $transaction
  */
 class ImportsTransaction extends Model
 {
@@ -56,18 +56,18 @@ class ImportsTransaction extends Model
     }
 
     /**
-     * @return BelongsTo<Transaction, $this>
-     */
-    public function transaction(): BelongsTo
-    {
-        return $this->belongsTo(Transaction::class, 'transaction_id');
-    }
-
-    /**
      * @return BelongsTo<Import, $this>
      */
     public function import(): BelongsTo
     {
         return $this->belongsTo(Import::class, 'import_id');
+    }
+
+    /**
+     * @return BelongsTo<Transaction, $this>
+     */
+    public function transaction(): BelongsTo
+    {
+        return $this->belongsTo(Transaction::class, 'transaction_id');
     }
 }

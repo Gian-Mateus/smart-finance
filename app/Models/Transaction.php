@@ -27,11 +27,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $type
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property User $user
- * @property Subcategory $subcategory
- * @property RecurrenceType $recurrenceTypes
- * @property PaymentMethod $paymentMethods
  * @property BanksAccount $bankAccount
+ * @property PaymentMethod $paymentMethods
+ * @property RecurrenceType $recurrenceTypes
+ * @property Subcategory $subcategory
+ * @property User $user
  * @property Collection|Import[] $imports
  * @property Collection|ImportsTransaction[] $importsTransactions
  */
@@ -101,27 +101,11 @@ class Transaction extends Model
     }
 
     /**
-     * @return BelongsTo<User, $this>
+     * @return BelongsTo<BanksAccount, $this>
      */
-    public function user(): BelongsTo
+    public function bankAccount(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * @return BelongsTo<Subcategory, $this>
-     */
-    public function subcategory(): BelongsTo
-    {
-        return $this->belongsTo(Subcategory::class, 'subcategory_id');
-    }
-
-    /**
-     * @return BelongsTo<RecurrenceType, $this>
-     */
-    public function recurrenceTypes(): BelongsTo
-    {
-        return $this->belongsTo(RecurrenceType::class, 'recurrence_types_id');
+        return $this->belongsTo(BanksAccount::class, 'bank_account_id');
     }
 
     /**
@@ -133,11 +117,27 @@ class Transaction extends Model
     }
 
     /**
-     * @return BelongsTo<BanksAccount, $this>
+     * @return BelongsTo<RecurrenceType, $this>
      */
-    public function bankAccount(): BelongsTo
+    public function recurrenceTypes(): BelongsTo
     {
-        return $this->belongsTo(BanksAccount::class, 'bank_account_id');
+        return $this->belongsTo(RecurrenceType::class, 'recurrence_types_id');
+    }
+
+    /**
+     * @return BelongsTo<Subcategory, $this>
+     */
+    public function subcategory(): BelongsTo
+    {
+        return $this->belongsTo(Subcategory::class, 'subcategory_id');
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**

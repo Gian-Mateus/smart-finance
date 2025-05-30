@@ -15,15 +15,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $user_id
  * @property int $category_id
  * @property int $subcategory_id
- * @property int|null $recurrence_type_id
+ * @property string $recurrence
  * @property int $target_value
  * @property string $types
  * @property Carbon|null $start_date
  * @property Carbon|null $end_date
- * @property User $user
- * @property Subcategory $subcategory
- * @property RecurrenceType $recurrenceType
  * @property Category $category
+ * @property Subcategory $subcategory
+ * @property User $user
  */
 class Budget extends Model
 {
@@ -43,7 +42,7 @@ class Budget extends Model
         'user_id',
         'category_id',
         'subcategory_id',
-        'recurrence_type_id',
+        'recurrence',
         'target_value',
         'types',
         'start_date',
@@ -69,7 +68,7 @@ class Budget extends Model
             'user_id' => 'integer',
             'category_id' => 'integer',
             'subcategory_id' => 'integer',
-            'recurrence_type_id' => 'integer',
+            'recurrence' => 'string',
             'target_value' => 'integer',
             'types' => 'string',
             'start_date' => 'datetime',
@@ -78,11 +77,11 @@ class Budget extends Model
     }
 
     /**
-     * @return BelongsTo<User, $this>
+     * @return BelongsTo<Category, $this>
      */
-    public function user(): BelongsTo
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     /**
@@ -94,18 +93,10 @@ class Budget extends Model
     }
 
     /**
-     * @return BelongsTo<RecurrenceType, $this>
+     * @return BelongsTo<User, $this>
      */
-    public function recurrenceType(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(RecurrenceType::class, 'recurrence_type_id');
-    }
-
-    /**
-     * @return BelongsTo<Category, $this>
-     */
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

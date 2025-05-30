@@ -17,7 +17,12 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories');
             // Continuar com o relacionamento com subcategorias, pois elas também terão orçamentos e não poderam ultrapassar o orçamento da categoria       
             $table->foreignId('subcategory_id')->constrained('subcategories');
-            $table->foreignId('recurrence_type_id')->nullable()->constrained('recurrence_types')->nullOnDelete();
+            $table->json('recurrence');
+            /* 
+                {
+                    "type": "daily | weekly | monthly | yearly",
+                }
+            */
             $table->integer('target_value')->default(00000);
             $table->enum('types', ['budget', 'goal']);
             $table->date('start_date')->nullable();
