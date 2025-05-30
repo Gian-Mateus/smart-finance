@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Utils;
 
-use App\Models\Icons;
+use App\Models\Icon;
 use Livewire\Component;
 use Livewire\Attributes\On;
 
@@ -40,7 +40,7 @@ class SearchIcons extends Component
         
         return view('livewire.utils.search-icons', [
             'results' => $results,
-            'icons' => Icons::query()->latest()->paginate($this->perPage)
+            'icons' => Icon::query()->latest()->paginate($this->perPage)
         ]);
     }
 }
