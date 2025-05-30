@@ -12,6 +12,18 @@ class PaymentMethodsSeeder extends Seeder
      */
     public function run(): void
     {
+        $paymentsMethods = [
+            ['name' => 'Dinheiro'],
+            ['name' => 'Cheque'],
+            ['name' => 'Pix'],
+            ['name' => 'Boleto'],
+            ['name' => 'Cartão de Crédito'],
+            ['name' => 'Cartão de Débito'],
+            ['name' => 'Transferência Bancária'],
+        ];
         
+        foreach ($paymentsMethods as $method) {
+            \App\Models\PaymentMethod::create($method);
+        }
     }
 }

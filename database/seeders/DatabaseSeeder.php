@@ -9,6 +9,7 @@ use Database\Seeders\BanksSeeder;
 use Database\Seeders\IconsSeeder;
 use Database\Seeders\CategoriesSeeder;
 use Database\Seeders\SubcategoriesSeeder;
+use Database\Seeders\PaymentMethodsSeeder;
 use Database\Seeders\RecurrenceTypeSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -29,9 +30,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CategoriesSeeder::class,
             SubcategoriesSeeder::class,
-            RecurrenceTypeSeeder::class,
+            //RecurrenceTypeSeeder::class,
             BanksSeeder::class,
             IconsSeeder::class,
+            PaymentMethodsSeeder::class,
         ]);
     }
 } 

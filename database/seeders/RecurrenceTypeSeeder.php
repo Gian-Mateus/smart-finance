@@ -13,21 +13,6 @@ class RecurrenceTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $periodicities = [
-            'Diária',
-            'Semanal',
-            'Quinzenal',
-            'Mensal',
-            'Bimestral',
-            'Trimestral',
-            'Semestral',
-            'Anual'
-        ];
-
-        foreach($periodicities as $p){
-            RecurrenceType::create([
-                'name' => $p
-            ]);
-        }
+        //
     }
 }
