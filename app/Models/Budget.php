@@ -20,10 +20,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $types
  * @property Carbon|null $start_date
  * @property Carbon|null $end_date
- * @property Category $category
- * @property RecurrenceType $recurrenceType
- * @property Subcategory $subcategory
  * @property User $user
+ * @property Subcategory $subcategory
+ * @property RecurrenceType $recurrenceType
+ * @property Category $category
  */
 class Budget extends Model
 {
@@ -78,19 +78,11 @@ class Budget extends Model
     }
 
     /**
-     * @return BelongsTo<Category, $this>
+     * @return BelongsTo<User, $this>
      */
-    public function category(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Category::class, 'category_id');
-    }
-
-    /**
-     * @return BelongsTo<RecurrenceType, $this>
-     */
-    public function recurrenceType(): BelongsTo
-    {
-        return $this->belongsTo(RecurrenceType::class, 'recurrence_type_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -102,10 +94,18 @@ class Budget extends Model
     }
 
     /**
-     * @return BelongsTo<User, $this>
+     * @return BelongsTo<RecurrenceType, $this>
      */
-    public function user(): BelongsTo
+    public function recurrenceType(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(RecurrenceType::class, 'recurrence_type_id');
+    }
+
+    /**
+     * @return BelongsTo<Category, $this>
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }

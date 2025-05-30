@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Transaction
  *
  * @property int $id
+ * @property int $user_id
  * @property int $bank_account_id
  * @property int|null $subcategory_id
  * @property int $recurrence_types_id
@@ -26,10 +27,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $type
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property BanksAccount $bankAccount
- * @property PaymentMethod $paymentMethods
- * @property RecurrenceType $recurrenceTypes
+ * @property User $user
  * @property Subcategory $subcategory
+ * @property RecurrenceType $recurrenceTypes
+ * @property PaymentMethod $paymentMethods
+ * @property BanksAccount $bankAccount
  * @property Collection|Import[] $imports
  * @property Collection|ImportsTransaction[] $importsTransactions
  */
@@ -48,6 +50,7 @@ class Transaction extends Model
      */
     protected $fillable = [
         'id',
+        'user_id',
         'bank_account_id',
         'subcategory_id',
         'recurrence_types_id',
@@ -74,6 +77,7 @@ class Transaction extends Model
     {
         return [
             'id' => 'integer',
+            'user_id' => 'integer',
             'bank_account_id' => 'integer',
             'subcategory_id' => 'integer',
             'recurrence_types_id' => 'integer',
@@ -97,19 +101,19 @@ class Transaction extends Model
     }
 
     /**
-     * @return BelongsTo<BanksAccount, $this>
+     * @return BelongsTo<User, $this>
      */
-    public function bankAccount(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(BanksAccount::class, 'bank_account_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
-     * @return BelongsTo<PaymentMethod, $this>
+     * @return BelongsTo<Subcategory, $this>
      */
-    public function paymentMethods(): BelongsTo
+    public function subcategory(): BelongsTo
     {
-        return $this->belongsTo(PaymentMethod::class, 'payment_methods_id');
+        return $this->belongsTo(Subcategory::class, 'subcategory_id');
     }
 
     /**
@@ -121,11 +125,19 @@ class Transaction extends Model
     }
 
     /**
-     * @return BelongsTo<Subcategory, $this>
+     * @return BelongsTo<PaymentMethod, $this>
      */
-    public function subcategory(): BelongsTo
+    public function paymentMethods(): BelongsTo
     {
-        return $this->belongsTo(Subcategory::class, 'subcategory_id');
+        return $this->belongsTo(PaymentMethod::class, 'payment_methods_id');
+    }
+
+    /**
+     * @return BelongsTo<BanksAccount, $this>
+     */
+    public function bankAccount(): BelongsTo
+    {
+        return $this->belongsTo(BanksAccount::class, 'bank_account_id');
     }
 
     /**
