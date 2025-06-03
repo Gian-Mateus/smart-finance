@@ -1,5 +1,5 @@
 <div class="ml-4 max-w-3xl mt-10">
-    <x-header title="Orçamentos/Metas" subtitle="Define Metas e Orçamentos para cada categoria" separator />
+    <x-header title="Orçamentos/Metas" subtitle="Define Metas e Orçamentos (de gastos) para cada categoria" separator />
     <x-button 
         label="Novo Orçamento" 
         class="btn-primary" 
@@ -30,7 +30,7 @@
         </x-collapse>
     @endforeach
 
-    <x-modal wire:model="modalAddBudget" title="Novo Orçamento" subtitle="Separe orçamentos por categoria ou subcategoria">
+    <x-modal wire:model="modalAddBudget" title="Novo Orçamento" subtitle="Separe orçamentos por categoria">
         <x-form no-separator>
         <!-- <x-choices
             label="Categoria ou Subcategoria"

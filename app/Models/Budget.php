@@ -55,7 +55,6 @@ class Budget extends Model
      * @var array<string, mixed>
      */
     protected $attributes = [
-        '$target_value' => '0',
     ];
 
     /**

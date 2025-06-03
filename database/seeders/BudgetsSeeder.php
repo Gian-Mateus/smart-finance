@@ -26,13 +26,13 @@ class BudgetsSeeder extends Seeder
             'Doações & Presentes' => 10000000,
         ];
 
-        foreach ($budgetCategories as $categoryName => $targetValue) {
+        foreach ($budgetCategories as $categoryName => $value) {
             \App\Models\Budget::create([
                 'user_id' => 1, // Assuming user_id 1 exists
                 'category_id' => \App\Models\Category::where('name', $categoryName)->first()->id,
                 'subcategory_id' => null, // Assuming no subcategory for now
-                'recurrence' => null, // Assuming no recurrence type for now
-                'target_value' => $targetValue,
+                'recurrence' => 'monthly', // Assuming no recurrence type for now
+                'target_value' => $value,
                 'types' => 'budget',
                 'start_date' => now(),
                 'end_date' => now()->addYear(),

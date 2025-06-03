@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Database\Seeders\BanksSeeder;
 use Database\Seeders\IconsSeeder;
+use Database\Seeders\BudgetsSeeder;
 use Database\Seeders\CategoriesSeeder;
 use Database\Seeders\SubcategoriesSeeder;
 use Database\Seeders\PaymentMethodsSeeder;
@@ -34,6 +35,7 @@ class DatabaseSeeder extends Seeder
             BanksSeeder::class,
             IconsSeeder::class,
             PaymentMethodsSeeder::class,
+            BudgetsSeeder::class,
         ]);
     }
 } 

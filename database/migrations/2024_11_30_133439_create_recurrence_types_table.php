@@ -16,7 +16,7 @@ return new class extends Migration
             $table->json('interval');
             /* 
                 {
-                    ??? "interval": 1,                   // Quantos dias, semanas ou meses entre repetições
+                    ??? "interval": 1,               // Quantos dias, semanas ou meses entre repetições
                     "type": "monthly",               // "daily", "weekly", "monthly", yearly, "custom"
                     "custom_days": [5, 20],          // Se for customizado, quais dias do mês (cada 5 e 20 de cada mês)
                     "day_of_month": 8,               // Se for mensal, em qual dia do mês
