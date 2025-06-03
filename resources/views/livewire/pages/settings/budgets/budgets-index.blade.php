@@ -2,12 +2,12 @@
     <x-header title="Orçamentos/Metas" subtitle="Define Metas e Orçamentos (de gastos) para cada categoria" separator />
     <x-button 
         label="Novo Orçamento" 
-        class="btn-primary" 
+        class="btn-primary mb-10" 
         icon="s-plus-small"
         @click="$wire.modalAddBudget = true"
     />
     @foreach ($this->budgets as $budget)
-        <x-collapse separator class="mt-10">
+        <x-collapse separator class="mt-0.5">
             <x-slot:heading>
                 <div class="flex justify-between items-center">
                     <span>

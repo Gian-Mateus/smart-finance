@@ -14,7 +14,7 @@ class BudgetsIndex extends Component
     #[Computed]
     public function budgets(){
         return Budget::where('user_id', Auth::id())
-        ->with('category.subcategories', 'recurrence_type')
+        ->with('category.subcategories')
         ->get();
     }
 

@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('budgets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('category_id')->nullable()->constrained('categories');
             // Continuar com o relacionamento com subcategorias, pois elas também terão orçamentos e não poderam ultrapassar o orçamento da categoria       
-            $table->foreignId('subcategory_id')->constrained('subcategories');
+            $table->foreignId('subcategory_id')->nullable()->constrained('subcategories');
             $table->enum('recurrence', ['daily', 'weekly', 'monthly', 'yearly']);
             $table->integer('target_value');
             $table->enum('types', ['budget', 'goal']);
