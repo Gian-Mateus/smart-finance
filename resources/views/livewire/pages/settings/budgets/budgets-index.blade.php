@@ -6,6 +6,16 @@
         icon="s-plus-small"
         @click="$wire.modalAddBudget = true"
     />
+
+    @foreach ($this->budgets as $budget)
+        @if ($budget->category_id)
+            {{ $budget->category->name }}
+            @if ($budget->subcategory_id)
+                {{ $budget->subcategory->name }}
+            @endif
+        @endif
+    @endforeach
+        
     @foreach ($this->budgets as $budget)
         <x-collapse separator class="mt-0.5">
             <x-slot:heading>
@@ -14,17 +24,20 @@
                         {{  $budget->category->name }}
                     </span>
                     <span>
-                        {{ $budget->formatted_target_value }}
+                       R$ {{ $budget->target_value_formatted }}
                     </span>
                 </div>
             </x-slot:heading>
             <x-slot:content>
                 <ul>
-                    @foreach ($budget->category->subcategories as $subcategory)
-                        <li class="flex justify-between items-center rounded p-2 hover:bg-base-300">
-                            <span>{{ $subcategory->name }}</span>
-                        </li>
-                    @endforeach
+                    {{-- @foreach ($budget->subcategory_id as )    
+                    @if ($budget->subcategory_id)
+                        
+                    @endif
+                    <li class="flex justify-between items-center rounded p-2 hover:bg-base-300">
+                        <span>{{ $subcategory->name }}</span>
+                    </li>
+                    @endforeach ($budget->subcategory_id as $subcategory) --}}
                 </ul>
             </x-slot:content>
         </x-collapse>

@@ -12,14 +12,14 @@ trait MoneyBRL
     {
         // Verifica se o valor é numérico
         if (!is_numeric($value)) {
-            return 'R$ 0,00';
+            return;
         }
-
+        
         // Formata o valor para o padrão brasileiro
         $formattedValue = number_format($value, 2, ',', '.');
 
-        // Retorna o valor formatado com o símbolo da moeda
-        return 'R$ ' . $formattedValue;
+        // Retorna o valor formatado
+        return $formattedValue;
     }
     
     /**
