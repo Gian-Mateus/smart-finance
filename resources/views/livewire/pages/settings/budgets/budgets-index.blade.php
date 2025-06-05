@@ -7,40 +7,35 @@
         @click="$wire.modalAddBudget = true"
     />
 
-    @foreach ($this->budgets as $budget)
-        @if ($budget->category_id)
-            {{ $budget->category->name }}
-            @if ($budget->subcategory_id)
-                {{ $budget->subcategory->name }}
-            @endif
-        @endif
-    @endforeach
+    {{-- {{ dd($this->budgets) }} --}}
         
     @foreach ($this->budgets as $budget)
         <x-collapse separator class="mt-0.5">
             <x-slot:heading>
+                {{-- {{ dd($budget['category']->category->name) }} --}}
                 <div class="flex justify-between items-center">
                     <span>
-                        {{  $budget->category->name }}
+                        {{  $budget['category']->category->name }}
                     </span>
                     <span>
-                       R$ {{ $budget->target_value_formatted }}
+                       R$ {{ $budget['category']->target_value_formatted }}
                     </span>
                 </div>
             </x-slot:heading>
             <x-slot:content>
-                <ul>
-                    {{-- @foreach ($budget->subcategory_id as )    
-                    @if ($budget->subcategory_id)
-                        
-                    @endif
-                    <li class="flex justify-between items-center rounded p-2 hover:bg-base-300">
-                        <span>{{ $subcategory->name }}</span>
-                    </li>
-                    @endforeach ($budget->subcategory_id as $subcategory) --}}
-                </ul>
-            </x-slot:content>
-        </x-collapse>
+                @if ($budget['subcategories'])    
+                    <ul>
+                        @foreach ($budget['subcategories'] as $sub)    
+                        {{-- {{ dd($sub->subcategory) }} --}}
+                            <li class="flex justify-between items-center rounded p-2 hover:bg-base-300">
+                                <span>{{ $sub->subcategory->name }}</span>
+                                <span>R$ {{ $sub->target_value_formatted }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+                </x-slot:content>
+            </x-collapse>
     @endforeach
 
     <x-modal wire:model="modalAddBudget" title="Novo Orçamento" subtitle="Separe orçamentos por categoria">

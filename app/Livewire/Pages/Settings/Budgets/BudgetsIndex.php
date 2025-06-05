@@ -13,8 +13,24 @@ class BudgetsIndex extends Component
 
     #[Computed]
     public function budgets(){
-        return Budget::where('user_id', Auth::id())
-        ->get();
+        $budgets = Budget::where('user_id', Auth::id())->get();
+        $organizedBudgets = [];
+        
+        foreach($budgets as $budget){
+            if (!isset($organizedBudgets[$budget->category_id])) {
+                $organizedBudgets[$budget->category_id] = [
+                    'category' => $budget,
+                    'subcategories' => []
+                ];
+            }
+            
+            if ($budget->subcategory_id) {
+                $organizedBudgets[$budget->category_id]['subcategories'][$budget->subcategory_id] = $budget;
+            } else {
+                $organizedBudgets[$budget->category_id]['category_budget'] = $budget;
+            }
+        }
+        return $organizedBudgets;
     }
 
     public function save(){
