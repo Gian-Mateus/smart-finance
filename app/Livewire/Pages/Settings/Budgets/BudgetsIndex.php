@@ -4,12 +4,24 @@ namespace App\Livewire\Pages\Settings\Budgets;
 
 use App\Models\Budget;
 use Livewire\Component;
+use App\Models\Category;
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 
 class BudgetsIndex extends Component
 {
     public bool $modalAddBudget = false;
+    public ?int $categoryOrSubcategory = null;
+    public Collection $categoriesAndSubcategories;
+    public string $recurrence;
+
+    public array $recurrences = [
+        ['id' => 'dayly', 'name' => 'Diário'],
+        ['id' => 'weekly', 'name' => 'Semanal'],
+        ['id' => 'monthly', 'name' => 'Mensal'],
+        ['id'=> 'yearly', 'name' => 'Anual']
+    ];
 
     #[Computed]
     public function budgets(){
@@ -33,8 +45,19 @@ class BudgetsIndex extends Component
         return $organizedBudgets;
     }
 
-    public function save(){
+    public function search(string $value = ''){
+        $selectedOption = Category::where('user_id', Auth::id())->where('id', $this->categoryOrSubcategory)->get();
         
+        $this->categoriesAndSubcategories = Category::where('user_id', Auth::id())
+        ->where('name', 'like', '%' . $value . '%')
+        ->take(5)
+        ->orderBy('name')
+        ->get()
+        ->merge($selectedOption);
+    }
+
+    public function mount(){
+        $this->search();
     }
 
     public function render()

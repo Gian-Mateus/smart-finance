@@ -40,18 +40,33 @@
 
     <x-modal wire:model="modalAddBudget" title="Novo Orçamento" subtitle="Separe orçamentos por categoria">
         <x-form no-separator>
-        <!-- <x-choices
-            label="Categoria ou Subcategoria"
-            wire:model="categoryOrSubcategory"
-           // :options="$categoriesAndSubcategories"
-            placeholder="Pesquisar categoria ou subcategoria..."
-            single
-            searchable 
-        /> -->
-    
+            <x-choices
+                label="Categoria"
+                wire:model="categoryOrSubcategory"
+                :options="$this->categoriesAndSubcategories"
+                placeholder="Pesquisar categoria..."
+                single
+                searchable
+            />
+            <div class="flex items-center gap-2">
+                <span class="btn">R$</span>
+                <div class="flex-1">
+                    <x-input placeholder="0,00"/>
+                </div>
+            </div>
+
+            {{-- {{ dd($recurrences) }} --}}
+            <x-select 
+                icon="o-clock"
+                label="Recorrência"
+                wire:model="recurrence"
+                :options="$recurrences"
+            />
+
+            {{-- {{ dd($this->categoriesAndSubcategories[0]->id) }} --}}
             <x-slot:actions>
                 <x-button label="Cancelar" @click="$wire.modalAddBudget = false" />
-                <x-button label="Adicionar" class="btn-primary" />
+                <x-button label="Adicionar" class="btn-primary" wire:click="save" />
             </x-slot:actions>
         </x-form>
     </x-modal>

@@ -116,9 +116,9 @@ class BankIndex extends Component
     public function search(string $value = ''){
 
        if($this->bankEditing !== null){
-           $selectedOption = Bank::where('id', $this->bankEditing)->get();
+           $selectedOption = Bank::where('user_id', Auth::id())->where('id', $this->bankEditing)->get();
        } else{
-           $selectedOption = Bank::where('id', $this->bankSearchableID)->get();
+           $selectedOption = Bank::where('user_id', Auth::id())->where('id', $this->bankSearchableID)->get();
        }
         
         $this->results = Bank::where('name', 'like', '%'.$value.'%')
