@@ -63,8 +63,11 @@
 				{{ isset($slot) ? $slot : 'Nada aqui' }}
 			</x-slot:content>
 		</x-main>
+		
 		{{-- Toast --}}
 		<x-toast />
+
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/robsontenorio/mary@0.44.2/libs/currency/currency.js"></script>
 
 		@livewireScripts
 	</body>
