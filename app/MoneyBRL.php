@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Support\Str;
+
 trait MoneyBRL
 {
     /**
@@ -10,16 +12,7 @@ trait MoneyBRL
      */
     public function showBRL($value)
     {
-        // Verifica se o valor é numérico
-        if (!is_numeric($value)) {
-            return;
-        }
-        
-        // Formata o valor para o padrão brasileiro
-        $formattedValue = number_format($value, 2, ',', '.');
-
-        // Retorna o valor formatado
-        return $formattedValue;
+        return number_format($this->toDecimal($value), 2, ",", ".");
     }
     
     /**
@@ -27,11 +20,9 @@ trait MoneyBRL
      */
     public function toInteger($value)
     {
-        if (!is_numeric($value)) {
-            return 0;
-        }
-        
-        return (int) round($value * 10000);
+        $value = Str::replace([",", "."], "", $value);
+        $value = intval($value);
+        return $value * 100;
     }
 
     /**
@@ -39,10 +30,6 @@ trait MoneyBRL
      */
     public function toDecimal($value)
     {
-        if (!is_numeric($value)) {
-            return 0;
-        }
-        
-        return $value / 10000;
+        return $value / 100;
     }
 }

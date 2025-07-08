@@ -7,8 +7,6 @@
         @click="$wire.modalAddBudget = true"
     />
 
-    {{-- {{ dd($this->budgets) }} --}}
-        
     @foreach ($this->budgets as $budget)
         <x-collapse separator class="mt-0.5">
             <x-slot:heading>
@@ -18,7 +16,7 @@
                         {{  $budget['category']->category->name }}
                     </span>
                     <span>
-                       R$ {{ $budget['category']->target_value_formatted }}
+                       R$ {{ $budget['category']->target_value }}
                     </span>
                 </div>
             </x-slot:heading>
@@ -29,7 +27,7 @@
                         {{-- {{ dd($sub->subcategory) }} --}}
                             <li class="flex justify-between items-center rounded p-2 hover:bg-base-300">
                                 <span>{{ $sub->subcategory->name }}</span>
-                                <span>R$ {{ $sub->target_value_formatted }}</span>
+                                <span>R$ {{ $sub->target_value }}</span>
                             </li>
                         @endforeach
                     </ul>
@@ -39,36 +37,49 @@
     @endforeach
 
     <x-modal wire:model="modalAddBudget" title="Novo Orçamento" subtitle="Separe orçamentos por categoria">
-        <x-form no-separator>
+        <x-form no-separator wire:submit="save">
             <x-choices
                 label="Categoria"
                 wire:model="categoryOrSubcategory"
-                :options="$this->categoriesAndSubcategories"
+                :options="$categoriesAndSubcategories"
                 placeholder="Pesquisar categoria..."
                 single
                 searchable
             />
-            <div class="flex items-center gap-2">
-                <span class="btn">R$</span>
-                <div class="flex-1">
-                    <x-input placeholder="0,00"/>
-                </div>
-            </div>
 
+            <x-input 
+                id="targetValueInput"
+                placeholder="0,00" 
+                prefix="R$"
+                wire:model="targetValue"
+                oninput="formatCurrency(this)"
+            />
+            
             {{-- {{ dd($recurrences) }} --}}
             <x-select 
                 icon="o-clock"
                 label="Recorrência"
+                placeholder="Selecione a recorrência"
                 wire:model="recurrence"
                 :options="$recurrences"
             />
 
             {{-- {{ dd($this->categoriesAndSubcategories[0]->id) }} --}}
             <x-slot:actions>
-                <x-button label="Cancelar" @click="$wire.modalAddBudget = false" />
+                <x-button label="Cancelar" @click="$wire.cancel, $wire.modalAddBudget = false" />
                 <x-button label="Adicionar" class="btn-primary" wire:click="save" />
             </x-slot:actions>
         </x-form>
     </x-modal>
 
+    {{-- Temporário - não está funcionando no app.js --}}
+    <script>
+        function formatCurrency(input) {
+            let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
+            value = value.replace(/(\d)(\d{2})$/, '$1,$2'); // Add comma before the last 2 digits (cents)
+            value = value.replace(/(?=(\d{3})+(\D))\B/g, '.'); // Add period for thousands separator
+
+            input.value = value;
+        }
+    </script>
 </div>

@@ -7,6 +7,7 @@ namespace App\Models;
 use App\MoneyBRL;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -102,7 +103,10 @@ class Budget extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function getTargetValueFormattedAttribute(){
-        return $this->showBRL($this->toDecimal($this->target_value));
+    protected function targetValue(): Attribute {
+        return Attribute::make(
+            get: fn ($value) => $this->showBRL($value),
+            set: fn ($value) => $this->toInteger($value),
+        );
     }
 }
