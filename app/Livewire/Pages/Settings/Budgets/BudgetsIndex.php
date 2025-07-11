@@ -30,7 +30,6 @@ class BudgetsIndex extends Component
     public array $recurrences = [
         ['id' => 'daily', 'name' => 'Diário'],
         ['id' => 'weekly', 'name' => 'Semanal'],
-        ['id' => 'monthly', 'name' => 'Mensal'],
         ['id'=> 'yearly', 'name' => 'Anual']
     ];
 
