@@ -10,10 +10,10 @@
     @foreach ($this->budgets as $budget)
         <x-collapse separator class="mt-0.5">
             <x-slot:heading>
-                {{-- {{ dd($budget['category']->category->name) }} --}}
+                {{-- {{ dd($budget['category']->category_id) }} --}}
                 <div class="flex justify-between items-center">
                     <span>
-                        {{  $budget['category']->category->name }}
+                        {{ $budget['category']->category->name }}
                     </span>
                     <span>
                        R$ {{ $budget['category']->target_value }}
@@ -21,6 +21,12 @@
                 </div>
             </x-slot:heading>
             <x-slot:content>
+                <x-button 
+                    label="Novo Orçamento Subcategoria" 
+                    class="btn-primary mb-10" 
+                    icon="s-plus-small"
+                    @click="$wire.modalAddBudget = true, $wire.category = {{ $budget['category']->category_id }}"
+                />
                 @if ($budget['subcategories'])    
                     <ul>
                         @foreach ($budget['subcategories'] as $sub)    
@@ -38,14 +44,26 @@
 
     <x-modal wire:model="modalAddBudget" title="Novo Orçamento" subtitle="Separe orçamentos por categoria">
         <x-form no-separator wire:submit="save">
+            @if (!$category)
             <x-choices
                 label="Categoria"
-                wire:model="categoryOrSubcategory"
-                :options="$categoriesAndSubcategories"
+                wire:model="category"
+                :options="$categories"
                 placeholder="Pesquisar categoria..."
                 single
                 searchable
             />
+            @else
+            <x-choices
+                label="Subcategoria"
+                wire:model="subcategory"
+                :options="$subcategories"
+                placeholder="Pesquisar subcategoria..."
+                single
+                searchable
+                search-function="searchSubcategories"
+            />
+            @endif
 
             <x-input 
                 id="targetValueInput"
@@ -64,10 +82,14 @@
                 :options="$recurrences"
             />
 
-            {{-- {{ dd($this->categoriesAndSubcategories[0]->id) }} --}}
+            {{-- {{ dd($this->categories[0]->id) }} --}}
             <x-slot:actions>
                 <x-button label="Cancelar" @click="$wire.cancel, $wire.modalAddBudget = false" />
+                @if ($category)
                 <x-button label="Adicionar" class="btn-primary" wire:click="save" />
+                @else
+                <x-button label="Adicionar" class="btn-primary" wire:click="save(true, {{ $budget['category']->category_id }})" />
+                @endif
             </x-slot:actions>
         </x-form>
     </x-modal>

@@ -33,7 +33,7 @@ class BudgetsSeeder extends Seeder
                 'category_id' => \App\Models\Category::where('name', $categoryName)->first()->id,
                 'subcategory_id' => $loop == 0 ? 1 : null, // Assuming no subcategory for now
                 'recurrence' => 'monthly', // Assuming no recurrence type for now
-                'target_value' => $loop == 0 ? 5000000 : $value,
+                'target_value' => $loop == 0 ? 500000 : $value,
                 'types' => 'budget',
                 'start_date' => now(),
                 'end_date' => now()->addYear(),

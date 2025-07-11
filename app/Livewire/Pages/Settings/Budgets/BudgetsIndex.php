@@ -2,10 +2,14 @@
 
 namespace App\Livewire\Pages\Settings\Budgets;
 
-use App\Models\Budget;
 use Mary\Traits\Toast;
 use Livewire\Component;
+
+/* Models */
+use App\Models\Budget;
 use App\Models\Category;
+use App\Models\Subcategory;
+
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
@@ -15,14 +19,16 @@ class BudgetsIndex extends Component
     use Toast;
 
     public bool $modalAddBudget = false;
-    public ?int $categoryOrSubcategory = null;
-    public Collection $categoriesAndSubcategories;
-    public string $recurrence;
-
+    public ?int $category = null;
+    public ?int $subcategory = null;
+    public Collection $categories;
+    public Collection $subcategories;
+    
     public string $targetValue;
-
+    
+    public string $recurrence;
     public array $recurrences = [
-        ['id' => 'dayly', 'name' => 'Diário'],
+        ['id' => 'daily', 'name' => 'Diário'],
         ['id' => 'weekly', 'name' => 'Semanal'],
         ['id' => 'monthly', 'name' => 'Mensal'],
         ['id'=> 'yearly', 'name' => 'Anual']
@@ -51,9 +57,21 @@ class BudgetsIndex extends Component
     }
 
     public function search(string $value = ''){
-        $selectedOption = Category::where('user_id', Auth::id())->where('id', $this->categoryOrSubcategory)->get();
+        $selectedOption = Category::where('user_id', Auth::id())->where('id', $this->category)->get();
         
-        $this->categoriesAndSubcategories = Category::where('user_id', Auth::id())
+        $this->categories = Category::where('user_id', Auth::id())
+        ->where('name', 'like', '%' . $value . '%')
+        ->take(5)
+        ->orderBy('name')
+        ->get()
+        ->merge($selectedOption);
+    }
+
+    public function searchSubcategories(string $value = ""){
+        $selectedOption = Subcategory::where('user_id', Auth::id())->where('id', $this->subcategory)->get();
+
+        $this->subcategories = Subcategory::where('user_id', Auth::id())
+        ->where('category_id', $this->category)
         ->where('name', 'like', '%' . $value . '%')
         ->take(5)
         ->orderBy('name')
@@ -64,8 +82,8 @@ class BudgetsIndex extends Component
     public function save($isSubcategory = false, $category = null){
         Budget::create([
             'user_id' => Auth::id(),
-            'category_id' => $isSubcategory ? $category : $this->categoryOrSubcategory,
-            'subcategory_id' => $isSubcategory ? $this->categoryOrSubcategory : null,
+            'category_id' => $isSubcategory ? $category : $this->category,
+            'subcategory_id' => $isSubcategory ? $this->category : null,
             'target_value' => $this->targetValue,
             'recurrence' => $this->recurrence,
             'types' => 'budget'
@@ -74,15 +92,16 @@ class BudgetsIndex extends Component
         $this->success("Orçamento criado com sucesso!");
         $this->cancel();
         $this->modalAddBudget = false;
-        //dd($this->categoryOrSubcategory);
+        //dd($this->category);
     }
 
     public function mount(){
         $this->search();
+        $this->searchSubcategories();
     }
 
     public function cancel(){
-        $this->reset(['targetValue', 'categoryOrSubcategory']);
+        $this->reset(['targetValue', 'category']);
     }
 
     public function render()

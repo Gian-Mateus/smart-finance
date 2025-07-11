@@ -30,6 +30,6 @@ trait MoneyBRL
      */
     public function toDecimal($value)
     {
-        return $value / 100;
+        return $value / 10000;
     }
 }
