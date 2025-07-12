@@ -13,17 +13,17 @@ class BudgetsSeeder extends Seeder
     public function run(): void
     {
         $budgetCategories = [
-            'Receitas' => 10000000,
-            'Investimentos' => 10000000,
-            'Moradia' => 10000000,
-            'Alimentação' => 10000000,
-            'Transporte' => 10000000,
-            'Educação' => 10000000,
-            'Lazer' => 10000000,
-            'Saúde & Beleza' => 10000000,
-            'Serviços Financeiros' => 10000000,
-            'Vestuário' => 10000000,
-            'Doações & Presentes' => 10000000,
+            'Receitas' => 100000,
+            'Investimentos' => 100000,
+            'Moradia' => 100000,
+            'Alimentação' => 100000,
+            'Transporte' => 100000,
+            'Educação' => 100000,
+            'Lazer' => 100000,
+            'Saúde & Beleza' => 100000,
+            'Serviços Financeiros' => 100000,
+            'Vestuário' => 100000,
+            'Doações & Presentes' => 100000,
         ];
 
         $loop = 0;
@@ -33,7 +33,7 @@ class BudgetsSeeder extends Seeder
                 'category_id' => \App\Models\Category::where('name', $categoryName)->first()->id,
                 'subcategory_id' => $loop == 0 ? 1 : null, // Assuming no subcategory for now
                 'recurrence' => 'monthly', // Assuming no recurrence type for now
-                'target_value' => $loop == 0 ? 500000 : $value,
+                'target_value' => $loop == 0 ? 50000 : $value,
                 'types' => 'budget',
                 'start_date' => now(),
                 'end_date' => now()->addYear(),
