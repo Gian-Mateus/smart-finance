@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Pages\Settings\Budgets;
 
+use App\Models\Budget;
 use Mary\Traits\Toast;
-use Livewire\Component;
 
 /* Models */
-use App\Models\Budget;
+use Livewire\Component;
 use App\Models\Category;
 use App\Models\Subcategory;
 
+use Livewire\Attributes\On;
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
@@ -44,17 +45,29 @@ class BudgetsIndex extends Component
         $this->dispatch('addBudgetCategory');
     }
 
+    public function hasSubcategories(int $category): bool{
+
+        $category = Category::find($category);
+
+        if(!$category){
+            return false;
+        }
+        
+        return $category->subcategories()->exists();
+    }
+
     public function addBudgetSubcategory(int $category){
         $this->dispatch('addBudgetSubcategory', $category);
     }
 
-    public function save($isSubcategory = false, $category = null){
+    #[On('save')]
+    public function save($data){
         Budget::create([
             'user_id' => Auth::id(),
-            'category_id' => $isSubcategory ? $category : $this->category,
-            'subcategory_id' => $isSubcategory ? $this->category : null,
-            'target_value' => $this->targetValue,
-            'recurrence' => $this->recurrence,
+            'category_id' => $data['category'],
+            'subcategory_id' => $data['subcategory'] ?: null,
+            'target_value' => $data['targetValue'],
+            'recurrence' => $data['recurrence'],
             'types' => 'budget'
         ]);
 
