@@ -18,21 +18,6 @@ class BudgetsIndex extends Component
 {
     use Toast;
 
-    public bool $modalAddBudget = false;
-    public ?int $category = null;
-    public ?int $subcategory = null;
-    public Collection $categories;
-    public Collection $subcategories;
-    
-    public string $targetValue;
-    
-    public string $recurrence;
-    public array $recurrences = [
-        ['id' => 'daily', 'name' => 'Diário'],
-        ['id' => 'weekly', 'name' => 'Semanal'],
-        ['id'=> 'yearly', 'name' => 'Anual']
-    ];
-
     #[Computed]
     public function budgets(){
         $budgets = Budget::where('user_id', Auth::id())->get();
@@ -55,27 +40,12 @@ class BudgetsIndex extends Component
         return $organizedBudgets;
     }
 
-    public function search(string $value = ''){
-        $selectedOption = Category::where('user_id', Auth::id())->where('id', $this->category)->get();
-        
-        $this->categories = Category::where('user_id', Auth::id())
-        ->where('name', 'like', '%' . $value . '%')
-        ->take(5)
-        ->orderBy('name')
-        ->get()
-        ->merge($selectedOption);
+    public function addBudgetCategory(){
+        $this->dispatch('addBudgetCategory');
     }
 
-    public function searchSubcategories(string $value = ""){
-        $selectedOption = Subcategory::where('user_id', Auth::id())->where('id', $this->subcategory)->get();
-
-        $this->subcategories = Subcategory::where('user_id', Auth::id())
-        ->where('category_id', $this->category)
-        ->where('name', 'like', '%' . $value . '%')
-        ->take(5)
-        ->orderBy('name')
-        ->get()
-        ->merge($selectedOption);
+    public function addBudgetSubcategory(int $category){
+        $this->dispatch('addBudgetSubcategory', $category);
     }
 
     public function save($isSubcategory = false, $category = null){
@@ -89,18 +59,6 @@ class BudgetsIndex extends Component
         ]);
 
         $this->success("Orçamento criado com sucesso!");
-        $this->cancel();
-        $this->modalAddBudget = false;
-        //dd($this->category);
-    }
-
-    public function mount(){
-        $this->search();
-        $this->searchSubcategories();
-    }
-
-    public function cancel(){
-        $this->reset(['targetValue', 'category']);
     }
 
     public function render()
