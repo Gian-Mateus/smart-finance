@@ -14,27 +14,40 @@
                     <span>
                         {{ $budget['category']->category->name }}
                     </span>
-                    <span>
-                       R$ {{ $budget['category']->target_value }}
-                    </span>
+                    <div>
+                        <span>
+                            {{ $budget['category']->recurrence }}:
+                        </span>
+                        <span>
+                           R$ {{ $budget['category']->target_value }}
+                        </span>
+                    </div>
                 </div>
             </x-slot:heading>
             <x-slot:content>
+                @if ($this->hasSubcategories($budget['category']->category_id))
                 <x-button 
                     label="Novo Orçamento Subcategoria" 
                     class="btn-primary mb-10" 
                     icon="s-plus-small"
                     wire:click="addBudgetSubcategory({{ $budget['category']->category_id }})"
                 />
+                @endif
                 @if ($budget['subcategories'])    
                     <ul>
                         @foreach ($budget['subcategories'] as $sub)    
                             <li class="flex justify-between items-center rounded p-2 hover:bg-base-300">
                                 <span>{{ $sub->subcategory->name }}</span>
-                                <span>R$ {{ $sub->target_value }}</span>
+                                <div>
+                                    <span>{{ $sub->recurrence }}:</span>
+                                    <span>R$ {{ $sub->target_value }}</span>
+                                </div>
                             </li>
                         @endforeach
                     </ul>
+                @endif
+                @if (!$this->hasSubcategories($budget['category']->category_id))
+                <span>Não há subcategorias cadastradas</span>
                 @endif
                 </x-slot:content>
             </x-collapse>

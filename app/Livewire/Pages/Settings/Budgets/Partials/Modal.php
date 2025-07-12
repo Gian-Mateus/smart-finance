@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Pages\Settings\Budgets\Partials;
 
+use App\Models\Budget;
+use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\Subcategory;
@@ -11,6 +13,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 class Modal extends Component
 {
+    use Toast;
+    
     public bool $modalAddBudget = false;
     public ?int $category = null;
     public ?int $subcategory = null;
@@ -65,13 +69,51 @@ class Modal extends Component
         }
     }
 
+    public function dispacthSaveBudgetCategory(){
+        
+        $data = $this->validate([
+            'category' => 'required',
+            'subcategory' => 'nullable',
+            'targetValue' => 'required',
+            'recurrence' => 'required'
+        ]);
+
+        $this->dispatch('save', $data);
+        $this->modalAddBudget = false;
+        $this->reset(['category', 'targetValue', 'recurrence']);
+    }
+    
+    public function dispacthSaveBudgetSubcategory(){
+        $categoryBudget = Budget::where('user_id', Auth::id())
+        ->where('category_id', $this->category)
+        ->whereNull('subcategory_id')
+        ->get();
+
+        //dd($this->targetValue > $categoryBudget[0]->target_value);
+        if($this->targetValue > $categoryBudget[0]->target_value){
+            $this->error('O valor do orçamento da subcategoria não pode ser maior que o orçamento da categoria em que ela pertence');
+            return;
+        }
+
+        $data = $this->validate([
+            'category' => 'required',
+            'subcategory' => 'required',
+            'targetValue' => 'required',
+            'recurrence' => 'required'
+        ]);
+        
+        $this->dispatch('save', $data);
+        $this->modalAddBudget = false;
+        $this->reset(['category', 'subcategory', 'targetValue', 'recurrence']);
+    }
+
     public function cancel(){
         $this->modalAddBudget = false;
         $this->reset(['category', 'targetValue', 'recurrence']);
     }
 
     public function mount(){
-        $this->categories = Category::where('user_id', Auth::id())->get();
+        $this->searchAny();
     }
 
     public function render()

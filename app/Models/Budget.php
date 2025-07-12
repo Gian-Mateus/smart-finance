@@ -109,4 +109,17 @@ class Budget extends Model
             set: fn ($value) => $this->toInteger($value),
         );
     }
+
+    protected function recurrence(): Attribute {
+        return Attribute::make(
+            get: fn ($value) => match ($value) {
+                'monthly' => 'Mensal',
+                'daily' => 'Diário',
+                'weekly' => 'Semanal',
+                'yearly' => 'Anual',
+                default => $value,
+            },
+            set: fn ($value) => $value,
+        );
+    }
 }

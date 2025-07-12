@@ -1,5 +1,6 @@
 <x-modal wire:model="modalAddBudget" title="Novo Orçamento" subtitle="Separe orçamentos por categoria">
         <x-form no-separator wire:submit="save">
+
             @if (!$category)
             <x-choices
                 label="Categoria"
@@ -10,7 +11,8 @@
                 searchable
                 search-function="searchAny"
             />
-            @else
+            @endif
+            @if ($category)
             <x-choices
                 label="Subcategoria"
                 wire:model="subcategory"
@@ -39,14 +41,17 @@
             />
             <x-slot:actions>
                 <x-button label="Cancelar" wire:click="cancel" />
-                @if ($category)
+
+                @if (!$category)
                 <x-button label="Adicionar" class="btn-primary" wire:click="dispacthSaveBudgetCategory" />
-                @else
+                @endif
+                @if ($category)
                 <x-button label="Adicionar" class="btn-primary" wire:click="dispacthSaveBudgetSubcategory" />
                 @endif
+
             </x-slot:actions>
         </x-form>
-    {{-- Temporário - não está funcionando no app.js
+    {{-- Temporário - não está funcionando no app.js --}}
     <script>
         function formatCurrency(input) {
             let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
@@ -55,5 +60,5 @@
 
             input.value = value;
         }
-    </script> --}}
+    </script>
 </x-modal>
