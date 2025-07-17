@@ -1,6 +1,6 @@
-# Gerenciador de Finanças Pessoais
+# Gerenciador de Finanças Pessoais - Smart Finance
 
-Este é um projeto para gerenciador de finanças pessoais, desenvolvido com Laravel. Ele permite aos usuários acompanhar suas receitas e despesas, organizar transações por categorias e subcategorias, gerenciar contas bancárias e orçamentos, e importar dados financeiros.
+Este é um projeto para gerenciador de finanças pessoais, desenvolvido com Laravel, Livewire, Mary-UI. Ele permite aos usuários acompanhar suas receitas e despesas, organizar transações por categorias e subcategorias, gerenciar contas bancárias e orçamentos, e importar dados financeiros.
 
 ### Estrutura de Dados
 
