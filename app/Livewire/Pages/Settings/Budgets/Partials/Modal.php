@@ -89,6 +89,8 @@ class Modal extends Component
         ->whereNull('subcategory_id')
         ->get();
 
+        $targetValuesSubcategories = Subcategory::where('category_id', $this->category);
+
         //dd($this->targetValue > $categoryBudget[0]->target_value);
         if($this->targetValue > $categoryBudget[0]->target_value){
             $this->error('O valor do orçamento da subcategoria não pode ser maior que o orçamento da categoria em que ela pertence');
