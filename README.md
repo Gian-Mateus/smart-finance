@@ -12,11 +12,10 @@ Este projeto utiliza um banco de dados relacional para armazenar informações f
 | `User`          | 1 -> n  | `Category`           | Um usuário pode ter várias categorias.       |
 | `Category`      | 1 -> n  | `Subcategory`        | Uma categoria pode ter várias subcategorias. |
 | `BanksAccount`  | 1 -> n  | `Transaction`        | Uma conta bancária pode ter várias transações.|
-| `Category`      | 1 -> n  | `Transaction`        | Uma categoria pode ter várias transações.    |
-| `Subcategory`   | 1 -> n  | `Transaction`        | Uma subcategoria pode ter várias transações. |
+| `Transaction`   | 1 -> 1  | `Category/Subcategory` | Relação polimófica, cada transação pode ter uma categoria ou subcategoria |
 | `Import`        | 1 -> n  | `ImportsTransaction` | Um import pode ter várias transações importadas.|
 | `ImportsTransaction` | 1 -> 1 | `Transaction`     | Uma transação importada corresponde a uma transação. |
-| `Budget`        | 1 -> 1  | `Category`           | Un orçamento está associado a uma categoria. |
+| `Budget`        | 1 -> 1  | `Category`           | Relação polimófica. Um orçamento está associado a uma categoria ou subcategoria. |
 | `PaymentMethod` | 1 -> n  | `Transaction`        | Um método de pagamento pode ter várias transações. |
 | `Bank`          | 1 -> n  | `BanksAccount`       | Um banco pode ter várias contas bancárias.   |
 
