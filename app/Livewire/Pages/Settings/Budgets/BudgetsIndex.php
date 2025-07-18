@@ -14,6 +14,7 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class BudgetsIndex extends Component
 {
@@ -21,24 +22,31 @@ class BudgetsIndex extends Component
 
     #[Computed]
     public function budgets(){
-        $budgets = Budget::where('user_id', Auth::id())->get();
-        $organizedBudgets = [];
-        
-        foreach($budgets as $budget){
-            if (!isset($organizedBudgets[$budget->category_id])) {
-                $organizedBudgets[$budget->category_id] = [
-                    'category' => $budget,
-                    'subcategories' => []
-                ];
+        $budgets = Budget::where('user_id', Auth::id())
+        ->with([
+            'budgetable' => function(MorphTo $morphto) {
+                $morphto->morphWith([
+                    Subcategory::class,
+                    Category::class
+                ]);
             }
             
-            if ($budget->subcategory_id) {
-                $organizedBudgets[$budget->category_id]['subcategories'][$budget->subcategory_id] = $budget;
-            } else {
-                $organizedBudgets[$budget->category_id]['category_budget'] = $budget;
-            }
-        }
-        return $organizedBudgets;
+        ])
+        ->get();
+
+        $organizedBudgets = new Collection();
+
+        // foreach($budgets as $budget){
+        //     if($budget->budgetable->category){
+        //         $organizedBudgets->push($budget->budgetable->category);
+        //     }
+
+        //     if($budget->budgetable->category->id == $budget->budgetable->subcategory->category->id){
+        //         $organizedBudgets[$budget->budgetable->category]->push($budget->budgetable->subcategory);
+        //     };
+        // }
+
+        return $budgets;
     }
 
     public function addBudgetCategory(){

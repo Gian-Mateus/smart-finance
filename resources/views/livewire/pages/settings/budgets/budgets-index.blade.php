@@ -6,7 +6,7 @@
         icon="s-plus-small"
         wire:click="addBudgetCategory"
     />
-
+    {{ dd($this->budgets[0]->budgetable) }}
     @foreach ($this->budgets as $budget)
         <x-collapse separator class="mt-0.5">
             <x-slot:heading>
