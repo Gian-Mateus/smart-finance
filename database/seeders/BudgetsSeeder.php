@@ -26,14 +26,14 @@ class BudgetsSeeder extends Seeder
             'Doações & Presentes' => 100000,
         ];
 
-        $loop = 0;
+        $loop = 1;
         foreach ($budgetCategories as $categoryName => $value) {
             \App\Models\Budget::create([
-                'user_id' => 1, // Assuming user_id 1 exists
-                'category_id' => \App\Models\Category::where('name', $categoryName)->first()->id,
-                'subcategory_id' => $loop == 0 ? 1 : null, // Assuming no subcategory for now
-                'recurrence' => 'monthly', // Assuming no recurrence type for now
-                'target_value' => $loop == 0 ? 50000 : $value,
+                'user_id' => 1, // User 1
+                'budgetable_id' => $loop,
+                'budgetable_type' => 'App\Models\Category',
+                'recurrence' => 'monthly',
+                'target_value' => $value,
                 'types' => 'budget',
                 'start_date' => now(),
                 'end_date' => now()->addYear(),
