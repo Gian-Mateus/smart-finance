@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Transaction
@@ -52,6 +53,7 @@ class Transaction extends Model
         'id',
         'user_id',
         'bank_account_id',
+        'category_id',
         'subcategory_id',
         'recurrence_types_id',
         'payment_methods_id',
@@ -79,6 +81,7 @@ class Transaction extends Model
             'id' => 'integer',
             'user_id' => 'integer',
             'bank_account_id' => 'integer',
+            'category_id' => 'integer',
             'subcategory_id' => 'integer',
             'recurrence_types_id' => 'integer',
             'payment_methods_id' => 'integer',
@@ -122,6 +125,14 @@ class Transaction extends Model
     public function recurrenceTypes(): BelongsTo
     {
         return $this->belongsTo(RecurrenceType::class, 'recurrence_types_id');
+    }
+
+    /**
+     * @return BelongsTo<Category, $this>
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     /**
