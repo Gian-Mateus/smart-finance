@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Category
@@ -71,11 +72,11 @@ class Category extends Model
     }
 
     /**
-     * @return HasMany<Budget, $this>
+     * @return MorphMany<Budget, $this>
      */
-    public function budgets(): HasMany
-    {
-        return $this->hasMany(Budget::class, 'category_id', 'id');
+    public function budgets(): MorphMany
+    {   
+        return $this->morphMany(Budget::class, 'budgetable');
     }
 
     /**

@@ -8,6 +8,7 @@ use App\MoneyBRL;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -44,8 +45,6 @@ class Budget extends Model
     protected $fillable = [
         'id',
         'user_id',
-        'category_id',
-        'subcategory_id',
         'recurrence',
         'target_value',
         'types',
@@ -69,8 +68,6 @@ class Budget extends Model
         return [
             'id' => 'integer',
             'user_id' => 'integer',
-            'category_id' => 'integer',
-            'subcategory_id' => 'integer',
             'recurrence' => 'string',
             'target_value' => 'integer',
             'types' => 'string',
@@ -80,19 +77,13 @@ class Budget extends Model
     }
 
     /**
-     * @return BelongsTo<Category, $this>
+     * Get the parent budgetable model (category or subcategory).
+     *
+     * @return MorphTo
      */
-    public function category(): BelongsTo
+    public function budgetable(): MorphTo
     {
-        return $this->belongsTo(Category::class, 'category_id');
-    }
-
-    /**
-     * @return BelongsTo<Subcategory, $this>
-     */
-    public function subcategory(): BelongsTo
-    {
-        return $this->belongsTo(Subcategory::class, 'subcategory_id');
+        return $this->morphTo();
     }
 
     /**
