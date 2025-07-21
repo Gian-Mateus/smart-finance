@@ -36,17 +36,24 @@ class BudgetsIndex extends Component
 
         $organizedBudgets = new Collection();
 
-        // foreach($budgets as $budget){
-        //     if($budget->budgetable->category){
-        //         $organizedBudgets->push($budget->budgetable->category);
-        //     }
+       foreach($budgets as $budget){
+           if($budget->budgetable_type == 'App\Models\Category'){
+               $organizedBudgets->push($budget);
+           }
+        }
 
-        //     if($budget->budgetable->category->id == $budget->budgetable->subcategory->category->id){
-        //         $organizedBudgets[$budget->budgetable->category]->push($budget->budgetable->subcategory);
-        //     };
-        // }
+        foreach($budgets as $b){
+            if($budget->budgetable_type == 'App\Models\Subcategory'){
+                $organizedBudgets->map(function($category) use ($b){
+                    if($category->category_id == $b->category_id){
+                        $category->subcategory = $b;
+                    }
+                });
 
-        return $budgets;
+            }
+        }
+
+        return $organizedBudgets;
     }
 
     public function addBudgetCategory(){

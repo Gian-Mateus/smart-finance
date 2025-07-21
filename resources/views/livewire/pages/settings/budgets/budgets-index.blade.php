@@ -5,37 +5,37 @@
         class="btn-primary mb-10" 
         icon="s-plus-small"
         wire:click="addBudgetCategory"
-    />
-    {{ dd($this->budgets[0]->budgetable) }}
-    @foreach ($this->budgets as $budget)
+        />
+        {{ dd($this->budgets) }}
+        @foreach ($this->budgets as $budget)
         <x-collapse separator class="mt-0.5">
             <x-slot:heading>
                 <div class="flex justify-between items-center">
                     <span>
-                        {{ $budget['category']->category->name }}
+                        {{ $budget->name }}
                     </span>
                     <div>
                         <span>
-                            {{ $budget['category']->recurrence }}:
+                            {{ $budget->recurrence }}:
                         </span>
                         <span>
-                           R$ {{ $budget['category']->target_value }}
+                           R$ {{ $budget->target_value }}
                         </span>
                     </div>
                 </div>
             </x-slot:heading>
             <x-slot:content>
-                @if ($this->hasSubcategories($budget['category']->category_id))
+                {{-- @if ($this->hasSubcategories($budget->category_id))
                 <x-button 
                     label="Novo Orçamento Subcategoria" 
                     class="btn-primary mb-10" 
                     icon="s-plus-small"
-                    wire:click="addBudgetSubcategory({{ $budget['category']->category_id }})"
+                    wire:click="addBudgetSubcategory({{ $budget->category_id }})"
                 />
                 @endif
-                @if ($budget['subcategories'])    
+                @if ($budget->subcategory)    
                     <ul>
-                        @foreach ($budget['subcategories'] as $sub)    
+                        @foreach ($budget->subcategory as $sub)    
                             <li class="flex justify-between items-center rounded p-2 hover:bg-base-300">
                                 <span>{{ $sub->subcategory->name }}</span>
                                 <div>
@@ -48,7 +48,7 @@
                 @endif
                 @if (!$this->hasSubcategories($budget['category']->category_id))
                 <span>Não há subcategorias cadastradas</span>
-                @endif
+                @endif --}}
                 </x-slot:content>
             </x-collapse>
     @endforeach
