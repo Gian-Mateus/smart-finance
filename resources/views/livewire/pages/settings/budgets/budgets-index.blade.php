@@ -5,14 +5,14 @@
         class="btn-primary mb-10" 
         icon="s-plus-small"
         wire:click="addBudgetCategory"
-        />
-        {{ dd($this->budgets) }}
+    />
+        
         @foreach ($this->budgets as $budget)
         <x-collapse separator class="mt-0.5">
             <x-slot:heading>
                 <div class="flex justify-between items-center">
                     <span>
-                        {{ $budget->name }}
+                        {{ $budget->budgetable->name }}
                     </span>
                     <div>
                         <span>
@@ -51,7 +51,7 @@
                 @endif --}}
                 </x-slot:content>
             </x-collapse>
-    @endforeach
+        @endforeach
 
     <livewire:pages.settings.budgets.partials.modal />
 </div>

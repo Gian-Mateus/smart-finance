@@ -35,6 +35,9 @@ class BudgetsIndex extends Component
         ->get();
 
         $organizedBudgets = new Collection();
+        /* Separando categoria e subcategoria eu poderia  */
+        $categories = [];
+        $subcategories = [];
 
        foreach($budgets as $budget){
            if($budget->budgetable_type == 'App\Models\Category'){
@@ -42,11 +45,13 @@ class BudgetsIndex extends Component
            }
         }
 
+        /* Se eu não percorrer usando foreach, eu vou ainda vou ter que percorrer dentro do each para pegar a budget que é subcategoria correspondente */
         foreach($budgets as $b){
-            if($budget->budgetable_type == 'App\Models\Subcategory'){
-                $organizedBudgets->map(function($category) use ($b){
-                    if($category->category_id == $b->category_id){
-                        $category->subcategory = $b;
+            if($b->budgetable_type == 'App\Models\Subcategory'){
+                /* Aqui posso usar o find() para acessar diretamente a categoria a qual essa subcategoria pertence e fazer o push() diretamente */
+                $organizedBudgets->each(function($category) use ($b){
+                    if($category->budgetable->id == $b->budgetable->category_id){
+                        $category->subcategories->push($b);
                     }
                 });
 
