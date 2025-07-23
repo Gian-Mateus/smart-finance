@@ -31,12 +31,9 @@ class Modal extends Component
     public Collection $categories;
     public Collection $subcategories;
 
-    #[On('addBudget')]
-    public function openModal(array $data){
+    #[On('newBudget')]
+    public function openModal(){
         $this->modalAddBudget = true;
-        if($data["type"] == "App\Models\Category"){
-            $this->category = $data["id"];
-        }
         $this->searchAny();
     }
 

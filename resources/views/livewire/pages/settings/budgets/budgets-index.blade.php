@@ -4,7 +4,7 @@
         label="Novo Orçamento" 
         class="btn-primary mb-10" 
         icon="s-plus-small"
-        wire:click="addBudgetCategory"
+        wire:click="newBudget"
     />
         
     {{-- {{ dd($this->budgets) }} --}}

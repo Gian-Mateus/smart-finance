@@ -67,7 +67,7 @@
 		{{-- Toast --}}
 		<x-toast />
 
-		@livewireScript
+		@livewireScripts
 	</body>
 
 </html>

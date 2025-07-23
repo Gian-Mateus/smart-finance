@@ -69,12 +69,11 @@ class BudgetsIndex extends Component
         return $category->subcategories()->exists();
     }
 
-    public function addBudget(int $id, string $type){
-        $data = [
-            "id" => $id,
-            "type" => $type
-        ];
-        $this->dispatch('addBudget', $data);
+    public function newBudget(int? $id = null){
+        if ($id) {
+            
+        }
+        $this->dispatch('newBudget');
     }
 
     #[On('save')]
