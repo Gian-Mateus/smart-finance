@@ -13,7 +13,6 @@ use App\Models\Subcategory;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class BudgetsIndex extends Component
@@ -34,35 +33,29 @@ class BudgetsIndex extends Component
         ])
         ->get();
 
-        $organizedBudgets = new Collection();
-        /* Separando categoria e subcategoria eu poderia  */
-        $categories = [];
-        $subcategories = [];
+        $organizedBudgets = collect();
+        $subcategories = collect();
 
        foreach($budgets as $budget){
            if($budget->budgetable_type == 'App\Models\Category'){
                $organizedBudgets->push($budget);
            }
+           
+           if($budget->budgetable_type == 'App\Models\Subcategory'){
+                $subcategories->push($budget);
+           }
         }
 
-        /* Se eu não percorrer usando foreach, eu vou ainda vou ter que percorrer dentro do each para pegar a budget que é subcategoria correspondente */
-        foreach($budgets as $b){
-            if($b->budgetable_type == 'App\Models\Subcategory'){
-                /* Aqui posso usar o find() para acessar diretamente a categoria a qual essa subcategoria pertence e fazer o push() diretamente */
-                $organizedBudgets->each(function($category) use ($b){
-                    if($category->budgetable->id == $b->budgetable->category_id){
-                        $category->subcategories->push($b);
-                    }
-                });
-
-            }
+        foreach($subcategories as $sb){
+            if(isset($organizedBudgets[$sb->budgetable->category_id - 1]->subcategories)){
+                $organizedBudgets[$sb->budgetable->category_id - 1]->subcategories->push($sb);
+            } else {
+                $organizedBudgets[$sb->budgetable->category_id - 1]->subcategories = collect();
+                $organizedBudgets[$sb->budgetable->category_id - 1]->subcategories->push($sb);
+            };
         }
 
         return $organizedBudgets;
-    }
-
-    public function addBudgetCategory(){
-        $this->dispatch('addBudgetCategory');
     }
 
     public function hasSubcategories(int $category): bool{
@@ -76,8 +69,12 @@ class BudgetsIndex extends Component
         return $category->subcategories()->exists();
     }
 
-    public function addBudgetSubcategory(int $category){
-        $this->dispatch('addBudgetSubcategory', $category);
+    public function addBudget(int $id, string $type){
+        $data = [
+            "id" => $id,
+            "type" => $type
+        ];
+        $this->dispatch('addBudget', $data);
     }
 
     #[On('save')]

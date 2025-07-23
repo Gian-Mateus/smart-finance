@@ -41,17 +41,10 @@
             />
             <x-slot:actions>
                 <x-button label="Cancelar" wire:click="cancel" />
-
-                @if (!$category)
-                <x-button label="Adicionar" class="btn-primary" wire:click="dispacthSaveBudgetCategory" />
-                @endif
-                @if ($category)
-                <x-button label="Adicionar" class="btn-primary" wire:click="dispacthSaveBudgetSubcategory" />
-                @endif
-
+                <x-button label="Adicionar" class="btn-primary" wire:click="dispacthSaveBudget()" />
             </x-slot:actions>
         </x-form>
-    {{-- Temporário - não está funcionando no app.js --}}
+    {{-- Temporário - não está funcionando no app.js (dentro Firebase Studio) --}}
     <script>
         function formatCurrency(input) {
             let value = input.value.replace(/\D/g, ''); // Remove non-digit characters

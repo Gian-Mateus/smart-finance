@@ -31,16 +31,12 @@ class Modal extends Component
     public Collection $categories;
     public Collection $subcategories;
 
-    #[On('addBudgetCategory')]
-    public function openModalAddBudgetCategory(){
+    #[On('addBudget')]
+    public function openModal(array $data){
         $this->modalAddBudget = true;
-        $this->searchAny();
-    }
-
-    #[On('addBudgetSubcategory')]
-    public function openModalAddBudgetSubcategory(int $category){
-        $this->modalAddBudget = true;
-        $this->category = $category;
+        if($data["type"] == "App\Models\Category"){
+            $this->category = $data["id"];
+        }
         $this->searchAny();
     }
 
@@ -68,34 +64,15 @@ class Modal extends Component
             ->merge($selectedOption);
         }
     }
-
-    public function dispacthSaveBudgetCategory(){
-        
-        $data = $this->validate([
-            'category' => 'required',
-            'subcategory' => 'nullable',
-            'targetValue' => 'required',
-            'recurrence' => 'required'
-        ]);
-
-        $this->dispatch('save', $data);
-        $this->modalAddBudget = false;
-        $this->reset(['category', 'targetValue', 'recurrence']);
-    }
     
-    public function dispacthSaveBudgetSubcategory(){
-        $categoryBudget = Budget::where('user_id', Auth::id())
-        ->where('category_id', $this->category)
-        ->whereNull('subcategory_id')
-        ->get();
-
-        $targetValuesSubcategories = Subcategory::where('category_id', $this->category);
+    public function dispacthSaveBudget(string $type, int $id){
+        
 
         //dd($this->targetValue > $categoryBudget[0]->target_value);
-        if($this->targetValue > $categoryBudget[0]->target_value){
+      /*   if($this->targetValue > $categoryBudget[0]->target_value){
             $this->error('O valor do orçamento da subcategoria não pode ser maior que o orçamento da categoria em que ela pertence');
             return;
-        }
+        } */
 
         $data = $this->validate([
             'category' => 'required',
