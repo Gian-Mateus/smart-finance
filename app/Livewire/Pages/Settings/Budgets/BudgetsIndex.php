@@ -71,7 +71,8 @@ class BudgetsIndex extends Component
 
     public function newBudget(int? $id = null){
         if ($id) {
-            
+            $this->dispatch('newBudget', $id);
+            return;
         }
         $this->dispatch('newBudget');
     }
