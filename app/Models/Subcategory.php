@@ -75,6 +75,15 @@ class Subcategory extends Model
         ];
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($subcategory) {
+            $subcategory->budgets()->delete();
+        });
+    }
+
     /**
      * @return MorphMany<Budget, $this>
      */

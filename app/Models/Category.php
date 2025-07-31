@@ -71,6 +71,15 @@ class Category extends Model
         ];
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($category) {
+            $category->budgets()->delete();
+        });
+    }
+
     /**
      * @return MorphMany<Budget, $this>
      */
