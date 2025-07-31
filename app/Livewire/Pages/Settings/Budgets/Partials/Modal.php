@@ -10,17 +10,27 @@ use App\Models\Subcategory;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\Rule;
 
 class Modal extends Component
 {
     use Toast;
-    
+
     public bool $modalAddBudget = false;
-    public ?int $category = null;
-    public ?int $subcategory = null;
+
+    // Usamos $parentId para armazenar o ID da categoria pai quando adicionando uma subcategoria
+    public ?int $parentId = null;
+
+    // Usamos $budgetableId para armazenar o ID da categoria ou subcategoria selecionada
+    #[Rule('required')]
+    public ?int $budgetableId = null;
+
+    #[Rule('required')]
     public $targetValue = null;
 
-    public string $recurrence;
+    #[Rule('required')]
+    public string $recurrence = ''; // Inicializado para evitar erro de required na renderização inicial
+
     public array $recurrences = [
         ['id' => 'monthly', 'name' => 'Mensal'],
         ['id' => 'daily', 'name' => 'Diário'],
@@ -28,68 +38,65 @@ class Modal extends Component
         ['id'=> 'yearly', 'name' => 'Anual']
     ];
 
-    public Collection $categories;
-    public Collection $subcategories;
+    public Collection $options; // Coleção genérica para categorias ou subcategorias
+    public string $budgetableType; // Para armazenar o tipo do orçamento (Category ou Subcategory)
+
 
     #[On('newBudget')]
-    public function openModal(){
+    public function openModal(?int $parentId = null){
+        $this->parentId = $parentId;
         $this->modalAddBudget = true;
-        $this->searchAny();
+        // Reseta o budgetableId para garantir que o choices seja limpo ao abrir o modal
+        $this->budgetableId = null;
+        $this->searchOptions(); // Busca as opções iniciais (categorias ou subcategorias)
     }
 
-    public function searchAny(string $value = ''){
-        if(!$this->category){
-            $selectedOption = Category::where('user_id', Auth::id())->where('id', $this->category)->get();
-            
-            $this->categories = Category::where('user_id', Auth::id())
-            ->where('name', 'like', '%' . $value . '%')
-            ->take(5)
-            ->orderBy('name')
-            ->get()
-            ->merge($selectedOption);
-        }
+    // Função genérica para buscar opções (categorias ou subcategorias)
+    public function searchOptions(string $value = ''){
+        if(!$this->parentId){
+            // Buscando categorias
+            $this->options = Category::where('user_id', Auth::id())
+                ->where('name', 'like', '%' . $value . '%')
+                ->take(5)
+                ->orderBy('name')
+                ->get();
+            $this->budgetableType = 'App\Models\Category';
+        } else {
+            // Buscando subcategorias
+             $this->options = Subcategory::where('user_id', Auth::id())
+                ->where('category_id', $this->parentId)
+                ->where('name', 'like', '%' . $value . '%')
+                ->take(5)
+                ->orderBy('name')
+                ->get();
 
-        if($this->category){
-            $selectedOption = Subcategory::where('user_id', Auth::id())->where('id', $this->subcategory)->get();
-    
-            $this->subcategories = Subcategory::where('user_id', Auth::id())
-            ->where('category_id', $this->category)
-            ->where('name', 'like', '%' . $value . '%')
-            ->take(5)
-            ->orderBy('name')
-            ->get()
-            ->merge($selectedOption);
+            $this->budgetableType = 'App\Models\Subcategory';
         }
     }
-    
-    public function dispacthSaveBudget(string $type, int $id){
-        
 
-        //dd($this->targetValue > $categoryBudget[0]->target_value);
-      /*   if($this->targetValue > $categoryBudget[0]->target_value){
-            $this->error('O valor do orçamento da subcategoria não pode ser maior que o orçamento da categoria em que ela pertence');
-            return;
-        } */
 
-        $data = $this->validate([
-            'category' => 'required',
-            'subcategory' => 'required',
-            'targetValue' => 'required',
-            'recurrence' => 'required'
+    public function save(){
+
+        $data = $this->validate();
+        $budgetableType = $this->parentId ? 'App\Models\Subcategory' : 'App\Models\Category';
+
+        $this->dispatch('save', [
+            'type' => $budgetableType,
+            'id' => $data['budgetableId'],
+            'targetValue' => $data['targetValue'],
+            'recurrence' => $data['recurrence']
         ]);
-        
-        $this->dispatch('save', $data);
         $this->modalAddBudget = false;
-        $this->reset(['category', 'subcategory', 'targetValue', 'recurrence']);
+        $this->reset(['parentId', 'budgetableId', 'targetValue', 'recurrence']);
     }
 
     public function cancel(){
         $this->modalAddBudget = false;
-        $this->reset(['category', 'targetValue', 'recurrence']);
+        $this->reset(['parentId', 'budgetableId', 'targetValue', 'recurrence']);
     }
 
     public function mount(){
-        $this->searchAny();
+        $this->searchOptions();
     }
 
     public function render()

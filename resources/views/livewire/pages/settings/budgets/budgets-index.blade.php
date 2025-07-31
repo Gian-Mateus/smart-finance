@@ -14,7 +14,7 @@
             <x-slot:heading>
                 <div>
                     <div class="flex items-center gap-4 mb-2">
-                        @if($budget->budgetable->icon)
+                        @if($budget->budgetable->icon != null)
                             <x-icon :name="$budget->budgetable->icon"/>
                         @endif
                         <div class="font-bold">
@@ -37,7 +37,7 @@
                     label="Novo Orçamento Subcategoria" 
                     class="btn-primary mb-10" 
                     icon="s-plus-small"
-                    wire:click="addBudget({{ $budget->budgetable_id }}, {{ $budget->budgetable_type }})"
+                    wire:click="newBudget({{ $budget->budgetable_id }})"
                 />
                 @endif
                 <ul>

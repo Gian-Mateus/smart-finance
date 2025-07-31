@@ -83,21 +83,25 @@ class CategoriesIndex extends Component
            return;
         }
 
-        if(array_all($this->deleteCategories, function($category){
-            return $category == false;
-        })){
-            $this->error('Selecione uma categoria para excluir!');
-            return;
-        }
+        // if(array_all($this->deleteCategories, function($category){
+        //     return $category == false;
+        // })){
+        //     $this->error('Selecione uma categoria para excluir!');
+        //     return;
+        // }
 
         $categoriesForDelete = array_keys($this->deleteCategories);
 
-        $deleteCategoriesCount = Category::whereIn("id", $categoriesForDelete)->where('user_id', Auth::id())->delete();
+        $deleteCategoriesCount = Category::whereIn("id", $categoriesForDelete)->where('user_id', Auth::id())->get();
         
+        foreach ($deleteCategoriesCount as $d) {
+            $d->delete();
+        }
+
         $this->modalConfirmDelete = false;
 
         // Toast success
-        if($deleteCategoriesCount > 0){
+        if($deleteCategoriesCount->lenght > 0){
             $this->success("{$deleteCategoriesCount} categoria(s) excluída(s) com sucesso!");
         } else {
             $this->warning('Nenhuma categoria foi excluída. Verifique se você tem permissão para excluir essas categorias.');

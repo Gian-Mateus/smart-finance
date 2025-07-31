@@ -69,7 +69,7 @@ class BudgetsIndex extends Component
         return $category->subcategories()->exists();
     }
 
-    public function newBudget(int? $id = null){
+    public function newBudget(?int $id = null){
         if ($id) {
             $this->dispatch('newBudget', $id);
             return;
@@ -79,10 +79,11 @@ class BudgetsIndex extends Component
 
     #[On('save')]
     public function save($data){
+        //dd($data['id']);
         Budget::create([
             'user_id' => Auth::id(),
-            'category_id' => $data['category'],
-            'subcategory_id' => $data['subcategory'] ?: null,
+            'budgetable_type' => $data['type'],
+            'budgetable_id' => $data['id'],
             'target_value' => $data['targetValue'],
             'recurrence' => $data['recurrence'],
             'types' => 'budget'

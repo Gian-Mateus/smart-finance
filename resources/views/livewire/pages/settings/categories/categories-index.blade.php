@@ -1,10 +1,6 @@
 <div
 	class="ml-4 max-w-3xl mt-10"
-	x-data='{ 
-		selectCategory: false, 
-		selectAllCategory: false, 
-		search: ""
-	}'
+	x-data='{search: ""}'
 >
 	<x-header
 		title="Categorias e Subcategorias"
@@ -12,46 +8,14 @@
 		separator
 	/>
 	{{-- Search, Delete and Add --}}
-	<div class="grid">
-		<div class="flex grid-cols-1 items-center gap-2">
-			{{-- Search --}}
-			<div class="flex-1">
-				<x-input
-					class="p-2"
-					x-model="search"
-					placeholder="Pesquisar"
-					icon="m-magnifying-glass"
-				/>
-			</div>
-			{{-- Delete Categories--}}
-			<x-dropdown>
-				<x-slot:trigger>
-					<x-button icon="o-ellipsis-vertical" class="btn-circle" />
-				</x-slot:trigger>
-
-				<x-menu-item title="Excluir Categorias" @click="selectCategory = true" />
-			</x-dropdown>
-		</div>
-		{{-- Select for delete Categories --}}
-		<div
-			class="m-2 flex items-center gap-x-2"
-			x-show="selectCategory"
-		>
-			<x-checkbox
-				label="Selecionar tudo"
-				@click="selectAllCategory = ! selectAllCategory"
-			/>
-			<x-button
-				class="btn-md"
-				label="Excluir"
-				icon="o-trash"
-				@click="$wire.modalConfirmDelete = true"
-			/>
-			<x-button
-				class="btn-md"
-				label="Cancelar"
-				icon="o-x-mark"
-				@click="selectCategory = false; selectAllCategory = false"
+	<div class="flex items-center gap-2">
+		{{-- Search --}}
+		<div class="flex-1">
+			<x-input
+				class="p-2"
+				x-model="search"
+				placeholder="Pesquisar"
+				icon="m-magnifying-glass"
 			/>
 		</div>
 	</div>
@@ -73,29 +37,31 @@
 			x-show="$data.name.includes($data.search.toLowerCase())"
 		>
 			<x-slot:heading>
-				<div class="flex justify-between items-center group">
-					<div>
-						@if ($category->icon)
-							<x-icon name="{{ $category->icon }}"/>
-						@endif
-						{{ $category->name }}
-					</div>
-					<x-checkbox 
-						class="z-10" 
-						x-show="$data.selectCategory" 
-						x-bind:checked="$data.selectAllCategory"
-						wire:model="deleteCategories.{{ $category->id }}"
-						:key="uniqid()"
-						id="{{ uniqid() }}"
+				@if ($category->icon)
+					<x-icon name="{{ $category->icon }}"/>
+				@endif
+				<h4>
+					{{ $category->name }}
+				</h4>
+				
+				<x-dropdown class="z-10">
+					<x-slot:trigger>
+						<x-button icon="m-ellipsis-vertical" class="btn-ghost hover:bg-red-500"/>
+					</x-slot:trigger>
+				
+					<x-button
+						class="btn-sm"
+						icon="o-trash"
+						responsive
 					/>
 					<x-button 
-						class="btn-sm bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10"
+						class="btn-sm"
 						icon="c-pencil"
 						responsive
 						x-show="!$data.selectCategory"
 						wire:click="openModalEdit({{ $category }})"
 					/>
-				</div>
+				</x-dropdown>
 			</x-slot:heading>
 			<x-slot:content>
 				<ul>
