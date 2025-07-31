@@ -45,6 +45,8 @@ class Budget extends Model
     protected $fillable = [
         'id',
         'user_id',
+        'budgetable_type',
+        'budgetable_id',
         'recurrence',
         'target_value',
         'types',
