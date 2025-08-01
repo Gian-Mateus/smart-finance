@@ -37,6 +37,10 @@ class CategoriesIndex extends Component
             ->get();
     }
 
+    public function newCategory(){
+        $this->dispatch('openModal', ["function" => "create", "type" => "category"]);
+    }
+
     #[On('iconSelected')]
     public function iconSelected($icon){
         $this->editingIcon = $icon;
