@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Utils;
 
+
 use App\Models\Icon;
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -35,7 +36,7 @@ class SearchIcons extends Component
     {
         $results = [];
         if(strlen($this->search) >= 1){
-            $results = Icons::where('name', 'like', '%'.$this->search.'%')->get();
+            $results = Icon::where('name', 'like', '%'.$this->search.'%')->get();
         }
         
         return view('livewire.utils.search-icons', [

@@ -10,7 +10,7 @@
             <x-button label="Sem ícone" class="mt-2 w-full" wire:click="resetIcon"/>
 
             @if(empty($search) && empty($results))
-                <div class="grid grid-cols-4 overflow-y-scroll max-h-52 p-2 gap-2 z-100">
+                <div class="grid grid-cols-4 overflow-y-scroll max-h-52 mt-2 p-2 gap-2 z-100">
                     @foreach ($icons as $icon)
                       <x-button icon="{{ $icon->name }}" class="btn-circle btn-outline" wire:click="defineIcon('{{ $icon->name }}')"/> 
                     @endforeach
@@ -34,7 +34,7 @@
                 <span>Nenhum item encontrado.</span>
             @else
     
-            <div class="grid grid-cols-4 overflow-y-scroll max-h-52">
+            <div class="grid grid-cols-4 overflow-y-scroll max-h-52 mt-2 p-2 gap-2 z-100">
                 @foreach ($results as $icon)
                     <x-button icon="{{ $icon->name }}" class="btn-circle btn-outline" wire:click="defineIcon('{{ $icon->name }}')"/>
                 @endforeach

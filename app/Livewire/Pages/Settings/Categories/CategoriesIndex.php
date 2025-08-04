@@ -20,13 +20,15 @@ class CategoriesIndex extends Component
 
     use Toast;
 
-    #[On('refreshCategories')]
-    public function refreshCategories(){
+    // #[On('refreshCategories')]
+    // public function refreshCategories()
+    // {
 
-    }
+    // }
 
     #[Computed]
-    public function categories(){
+    public function categories()
+    {
         return Category::where('user_id', Auth::id())
             ->select('id', 'name', 'icon')
             ->with(['subcategories' => function($q) {
@@ -37,78 +39,70 @@ class CategoriesIndex extends Component
             ->get();
     }
 
-    public function newCategory(){
-        $this->dispatch('openModal', ["function" => "create", "type" => "category"]);
+    public function new($type, $category = null){
+        $this->dispatch('openModal', [
+            "function" => "create",
+            "type" => $type,
+            "category" => $category ?? null
+        ]);
     }
 
-    #[On('iconSelected')]
-    public function iconSelected($icon){
-        $this->editingIcon = $icon;
-    }
-
-    public function openModalEdit($editing){
-        $this->modalEdit = true;
-       //dd($editing);
-        $this->editing = $editing;
-    }
-
-    public function update(){
-        if (!$this->editing) return;
-
-        if(isset($this->editing['subcategories'])){
-            Category::where('user_id', Auth::id())->where('id', $this->editing['id'])->update([
-                'name' => $this->editing['name'],
-                'icon' => $this->editingIcon
-            ]);
-            $this->success('Categoria atualizada com sucesso!');
-        } else{
-            Subcategory::where('user_id', Auth::id())->where('id', $this->editing['id'])->update([
-                'name' => $this->editing['name'],
-            ]);
-            $this->success('Subcategoria atualizada com sucesso!');
-        }
-        
-        $this->modalEdit = false;
-        $this->dispatch('refreshCategories');
-    }
-
-    public function deleteSubcategory($id){
-
-        Subcategory::where('id', $id)->where('user_id', Auth::id())->delete();
-
-        $this->success('Subcategoria excluída com sucesso!');
-    }
-
-    public function delete()
+    public function deleteModal($type, $data)
     {
-        //dd($this->deleteCategories);
-        if(empty($this->deleteCategories)){
-           $this->error('Selecione uma categoria para excluir!');
-           return;
+        $this->dispatch('openModal', [
+            "function" => "delete",
+            "type" => $type,
+            "data" => $data
+        ]);
+    }
+
+    public function editModal($type, $data)
+    {
+        $this->dispatch('openModal', [
+            "function" => "edit",
+            "type" => $type,
+            "data" => $data
+        ]);
+    }
+
+    public function update()
+    {
+
+    }
+
+    #[On('delete')]
+    public function delete($data)
+    {
+        if($data["type"] == "category"){
+            Category::where('id', $data["id"])->where('user_id', Auth::id())->delete();
+            $this->success("Categoria excluída com sucesso!");
         }
 
-        // if(array_all($this->deleteCategories, function($category){
-        //     return $category == false;
-        // })){
-        //     $this->error('Selecione uma categoria para excluir!');
-        //     return;
-        // }
-
-        $categoriesForDelete = array_keys($this->deleteCategories);
-
-        $deleteCategoriesCount = Category::whereIn("id", $categoriesForDelete)->where('user_id', Auth::id())->get();
-        
-        foreach ($deleteCategoriesCount as $d) {
-            $d->delete();
+        if($data["type"] == "subcategory"){
+            Subcategory::where('id', $data["id"])->where('user_id', Auth::id())->delete();
+            $this->success("Subcategoria excluída com sucesso!");
         }
+    }
 
-        $this->modalConfirmDelete = false;
-
-        // Toast success
-        if($deleteCategoriesCount->lenght > 0){
-            $this->success("{$deleteCategoriesCount} categoria(s) excluída(s) com sucesso!");
-        } else {
-            $this->warning('Nenhuma categoria foi excluída. Verifique se você tem permissão para excluir essas categorias.');
+    #[On("save")]
+    public function save($data)
+    {
+        if($data['type'] == "category"){
+            Category::create([
+                'name' => $data['name'],
+                'icon' => $data['icon'],
+                'user_id' => Auth::id()
+            ]);
+            $this->success("Categoria criada com sucesso!");
+        }
+        if($data["type"] == "subcategory"){
+            //dd($data);
+            Subcategory::create([
+                'name' => $data['name'],
+                'category_id' => $data['category_id'],
+                'user_id' => Auth::id()
+            ]);
+            $this->success("Subcategoria criada com sucesso!");
         }
     }
 

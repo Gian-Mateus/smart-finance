@@ -20,7 +20,7 @@
 		</div>
 	</div>
 
-	<x-button label="Nova Categoria" icon="o-plus" class="my-4 btn-primary" wire:click="newCategory"/>
+	<x-button label="Nova Categoria" icon="o-plus" class="my-4 btn-primary" wire:click="new('category')"/>
 
 	@foreach ($this->categories as $category)
 	<div class="flex gap-1 mb-1 group">
@@ -36,7 +36,7 @@
 		   <x-slot:content>
 			   <ul>
 				   <li>
-				   		<x-button label="Nova Categoria" icon="o-plus" class="btn-primary" wire:click="newSubcategory({{ $category->id }})"/>
+				   		<x-button label="Nova Subcategoria" icon="o-plus" class="btn-primary" wire:click="new('subcategory', {{ $category }})"/>
 				   </li>
 				   {{-- Subcategories --}}
 				   @foreach ($category->subcategories as $subcategory)
@@ -49,9 +49,9 @@
 								<x-button icon="m-ellipsis-vertical" class="btn-ghost opacity-0 transition-opacity duration-300 group-hover/subcat:opacity-100"/>
 							</x-slot:trigger>
 
-							<x-menu-item icon="o-trash" responsive title="Excluir" wire:click="deleteSubcategory({{ $subcategory }})" />
+							<x-menu-item icon="o-trash" responsive title="Excluir" wire:click="deleteModal('subcategory', {{ $subcategory }})" />
 							<x-menu-item icon="c-pencil" label="Editar" responsive 
-							wire:click="openModalEdit({{ $subcategory }})" />		
+							wire:click="editModal('subcategory', {{ $subcategory }})" />		
 						</x-dropdown>
 				   </li>
 				   @endforeach
@@ -63,9 +63,9 @@
 				<x-button icon="m-ellipsis-vertical" class="btn-ghost opacity-0 transition-opacity duration-300 group-hover:opacity-100"/>
 			</x-slot:trigger>
 
-			<x-menu-item icon="o-trash" responsive title="Excluir" wire:click="deleteCategory({{ $category }})"/>
+			<x-menu-item icon="o-trash" responsive title="Excluir" wire:click="deleteModal('category', {{ $category }})"/>
 			<x-menu-item icon="c-pencil" label="Editar" responsive 
-			wire:click="openModalEdit({{ $category }})" />		
+			wire:click="editModal('subcategory', {{ $category }})" />		
 		</x-dropdown>
 	</div>
 	@endforeach
