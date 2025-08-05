@@ -50,8 +50,7 @@
 							</x-slot:trigger>
 
 							<x-menu-item icon="o-trash" responsive title="Excluir" wire:click="deleteModal('subcategory', {{ $subcategory }})" />
-							<x-menu-item icon="c-pencil" label="Editar" responsive 
-							wire:click="editModal('subcategory', {{ $subcategory }})" />		
+							<x-menu-item icon="c-pencil" label="Editar" responsive wire:click="editModal('subcategory', {{ $subcategory }})" />		
 						</x-dropdown>
 				   </li>
 				   @endforeach
@@ -64,8 +63,7 @@
 			</x-slot:trigger>
 
 			<x-menu-item icon="o-trash" responsive title="Excluir" wire:click="deleteModal('category', {{ $category }})"/>
-			<x-menu-item icon="c-pencil" label="Editar" responsive 
-			wire:click="editModal('subcategory', {{ $category }})" />		
+			<x-menu-item icon="c-pencil" label="Editar" responsive wire:click="editModal('category', {{ $category }})" />		
 		</x-dropdown>
 	</div>
 	@endforeach

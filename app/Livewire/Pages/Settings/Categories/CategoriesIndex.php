@@ -12,12 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoriesIndex extends Component
 {  
-    public $deleteCategories = [];
-    public bool $modalConfirmDelete = false;
-    public bool $modalEdit = false;
-    public $editing = null;
-    public ?string $editingIcon = null;
-
     use Toast;
 
     // #[On('refreshCategories')]
@@ -65,9 +59,25 @@ class CategoriesIndex extends Component
         ]);
     }
 
-    public function update()
+    #[On('update')]
+    public function update($data)
     {
+        if($data["type"] == "category"){
+            Category::where('id', $data["id"])->where('user_id', Auth::id())->update([
+                'name' => $data["name"],
+                'icon' => $data["icon"]
+            ]);
+            $this->success("Categoria atualizada com sucesso!");
+            return;
+        }
 
+        if($data["type"] == "subcategory"){
+            Subcategory::where('id', $data["id"])->where('user_id', Auth::id())->update([
+                'name' => $data["name"],
+            ]);
+            $this->success("Subcategoria atualizada com sucesso!");
+            return;
+        }
     }
 
     #[On('delete')]

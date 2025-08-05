@@ -35,6 +35,7 @@ class Modal extends Component
                 "type" => $data["type"],
                 "data" => $data["category"] ?? null
             ];
+            return;
         }
 
         if($data['function'] == 'delete'){
@@ -44,6 +45,7 @@ class Modal extends Component
                 "type" => $data["type"],
                 "data" => $data["data"]
             ];
+            return;
         }
 
         if($data['function'] == 'edit'){
@@ -53,6 +55,8 @@ class Modal extends Component
                 "type" => $data["type"],
                 "data" => $data["data"]
             ];
+            $this->name = $data["data"]["name"];
+            return;
         }
 
         //dd($this->modal);
@@ -76,6 +80,8 @@ class Modal extends Component
                 "type" => $this->modal["type"],
                 "category_id" => $this->modal["data"]["id"] ?? null
             ]);
+            $this->close();
+            return;
         }
         
         if($this->modal["function"] == "delete"){
@@ -83,6 +89,19 @@ class Modal extends Component
                 "type" => $this->modal["type"],
                 "id" => $this->modal["data"]["id"]
             ]);
+            $this->close();
+            return;
+        }
+
+        if($this->modal["function"] == "edit"){
+            $this->dispatch('update',[
+                "type" => $this->modal["type"],
+                "id" => $this->modal["data"]["id"],
+                "name" => $this->name,
+                "icon" => $this->icon ?? null
+            ]);
+            $this->close();
+            return;
         }
 
         $this->close();

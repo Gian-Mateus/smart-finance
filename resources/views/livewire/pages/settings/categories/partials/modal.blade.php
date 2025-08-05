@@ -29,11 +29,11 @@
 	<div class="flex gap-2 w-full">
 		@if($modal["type"] == "category")
 		<div class="self-end">
-			<livewire:utils.searchIcons/>
+			<livewire:utils.searchIcons :iconSelect="$modal['data']['icon']"/>
 		</div>
 		@endif
 		<div class="flex-1">
-			<x-input label="Nome" wire:model="name" value="{{ $modal['data']['name'] }}" />
+			<x-input label="Nome" wire:model="name" />
 		</div>
 	</div>
 	@endif
