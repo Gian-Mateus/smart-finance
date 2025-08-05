@@ -19,9 +19,6 @@ return new class extends Migration
             $table->morphs('budgetable');
             $table->enum('recurrence', ['daily', 'weekly', 'monthly', 'yearly']);
             $table->integer('target_value');
-            $table->enum('types', ['budget', 'goal']);
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
         });
     }
 

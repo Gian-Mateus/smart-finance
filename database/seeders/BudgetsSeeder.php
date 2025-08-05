@@ -34,9 +34,6 @@ class BudgetsSeeder extends Seeder
                 'budgetable_type' => 'App\Models\Category',
                 'recurrence' => 'monthly',
                 'target_value' => $value,
-                'types' => 'budget',
-                'start_date' => now(),
-                'end_date' => now()->addYear(),
             ]);
             $loop++;
         }

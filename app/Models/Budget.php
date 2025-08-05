@@ -49,9 +49,6 @@ class Budget extends Model
         'budgetable_id',
         'recurrence',
         'target_value',
-        'types',
-        'start_date',
-        'end_date',
     ];
 
     /**
@@ -72,9 +69,6 @@ class Budget extends Model
             'user_id' => 'integer',
             'recurrence' => 'string',
             'target_value' => 'integer',
-            'types' => 'string',
-            'start_date' => 'datetime',
-            'end_date' => 'datetime',
         ];
     }
 

@@ -86,7 +86,6 @@ class BudgetsIndex extends Component
             'budgetable_id' => $data['id'],
             'target_value' => $data['targetValue'],
             'recurrence' => $data['recurrence'],
-            'types' => 'budget'
         ]);
 
         $this->success("Orçamento criado com sucesso!");
