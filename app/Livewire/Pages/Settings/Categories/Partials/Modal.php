@@ -27,40 +27,38 @@ class Modal extends Component
     #[On('openModal')]
     public function open($data = null){
         $this->modalOpen = true;
-        
-        if($data["function"] == "create"){
-            $this->title = $data["type"] == "category" ? "Nova Categoria" : "Nova Subcategoria para " . $data["category"]["name"];
-            $this->modal = [
-                "function" => $data["function"],
-                "type" => $data["type"],
-                "data" => $data["category"] ?? null
-            ];
-            return;
-        }
+    
+        switch ($data["function"]) {
+            case "create":
+                $this->title = $data["type"] == "category" ? "Nova Categoria" : "Nova Subcategoria para " . $data["category"]["name"];
+                $this->modal = [
+                    "function" => $data["function"],
+                    "type" => $data["type"],
+                    "data" => $data["category"] ?? null
+                ];
+                break;
 
-        if($data['function'] == 'delete'){
-            $this->title = $data["type"] == "category" ? "Excluir Categoria" : "Excluir Subcategoria";
-            $this->modal = [
-                "function" => $data["function"],
-                "type" => $data["type"],
-                "data" => $data["data"]
-            ];
-            return;
+            case "delete":
+                $this->title = $data["type"] == "category" ? "Excluir Categoria" : "Excluir Subcategoria";
+                $this->modal = [
+                    "function" => $data["function"],
+                    "type" => $data["type"],
+                    "data" => $data["data"]
+                ];
+                break;
+                
+            case "edit":
+                $this->title = $data["type"] == "category" ? "Editando Categoria" : "Editando Subcategoria";
+                $this->modal = [
+                    "function" => $data["function"],
+                    "type" => $data["type"],
+                    "data" => $data["data"]
+                ];
+                $this->name = $data["data"]["name"];
+                break;
         }
-
-        if($data['function'] == 'edit'){
-            $this->title = $data["type"] == "category" ? "Editando Categoria" : "Editando Subcategoria";
-            $this->modal = [
-                "function" => $data["function"],
-                "type" => $data["type"],
-                "data" => $data["data"]
-            ];
-            $this->name = $data["data"]["name"];
-            return;
-        }
-
-        //dd($this->modal);
     }
+    
     
     public function close(){
         $this->modalOpen = false;
@@ -73,39 +71,36 @@ class Modal extends Component
     }
 
     public function confirm(){
-        if($this->modal["function"] == "create"){
-            $this->dispatch("save", [
-                "name" => $this->name,
-                "icon" => $this->icon,
-                "type" => $this->modal["type"],
-                "category_id" => $this->modal["data"]["id"] ?? null
-            ]);
-            $this->close();
-            return;
-        }
-        
-        if($this->modal["function"] == "delete"){
-            $this->dispatch("delete", [
-                "type" => $this->modal["type"],
-                "id" => $this->modal["data"]["id"]
-            ]);
-            $this->close();
-            return;
-        }
+        switch ($this->modal["function"]) {
+            case "create":
+                $this->dispatch("save", [
+                    "name" => $this->name,
+                    "icon" => $this->icon,
+                    "type" => $this->modal["type"],
+                    "category_id" => $this->modal["data"]["id"] ?? null
+                ]);
+                break;
 
-        if($this->modal["function"] == "edit"){
-            $this->dispatch('update',[
-                "type" => $this->modal["type"],
-                "id" => $this->modal["data"]["id"],
-                "name" => $this->name,
-                "icon" => $this->icon ?? null
-            ]);
-            $this->close();
-            return;
-        }
+            case "delete":
+                $this->dispatch("delete", [
+                    "type" => $this->modal["type"],
+                    "id" => $this->modal["data"]["id"]
+                ]);
+                break;
 
+            case "edit":
+                $this->dispatch('update',[
+                    "type" => $this->modal["type"],
+                    "id" => $this->modal["data"]["id"],
+                    "name" => $this->name,
+                    "icon" => $this->icon ?? null
+                ]);
+                break;
+        }
+    
         $this->close();
     }
+    
 
     public function render()
     {
