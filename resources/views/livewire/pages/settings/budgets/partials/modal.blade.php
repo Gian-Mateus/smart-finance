@@ -1,7 +1,15 @@
-<x-modal wire:model="modalAddBudget" title="Novo Orçamento" subtitle="Define Metas e Orçamentos (de gastos) para cada categoria">
-    <x-form no-separator wire:submit="save">
-
-        @if (!$parentId)
+<x-modal 
+    wire:model="modalOpen" 
+    title="{{ $title }}" 
+>
+    <div class="flex flex-col gap-2">
+        @if ($modal["function"] == "edit")
+        <div class="my-2">
+            Editando orçamento para categoria: {{ $modal["data"]["budgetable"]["name"] }}
+        </div>
+        @endif
+        @if ($modal["function"] == "create")
+        @if($modal["type"] == "category")
         <x-choices
             label="Categoria"
             wire:model="budgetableId"
@@ -11,7 +19,8 @@
             searchable
             search-function="searchOptions"
         />
-        @else
+        @endif
+        @if($modal["type"] == "subcategory")
         <x-choices
             label="Subcategoria"
             wire:model="budgetableId"
@@ -21,6 +30,7 @@
             searchable
             search-function="searchOptions"
         />
+        @endif
         @endif
 
         <x-input
@@ -34,15 +44,15 @@
         <x-select
             icon="o-clock"
             label="Recorrência"
-            placeholder="Selecione a recorrência"
             wire:model="recurrence"
             :options="$recurrences"
         />
+
         <x-slot:actions>
-            <x-button label="Cancelar" wire:click="cancel" />
+            <x-button label="Cancelar" wire:click="close" />
             <x-button label="Adicionar" class="btn-primary" wire:click="save" />
         </x-slot:actions>
-    </x-form>
+    </div>
     {{-- Temporário - não está funcionando no app.js (dentro Firebase Studio) --}}
     <script>
         function formatCurrency(input) {

@@ -3,7 +3,6 @@
 namespace App\Livewire\Pages\Settings\Budgets\Partials;
 
 use App\Models\Budget;
-use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\Subcategory;
@@ -14,14 +13,17 @@ use Livewire\Attributes\Rule;
 
 class Modal extends Component
 {
-    use Toast;
 
-    public bool $modalAddBudget = false;
+    public bool $modalOpen = false;
 
-    // Usamos $parentId para armazenar o ID da categoria pai quando adicionando uma subcategoria
-    public ?int $parentId = null;
+    public $modal = [
+        "function" => '',
+        "type" => '',
+        "data" => null
+    ];
 
-    // Usamos $budgetableId para armazenar o ID da categoria ou subcategoria selecionada
+    public $title = '';
+
     #[Rule('required')]
     public ?int $budgetableId = null;
 
@@ -29,7 +31,7 @@ class Modal extends Component
     public $targetValue = null;
 
     #[Rule('required')]
-    public string $recurrence = ''; // Inicializado para evitar erro de required na renderização inicial
+    public string $recurrence = '';
 
     public array $recurrences = [
         ['id' => 'monthly', 'name' => 'Mensal'],
@@ -39,64 +41,109 @@ class Modal extends Component
     ];
 
     public Collection $options; // Coleção genérica para categorias ou subcategorias
-    public string $budgetableType; // Para armazenar o tipo do orçamento (Category ou Subcategory)
 
+    #[On('openModal')]
+    public function openModal($data){
+        $this->modalOpen = true;
 
-    #[On('newBudget')]
-    public function openModal(?int $parentId = null){
-        $this->parentId = $parentId;
-        $this->modalAddBudget = true;
-        // Reseta o budgetableId para garantir que o choices seja limpo ao abrir o modal
-        $this->budgetableId = null;
-        $this->searchOptions(); // Busca as opções iniciais (categorias ou subcategorias)
+        switch ($data["function"]) {
+            case 'create':
+                $this->title = $data['type'] == "category" ? "Novo Orçamento" : "Novo Sub-Orçamento";
+                $this->modal = [
+                    "type" => $data['type'],
+                    "function" => $data['function'],
+                    "data" => $data['data'] ?? null
+                ];
+                $this->searchOptions();
+                break;
+                
+            case 'edit':
+                $this->title = $data['type'] == "category" ? "Editando Orçamento" : "Editando Sub-Orçamento";
+                $this->modal = [
+                    "type" => $data['type'],
+                    "function" => $data['function'],
+                    "data" => $data['data'] ?? null
+                ];
+                $this->recurrence = $data['data']['recurrence'];
+                $this->targetValue = $data['data']['target_value'];
+                $this->searchOptions();
+                break;
+                
+            case 'delete':
+                break;
+
+        }
     }
 
     // Função genérica para buscar opções (categorias ou subcategorias)
     public function searchOptions(string $value = ''){
-        if(!$this->parentId){
-            // Buscando categorias
-            $this->options = Category::where('user_id', Auth::id())
+        switch ($this->modal['type']) {
+            case 'category':
+                $this->options = Category::where('user_id', Auth::id())
                 ->where('name', 'like', '%' . $value . '%')
                 ->take(5)
                 ->orderBy('name')
                 ->get();
-            $this->budgetableType = 'App\Models\Category';
-        } else {
-            // Buscando subcategorias
-             $this->options = Subcategory::where('user_id', Auth::id())
-                ->where('category_id', $this->parentId)
+                break;
+            
+            case 'subcategory':
+                $this->options = Subcategory::where('user_id', Auth::id())
+                ->where('category_id', $this->modal['data']['id'])
                 ->where('name', 'like', '%' . $value . '%')
                 ->take(5)
                 ->orderBy('name')
                 ->get();
-
-            $this->budgetableType = 'App\Models\Subcategory';
+                break;            
         }
+
     }
 
 
     public function save(){
 
         $data = $this->validate();
-        $budgetableType = $this->parentId ? 'App\Models\Subcategory' : 'App\Models\Category';
+        $budgetableType = $this->modal['type'] == "category" ? 'App\Models\Category' : 'App\Models\Subcategory';
 
-        $this->dispatch('save', [
-            'type' => $budgetableType,
-            'id' => $data['budgetableId'],
-            'targetValue' => $data['targetValue'],
-            'recurrence' => $data['recurrence']
-        ]);
-        $this->modalAddBudget = false;
-        $this->reset(['parentId', 'budgetableId', 'targetValue', 'recurrence']);
+        switch ($this->modal['function']) {
+            case 'create':
+                $this->dispatch('save', [
+                    'type' => $budgetableType,
+                    'id' => $data['budgetableId'],
+                    'targetValue' => $data['targetValue'],
+                    'recurrence' => $data['recurrence']
+                ]);
+                $this->close();
+                break;
+
+            case 'delete':
+                $this->dispatch('delete', [
+                    'type' => $budgetableType,
+                    'id' => $data['budgetableId'],
+                    'targetValue' => $data['targetValue'],
+                    'recurrence' => $data['recurrence']
+                ]);
+                $this->close();
+                break;
+
+            case 'edit':
+                $this->dispatch('update', [
+                    'type' => $budgetableType,
+                    'id' => $data['budgetableId'],
+                    'targetValue' => $data['targetValue'],
+                    'recurrence' => $data['recurrence']
+                ]);
+                $this->close();
+                break;
+        }
     }
 
-    public function cancel(){
+    public function close(){
         $this->modalAddBudget = false;
-        $this->reset(['parentId', 'budgetableId', 'targetValue', 'recurrence']);
+        $this->reset();
     }
 
     public function mount(){
-        $this->searchOptions();
+        $this->searchOptions('', $this->modal['type']);
     }
 
     public function render()
