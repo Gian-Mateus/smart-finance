@@ -19,6 +19,7 @@ return new class extends Migration
             $table->morphs('budgetable');
             $table->enum('recurrence', ['daily', 'weekly', 'monthly', 'yearly']);
             $table->integer('target_value');
+            $table->timestamps();
         });
     }
 
