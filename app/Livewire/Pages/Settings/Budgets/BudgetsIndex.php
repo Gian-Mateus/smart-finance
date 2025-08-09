@@ -31,6 +31,7 @@ class BudgetsIndex extends Component
             }
             
         ])
+        ->orderByDesc('created_at')
         ->get();
 
         $organizedBudgets = collect();
@@ -69,12 +70,28 @@ class BudgetsIndex extends Component
         return $category->subcategories()->exists();
     }
 
-    public function newBudget(?int $id = null){
-        if ($id) {
-            $this->dispatch('newBudget', $id);
-            return;
-        }
-        $this->dispatch('newBudget');
+    public function newBudget($type, $category = null){
+        $this->dispatch('openModal', [
+            'type' => $type,
+            'function' => 'create',
+            'data' => $category ?? null
+        ]);
+    }
+
+    public function deleteModal($type, $data){
+        $this->dispatch('openModal', [
+            'type' => $type,
+            'function' => 'delete',
+            'data' => $data
+        ]);
+    }
+
+    public function editModal($type, $data){
+        $this->dispatch('openModal', [
+            'type' => $type,
+            'function' => 'edit',
+            'data' => $data
+        ]);
     }
 
     #[On('save')]
