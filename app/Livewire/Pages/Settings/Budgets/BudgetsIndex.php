@@ -94,9 +94,16 @@ class BudgetsIndex extends Component
         ]);
     }
 
+    #[On('update')]
+    public function update($data)
+    {
+        dd($data);
+        //$budget = Budget::find($data['budgetId']);
+    }
+
     #[On('save')]
     public function save($data){
-        //dd($data['id']);
+        //dd($data);
         Budget::create([
             'user_id' => Auth::id(),
             'budgetable_type' => $data['type'],
