@@ -3,39 +3,29 @@
     title="{{ $title }}" 
 >
     <div class="flex flex-col gap-2">
-        @switch($modal["function"])
-            @case('edit')
-                <div class="my-2">
-                    Editando orçamento para categoria: {{ $modal["data"]["budgetable"]["name"] }}
-                </div>
+        @switch($this->type)
+            @case('category')
+                <x-choices
+                    label="Categoria"
+                    wire:model="form.budgetable_id"
+                    :options="$options"
+                    placeholder="Pesquisar categoria..."
+                    single
+                    searchable
+                    search-function="searchOptions"
+                />
                 @break
 
-            @case('create')
-                @switch($modal["type"])
-                    @case('category')
-                        <x-choices
-                            label="Categoria"
-                            wire:model="budgetableId"
-                            :options="$options"
-                            placeholder="Pesquisar categoria..."
-                            single
-                            searchable
-                            search-function="searchOptions"
-                        />
-                        @break
-
-                    @case('subcategory')
-                        <x-choices
-                            label="Subcategoria"
-                            wire:model="budgetableId"
-                            :options="$options"
-                            placeholder="Pesquisar subcategoria..."
-                            single
-                            searchable
-                            search-function="searchOptions"
-                        />
-                        @break
-                @endswitch
+            @case('subcategory')
+                <x-choices
+                    label="Subcategoria"
+                    wire:model="form.budgetable_id"
+                    :options="$options"
+                    placeholder="Pesquisar subcategoria..."
+                    single
+                    searchable
+                    search-function="searchOptions"
+                />
                 @break
         @endswitch
 
@@ -43,14 +33,14 @@
             id="targetValueInput"
             placeholder="0,00"
             prefix="R$"
-            wire:model="targetValue"
+            wire:model="form.target_value"
             oninput="formatCurrency(this)"
         />
 
         <x-select
             icon="o-clock"
             label="Recorrência"
-            wire:model="recurrence"
+            wire:model="form.recurrece"
             :options="$recurrences"
         />
 
@@ -59,6 +49,7 @@
             <x-button label="Adicionar" class="btn-primary" wire:click="save" />
         </x-slot:actions>
     </div>
+    
     {{-- Temporário - não está funcionando no app.js (dentro Firebase Studio) --}}
     <script>
         function formatCurrency(input) {

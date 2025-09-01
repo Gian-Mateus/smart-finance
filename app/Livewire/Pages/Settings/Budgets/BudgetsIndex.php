@@ -94,27 +94,6 @@ class BudgetsIndex extends Component
         ]);
     }
 
-    #[On('update')]
-    public function update($data)
-    {
-        dd($data);
-        //$budget = Budget::find($data['budgetId']);
-    }
-
-    #[On('save')]
-    public function save($data){
-        //dd($data);
-        Budget::create([
-            'user_id' => Auth::id(),
-            'budgetable_type' => $data['type'],
-            'budgetable_id' => $data['id'],
-            'target_value' => $data['targetValue'],
-            'recurrence' => $data['recurrence'],
-        ]);
-
-        $this->success("Orçamento criado com sucesso!");
-    }
-
     public function render()
     {
         return view('livewire.pages.settings.budgets.budgets-index');

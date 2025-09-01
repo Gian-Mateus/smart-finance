@@ -7,16 +7,14 @@ use Livewire\Form;
 
 class BudgetsForm extends Form
 {
-    #[Validate('required', message: 'Este campo é obrigatório.')] 
-    #[Validate('min:3', message: 'Este campo deve ter pelo menos :min caracteres.')] 
-    public string $name;
-    
-    #[Validate('nullable')]
-    #[Validate('min:4', message: 'Este campo deve ter pelo menos :min caracteres.')] 
-    public ?int $account_number;
+    public $budgetable_type;
+    public $budgetable_id;
 
-    #[Validate('required', message: 'Este campo é obrigatório.')]
-    public ?int $bankSearchableID = null;
-    public ?int $bankEditing = null;
-    public Collection $results;
+    #[Validate('required', message: "Campo é obrigatório.")]
+    #[Validate('in:daily,weekly,monthly,yearly', message: "Opção inválida.")]
+    public $recurrece;
+
+    #[Validate('required', message: "Campo é obrigatório.")]
+    #[Validate('min:1', message: "Defina o valor maior que zero.")]
+    public $target_value;
 }

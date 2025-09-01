@@ -9,34 +9,17 @@ use App\Models\Subcategory;
 use Illuminate\Support\Arr;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Rule;
+use App\Livewire\Forms\BudgetsForm;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 
 class Modal extends Component
 {
-
-    public bool $modalOpen = false;
-
-    public $modal = [
-        "function" => '',
-        "type" => '',
-        "data" => null
-    ];
-
+    public BudgetsForm $form;
+    public $modalOpen = false;
+    public $function;
+    public $type;
     public $title = '';
-
-    //#[Rule('required')]
-    public $budgetId = null;
-
-    //#[Rule('required')]
-    public ?int $budgetableId = null;
-
-    #[Rule('required')]
-    public $targetValue = null;
-
-    #[Rule('required')]
-    public string $recurrence = '';
-
     public array $recurrences = [
         ['id' => 'monthly', 'name' => 'Mensal'],
         ['id' => 'daily', 'name' => 'Diário'],
@@ -53,26 +36,21 @@ class Modal extends Component
         switch ($data["function"]) {
             case 'create':
                 $this->title = $data['type'] == "category" ? "Novo Orçamento" : "Novo Sub-Orçamento";
-                $this->modal = [
-                    "type" => $data['type'],
-                    "function" => $data['function'],
-                    "data" => $data['data'] ?? null
-                ];
+                $this->function = $data['function'];
+                $this->type = $data['type'];
                 $this->searchOptions();
                 break;
                 
             case 'edit':
                 //dd($data);
                 $this->title = $data['type'] == "category" ? "Editando Orçamento" : "Editando Sub-Orçamento";
-                $this->modal = [
-                    "type" => $data['type'],
-                    "function" => $data['function'],
-                    "data" => $data['data'] ?? null
-                ];
-                $this->recurrence = collect($this->recurrences)
-                ->firstWhere('name', $data['data']['recurrence'])['id'];
-                $this->targetValue = $data['data']['target_value'];
-                $this->budgetId = $data['data']['id'];
+                $this->function = $data['function'];
+                $this->type = $data['type'];
+                $this->form->recurrence = collect($this->recurrences)->firstWhere('name', $data['data']['recurrence'])['id'];
+                $this->form->target_value = $data['data']['target_value'];
+                $this->form->budgetable_id = $data['data']['id'];
+                $this->form->budgetable_type = $data['data']['budgetable_type'];
+
                 $this->searchOptions();
                 break;
                 
@@ -80,26 +58,28 @@ class Modal extends Component
                 break;
 
         }
+
+        $this->searchOptions();
     }
 
     // Função genérica para buscar opções (categorias ou subcategorias)
     public function searchOptions(string $value = ''){
-        switch ($this->modal['type']) {
+        switch ($this->type) {
             case 'category':
                 $this->options = Category::where('user_id', Auth::id())
-                ->where('name', 'like', '%' . $value . '%')
-                ->take(5)
-                ->orderBy('name')
-                ->get();
+                    ->where('name', 'like', '%' . $value . '%')
+                    ->take(5)
+                    ->orderBy('name')
+                    ->get();
                 break;
             
             case 'subcategory':
                 $this->options = Subcategory::where('user_id', Auth::id())
-                ->where('category_id', $this->modal['data']['id'])
-                ->where('name', 'like', '%' . $value . '%')
-                ->take(5)
-                ->orderBy('name')
-                ->get();
+                    ->where('category_id', $this->budgetable_id)
+                    ->where('name', 'like', '%' . $value . '%')
+                    ->take(5)
+                    ->orderBy('name')
+                    ->get();
                 break;            
         }
 
@@ -108,22 +88,11 @@ class Modal extends Component
 
     public function save(){
         
-        $data = $this->validate();
-        $budgetableType = $this->modal['type'] == "category" ? 'App\Models\Category' : 'App\Models\Subcategory';
+        $validated = $this->validate();
 
-        switch ($this->modal['function']) {
+        switch ($this->function) {
             case 'create':
                 $this->dispatch('save', [
-                    'type' => $budgetableType,
-                    'id' => $data['budgetableId'],
-                    'targetValue' => $data['targetValue'],
-                    'recurrence' => $data['recurrence']
-                ]);
-                $this->close();
-                break;
-
-            case 'delete':
-                $this->dispatch('delete', [
                     'type' => $budgetableType,
                     'id' => $data['budgetableId'],
                     'targetValue' => $data['targetValue'],
@@ -142,16 +111,22 @@ class Modal extends Component
                 ]);
                 $this->close();
                 break;
+
+            case 'delete':
+                $this->dispatch('delete', [
+                    'type' => $budgetableType,
+                    'id' => $data['budgetableId'],
+                    'targetValue' => $data['targetValue'],
+                    'recurrence' => $data['recurrence']
+                ]);
+                $this->close();
+                break;
         }
     }
 
     public function close(){
         $this->modalAddBudget = false;
         $this->reset();
-    }
-
-    public function mount(){
-        $this->searchOptions('', $this->modal['type']);
     }
 
     public function render()
