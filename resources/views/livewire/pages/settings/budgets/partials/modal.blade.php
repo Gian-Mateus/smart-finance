@@ -3,35 +3,41 @@
     title="{{ $title }}" 
 >
     <div class="flex flex-col gap-2">
-        @if ($modal["function"] == "edit")
-        <div class="my-2">
-            Editando orçamento para categoria: {{ $modal["data"]["budgetable"]["name"] }}
-        </div>
-        @endif
-        @if ($modal["function"] == "create")
-        @if($modal["type"] == "category")
-        <x-choices
-            label="Categoria"
-            wire:model="budgetableId"
-            :options="$options"
-            placeholder="Pesquisar categoria..."
-            single
-            searchable
-            search-function="searchOptions"
-        />
-        @endif
-        @if($modal["type"] == "subcategory")
-        <x-choices
-            label="Subcategoria"
-            wire:model="budgetableId"
-            :options="$options"
-            placeholder="Pesquisar subcategoria..."
-            single
-            searchable
-            search-function="searchOptions"
-        />
-        @endif
-        @endif
+        @switch($modal["function"])
+            @case('edit')
+                <div class="my-2">
+                    Editando orçamento para categoria: {{ $modal["data"]["budgetable"]["name"] }}
+                </div>
+                @break
+
+            @case('create')
+                @switch($modal["type"])
+                    @case('category')
+                        <x-choices
+                            label="Categoria"
+                            wire:model="budgetableId"
+                            :options="$options"
+                            placeholder="Pesquisar categoria..."
+                            single
+                            searchable
+                            search-function="searchOptions"
+                        />
+                        @break
+
+                    @case('subcategory')
+                        <x-choices
+                            label="Subcategoria"
+                            wire:model="budgetableId"
+                            :options="$options"
+                            placeholder="Pesquisar subcategoria..."
+                            single
+                            searchable
+                            search-function="searchOptions"
+                        />
+                        @break
+                @endswitch
+                @break
+        @endswitch
 
         <x-input
             id="targetValueInput"
