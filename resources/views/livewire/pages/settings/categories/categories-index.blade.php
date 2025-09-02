@@ -40,13 +40,13 @@
 				   </li>
 				   {{-- Subcategories --}}
 				   @foreach ($category->subcategories as $subcategory)
-				   <li class="group/subcat relative flex items-center justify-between rounded p-2 hover:bg-base-300">
+    				<li wire:key="subcat-{{ $subcategory->id }}" class="group/subcat relative flex items-center justify-between rounded p-2 hover:bg-base-300">
 					   <div>
 						   {{ $subcategory->name }}
 					   </div>
 					   <x-dropdown right>
 							<x-slot:trigger>
-								<x-button icon="m-ellipsis-vertical" class="btn-ghost opacity-0 transition-opacity duration-300 group-hover/subcat:opacity-100"/>
+								<x-button icon="m-ellipsis-vertical" class="btn-ghost opacity-0 group-hover/subcat:opacity-100"/>
 							</x-slot:trigger>
 
 							<x-menu-item icon="o-trash" responsive title="Excluir" wire:click="deleteModal('subcategory', {{ $subcategory }})" />
@@ -59,7 +59,7 @@
 	   	</x-collapse>
 		<x-dropdown right>
 			<x-slot:trigger>
-				<x-button icon="m-ellipsis-vertical" class="btn-ghost opacity-0 transition-opacity duration-300 group-hover:opacity-100"/>
+				<x-button icon="m-ellipsis-vertical" class="btn-ghost opacity-0 group-hover:opacity-100"/>
 			</x-slot:trigger>
 
 			<x-menu-item icon="o-trash" responsive title="Excluir" wire:click="deleteModal('category', {{ $category }})"/>

@@ -5,24 +5,16 @@ namespace App\Livewire\Pages\Settings\Categories\Partials;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
+use App\Livewire\Forms\CategoriesForm;
 
 class Modal extends Component
 {
 
     public $modalOpen = false;
-
     public $title;
-
-    public $modal = [
-        "function" => '',
-        "type" => '',
-        "data" => null
-    ];
-
-    #[Validate('required|min:3')]
-    public $name;
-
-    public $icon;
+    public $function;
+    public $type;
+    public CategoriesForm $form;
 
     #[On('openModal')]
     public function open($data = null){
@@ -31,30 +23,24 @@ class Modal extends Component
         switch ($data["function"]) {
             case "create":
                 $this->title = $data["type"] == "category" ? "Nova Categoria" : "Nova Subcategoria para " . $data["category"]["name"];
-                $this->modal = [
-                    "function" => $data["function"],
-                    "type" => $data["type"],
-                    "data" => $data["category"] ?? null
-                ];
+                $this->function = $data["function"];
+                $this->type = $data["type"];
+                break;
+
+            case "edit":
+                $this->title = $data["type"] == "category" ? "Editando Categoria" : "Editando Subcategoria";
+                $this->function = $data["function"];
+                $this->type = $data["type"];
+                $this->form->name = $data["data"]["name"];
+                $this->form->icon = $data["data"]["icon"] ?? null;
                 break;
 
             case "delete":
                 $this->title = $data["type"] == "category" ? "Excluir Categoria" : "Excluir Subcategoria";
-                $this->modal = [
-                    "function" => $data["function"],
-                    "type" => $data["type"],
-                    "data" => $data["data"]
-                ];
-                break;
-                
-            case "edit":
-                $this->title = $data["type"] == "category" ? "Editando Categoria" : "Editando Subcategoria";
-                $this->modal = [
-                    "function" => $data["function"],
-                    "type" => $data["type"],
-                    "data" => $data["data"]
-                ];
-                $this->name = $data["data"]["name"];
+                $this->function = $data["function"];
+                $this->type = $data["type"];
+                $this->form->name = $data["data"]["name"];
+                $this->form->icon = $data["data"]["icon"] ?? null;
                 break;
         }
     }
@@ -70,31 +56,18 @@ class Modal extends Component
         $this->icon = $icon;
     }
 
-    public function confirm(){
-        switch ($this->modal["function"]) {
+    public function save(){
+        switch ($this->function) {
             case "create":
-                $this->dispatch("save", [
-                    "name" => $this->name,
-                    "icon" => $this->icon,
-                    "type" => $this->modal["type"],
-                    "category_id" => $this->modal["data"]["id"] ?? null
-                ]);
+                
                 break;
 
             case "delete":
-                $this->dispatch("delete", [
-                    "type" => $this->modal["type"],
-                    "id" => $this->modal["data"]["id"]
-                ]);
+                
                 break;
 
             case "edit":
-                $this->dispatch('update',[
-                    "type" => $this->modal["type"],
-                    "id" => $this->modal["data"]["id"],
-                    "name" => $this->name,
-                    "icon" => $this->icon ?? null
-                ]);
+                
                 break;
         }
     

@@ -24,11 +24,7 @@ class CategoriesIndex extends Component
     public function categories()
     {
         return Category::where('user_id', Auth::id())
-            ->select('id', 'name', 'icon')
-            ->with(['subcategories' => function($q) {
-                $q->where('user_id', Auth::id())
-                  ->select('id', 'name', 'category_id');
-            }])
+            ->with('subcategories')
             ->orderByDesc('created_at')
             ->get();
     }
