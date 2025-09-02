@@ -14,11 +14,6 @@ class CategoriesIndex extends Component
 {  
     use Toast;
 
-    // #[On('refreshCategories')]
-    // public function refreshCategories()
-    // {
-
-    // }
 
     #[Computed]
     public function categories()
@@ -55,68 +50,9 @@ class CategoriesIndex extends Component
         ]);
     }
 
-    #[On('update')]
-    public function update($data)
-    {
-        switch ($data['type']) {
-            case 'category':
-                Category::where('id', $data["id"])->where('user_id', Auth::id())->update([
-                    'name' => $data["name"],
-                    'icon' => $data["icon"]
-                ]);
-                $this->success("Categoria atualizada com sucesso!");
-                break;
-            
-            case 'subcategory':
-                Subcategory::where('id', $data["id"])->where('user_id', Auth::id())->update([
-                    'name' => $data["name"],
-                ]);
-                $this->success("Subcategoria atualizada com sucesso!");
-                break;
-
-        }
-    }
-
-    #[On('delete')]
-    public function delete($data)
-    {
-        switch ($data['type']) {
-            case 'category':
-                Category::where('id', $data["id"])->where('user_id', Auth::id())->delete();
-                $this->success("Categoria excluída com sucesso!");
-                break;
-            
-            case 'subcategory':
-                Subcategory::where('id', $data["id"])->where('user_id', Auth::id())->delete();
-            $this->success("Subcategoria excluída com sucesso!");
-                break;
-
-        }
-    }
-
-    #[On("save")]
-    public function save($data)
-    {
-        switch ($data['type']) {
-            case 'category':
-                Category::create([
-                    'name' => $data['name'],
-                    'icon' => $data['icon'],
-                    'user_id' => Auth::id()
-                ]);
-                $this->success("Categoria criada com sucesso!");
-                break;
-            
-            case 'subcategory':
-                Subcategory::create([
-                    'name' => $data['name'],
-                    'category_id' => $data['category_id'],
-                    'user_id' => Auth::id()
-                ]);
-                $this->success("Subcategoria criada com sucesso!");
-                break;
-
-        }
+    #[On('refresh')]
+    public function mount(){
+        //
     }
 
     public function render()

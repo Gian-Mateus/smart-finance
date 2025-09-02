@@ -1,9 +1,10 @@
-<div>
-	<x-modal 
+<x-modal 
 		wire:model="modalOpen" 
 		title="{{ $title }}" 
 		class="backdrop-blur"
 	>
+	<x-form wire:submit="save">
+
 	@switch($this->function)
 		@case('create')
 			<div class="flex gap-2 w-full">
@@ -47,25 +48,29 @@
 			@case('create')
 				<x-button
 					label="Adicionar"
-					wire:click="save"
+					type="submit"
+					spinner="save"
 				/>
 				@break
 
 			@case('edit')
 				<x-button
 					label="Salvar"
-					wire:click="save"
+					type="submit"
+					spinner="save"
 				/>
 				@break
 
-			@case('create')
+			@case('delete')
 				<x-button
 					label="Excluir"
-					wire:click="save"
+					type="submit"
+					spinner="save"
 				/>
 				@break
 				
 		@endswitch
 	</x-slot:actions>
-	</x-modal>
-</div>
+	
+	</x-form>
+</x-modal>
