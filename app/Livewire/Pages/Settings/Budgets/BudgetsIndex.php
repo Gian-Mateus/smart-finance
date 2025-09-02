@@ -2,11 +2,11 @@
 
 namespace App\Livewire\Pages\Settings\Budgets;
 
-use App\Models\Budget;
+use Livewire\Component;
 use Mary\Traits\Toast;
 
 /* Models */
-use Livewire\Component;
+use App\Models\Budget;
 use App\Models\Category;
 use App\Models\Subcategory;
 
@@ -92,6 +92,11 @@ class BudgetsIndex extends Component
             'function' => 'edit',
             'data' => $data
         ]);
+    }
+
+    #[On('refresh')]
+    public function mount(){
+        //
     }
 
     public function render()

@@ -2,7 +2,12 @@
     wire:model="modalOpen" 
     title="{{ $title }}" 
 >
-    <div class="flex flex-col gap-2">
+    <x-form wire:submit="save" class="flex flex-col gap-2">
+        @if ($this->function == "delete")
+            <p class="text-md">Tem certeza que deseja excluir este orçamento?</p>
+            
+        @else
+
         @switch($this->type)
             @case('category')
                 <x-choices
@@ -28,7 +33,7 @@
                 />
                 @break
         @endswitch
-
+        
         <x-input
             id="targetValueInput"
             placeholder="0,00"
@@ -40,15 +45,27 @@
         <x-select
             icon="o-clock"
             label="Recorrência"
-            wire:model="form.recurrece"
+            wire:model="form.recurrence"
             :options="$recurrences"
         />
 
+        @endif
+
         <x-slot:actions>
             <x-button label="Cancelar" wire:click="close" />
-            <x-button label="Adicionar" class="btn-primary" wire:click="save" />
+            @switch($this->function)
+                @case('create')
+                    <x-button label="Adicionar" class="btn-primary" type="submit" spinner="save"/>
+                    @break
+                @case('edit')
+                    <x-button label="Salvar" class="btn-primary" type="submit" spinner="save"/>
+                    @break
+                @case('delete')
+                    <x-button label="Excluir" class="btn-primary" type="submit" spinner="save"/>
+                    @break
+            @endswitch
         </x-slot:actions>
-    </div>
+    </x-form>
     
     {{-- Temporário - não está funcionando no app.js (dentro Firebase Studio) --}}
     <script>

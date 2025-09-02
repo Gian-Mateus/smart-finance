@@ -24,7 +24,7 @@
 
 	@foreach ($this->categories as $category)
 	<div class="flex gap-1 mb-1 group">
-		<x-collapse collapse-plus-minus separator>
+		<x-collapse separator>
 		   <x-slot:heading>
 			   <div class="flex items-center gap-2">
 				   @if ($category->icon)
