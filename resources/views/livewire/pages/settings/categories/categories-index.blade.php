@@ -44,14 +44,29 @@
 					   <div>
 						   {{ $subcategory->name }}
 					   </div>
-					   <x-dropdown right>
-							<x-slot:trigger>
-								<x-button icon="m-ellipsis-vertical" class="btn-ghost opacity-0 group-hover/subcat:opacity-100"/>
-							</x-slot:trigger>
+					   <div
+							x-data="{ open: false }"
+							@click.outside="open = false"
+							class="dropdown dropdown-end"
+						>
 
-							<x-menu-item icon="o-trash" responsive title="Excluir" wire:click="deleteModal('subcategory', {{ $subcategory }})" />
-							<x-menu-item icon="c-pencil" label="Editar" responsive wire:click="editModal('subcategory', {{ $subcategory }})" />		
-						</x-dropdown>
+							<!-- O gatilho (botão) que abre o dropdown -->
+							<div @click.prevent="open = !open">
+								<x-button icon="m-ellipsis-vertical" class="btn-ghost opacity-0 group-hover/subcat:opacity-100"/>
+							</div>
+
+							<!-- O conteúdo do dropdown, envolvido em um <template x-if> -->
+							<template x-if="open">
+								<ul
+									class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-auto min-w-max border-[length:var(--border)] border-base-content/10"
+									@click="open = false"
+									x-transition>
+									
+									<x-menu-item icon="o-trash" responsive title="Excluir" wire:click="deleteModal('subcategory', {{ $subcategory }})" />
+									<x-menu-item icon="c-pencil" label="Editar" responsive wire:click="editModal('subcategory', {{ $subcategory }})" />
+								</ul>
+							</template>
+						</div>
 				   </li>
 				   @endforeach
 			   </ul>

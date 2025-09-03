@@ -20,6 +20,7 @@ class Modal extends Component
     public $title;
     public $function;
     public $type;
+    public $id;
     public CategoriesForm $form;
 
     #[On('openModal')]
@@ -42,13 +43,13 @@ class Modal extends Component
                     case 'category':
                         $this->form->name = $data["data"]["name"];
                         $this->form->icon = $data["data"]["icon"] ?? null;
-                        $this->form->category_id = $data["data"]["id"];
+                        $this->id= $data["data"]["id"];
                     break;
                     
                     case 'subcategory':
                         $this->form->name = $data["data"]["name"];
                         $this->form->icon = $data["data"]["icon"] ?? null;
-                        $this->form->subcategory_id = $data["data"]["id"];
+                        $this->id = $data["data"]["id"];
                         $this->form->category_id = $data["data"]["category_id"];
                     break;
                 }
@@ -62,11 +63,14 @@ class Modal extends Component
                     case 'category':
                         $this->form->category_id = $data["data"]["id"];
                         $this->form->name = $data["data"]["name"];
+                        $this->id = $data['data']['id'];
                     break;
 
                     case 'subcategory':
                         $this->form->subcategory_id = $data["data"]["id"];
                         $this->form->name = $data["data"]["name"];
+                        $this->id = $data['data']['id'];
+                        $this->form->category_id = $data["data"]["category_id"];
                     break;
                 }
                 break;
@@ -113,11 +117,11 @@ class Modal extends Component
             case "edit":
                 switch($this->type){
                     case 'category':
-                        Category::where('user_id', Auth::id())->where('id', $this->form->category_id)->update($validated);
+                        Category::where('user_id', Auth::id())->where('id', $this->id)->update($validated);
                         $this->success('Categoria editada com sucesso!');
                     break;
                     case 'subcategory':
-                        Subcategory::where('user_id', Auth::id())->where('id', $this->form->subcategory_id)->update($validated);
+                        Subcategory::where('user_id', Auth::id())->where('id', $this->id)->update($validated);
                         $this->success('Subcategoria editada com sucesso!');
                     break;
                 } 
@@ -126,11 +130,13 @@ class Modal extends Component
             case "delete":
                 switch($this->type){
                     case 'category':
-                        Category::where('user_id', Auth::id())->where('id', $this->form->category_id)->delete();
+                        $category = Category::where('user_id', Auth::id())->find($this->id);
+                        $category->delete();
                         $this->success('Categoria deletada com sucesso!');
                     break;
                     case 'subcategory':
-                        Subcategory::where('user_id', Auth::id())->where('id', $this->form->subcategory_id)->delete();
+                        $subcategory = Subcategory::where('user_id', Auth::id())->find($this->id);
+                        $subcategory->delete();
                         $this->success('Subcategoria deletada com sucesso!');
                     break;
                 } 

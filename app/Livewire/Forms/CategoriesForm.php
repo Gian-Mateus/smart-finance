@@ -10,7 +10,6 @@ class CategoriesForm extends Form
     public $name;
     public $icon;
     public $category_id;
-    public $subcategory_id;
     public $type = 'category';
 
     public function rules()
