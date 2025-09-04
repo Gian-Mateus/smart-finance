@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('subcategories', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->foreignId('category_id')->constrained('categories')
-                                            ->onUpdate('cascade')
-                                            ->onDelete('cascade'); // FOREIGN KEY (categories_id)
-            // Verificar se é necessário o campo user_id, pois categories já há relacionamento com users
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('category_id')->constrained('categories') // FOREIGN KEY (categories_id)
+                                            ->cascadeOnDelete() 
+                                            ->cascadeOnUpdate(); 
+            
+            $table->foreignId('user_id')->constrained('users') // Verificar se é necessário o campo user_id, pois categories já há relacionamento com users
+                                        ->cascadeOnDelete()
+                                        ->cascadeOnUpdate(); 
             $table->string('name', 100); // name VARCHAR(100) NOT NULL
             $table->timestamps();
         });

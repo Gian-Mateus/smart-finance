@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('banks_accounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('bank_id')->constrained('banks');
+            $table->foreignId('user_id')->constrained('users')
+                                        ->cascadeOnDelete()
+                                        ->cascadeOnUpdate();
+            $table->foreignId('bank_id')->constrained('banks')
+                                        ->cascadeOnDelete()
+                                        ->cascadeOnUpdate();
             $table->string('name', 100);
             $table->integer('account_number')->nullable();
             $table->timestamps();

@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('imports_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('import_id')->constrained('imports');
-            $table->foreignId('transaction_id')->constrained('transactions');
+            $table->foreignId('import_id')->constrained('imports')
+                                            ->cascadeOnDelete()
+                                            ->cascadeOnUpdate();
+            $table->foreignId('transaction_id')->constrained('transactions')
+                                                ->cascadeOnDelete()
+                                                ->cascadeOnUpdate();
         });
     }
 

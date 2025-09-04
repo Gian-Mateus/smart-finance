@@ -13,20 +13,18 @@ return new class extends Migration
     {
         Schema::create('recurrence_types', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->json('interval');
-            /* 
-                {
-                    ??? "interval": 1,               // Quantos dias, semanas ou meses entre repetições
-                    "type": "monthly",               // "daily", "weekly", "monthly", yearly, "custom"
-                    "custom_days": [5, 20],          // Se for customizado, quais dias do mês (cada 5 e 20 de cada mês)
-                    "day_of_month": 8,               // Se for mensal, em qual dia do mês
-                    "week_day": null,                // Se for semanal, qual dia da semana (0 = Domingo, 6 = Sábado)
-                    "start_date": "2025-06-01",      // Quando começa a recorrência
-                    "end_date": "2027-01-01",        // Quando termina (pode ser null pra infinito)
-                    "occurrences": null,             // Alternativa ao end_date: número total de vezes
-                    "description": "Mensal no dia 8 por 20 meses"
-                }
-            */
+            $table->string('name', 50);
+            $table->enum('type', ['daily', 'weekly', 'monthly', 'yearly', 'custom']);
+            $table->integer('interval')->nullable(); // a cada tantos dias
+            $table->integer('day_of_month')->nullable(); // todo dia X de cada mês
+            $table->enum('week_day', ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sabado'])->nullable();
+            $table->date('start_date')->nullable(); // início da recorrência
+            $table->date('end_date')->nullable(); // fim da recorrência
+            $table->integer('occurrences')->nullable(); // vezes que vão ocorrer, null = infinito/indeterminado
+
+            $table->foreignId('user_id')->constrained('users')
+                                        ->cascadeOnDelete()
+                                        ->cascadeOnUpdate();
             $table->timestamps();
         });
     }
