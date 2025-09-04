@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('bank_account_id')->constrained('banks_accounts')->cascadeOnDelete()->cascadeOnUpdate(); // FOREIGN KEY banco_id
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('subcategory_id')->nullable()->constrained('subcategories')->nullOnDelete(); // FOREIGN KEY subcategoria_id
-            $table->foreignId('recurrence_types_id')->constrained('recurrence_types')->cascadeOnDelete()->cascadeOnUpdate(); // FOREIGN KEY periodicidade_id
+            $table->foreignId('recurrence_types_id')->nullable()->constrained('recurrence_types')->cascadeOnDelete()->cascadeOnUpdate(); // FOREIGN KEY periodicidade_id
             $table->foreignId('payment_methods_id')->constrained('payment_methods'); // FOREIGN KEY forma_pagamento_id
             $table->decimal('value', 10, 2); // valor DECIMAL(10,2) NOT NULL
             $table->date('date'); // data DATE NOT NULL
