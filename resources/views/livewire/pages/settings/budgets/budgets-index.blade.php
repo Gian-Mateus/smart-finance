@@ -1,5 +1,5 @@
 <div class="ml-4 max-w-3xl mt-10">
-    <x-header title="Orçamentos" subtitle="Define Orçamentos (de gastos) para cada categoria" separator />
+    <x-header title="Orçamentos" subtitle="Define Orçamentos (teto de gastos) para cada categoria" separator />
     <x-button 
         label="Novo Orçamento" 
         class="btn-primary mb-10" 

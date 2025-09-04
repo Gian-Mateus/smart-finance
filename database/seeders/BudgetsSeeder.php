@@ -32,7 +32,7 @@ class BudgetsSeeder extends Seeder
                 'user_id' => 1, // User 1
                 'budgetable_id' => $loop,
                 'budgetable_type' => 'App\Models\Category',
-                'recurrence' => 'monthly',
+                'recurrence' => 3,
                 'target_value' => $value,
             ]);
             $loop++;
