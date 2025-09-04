@@ -53,7 +53,7 @@
 						<x-menu-item title="Bancos/Contas" icon="c-building-library" link="{{ route('banks') }}" />
 						<x-menu-item title="Categorias/Subcategorias" icon="c-squares-plus" link="{{ route('categories') }}" />
 						<x-menu-item title="Orçamentos" icon="o-document-currency-dollar" link="{{ route('budgets') }}" />
-						<x-menu-item title="Recorrências" icon="m-calendar" link="/" />
+						<x-menu-item title="Trans. Recorrentes" icon="m-calendar" link="/" />
 					</x-menu-sub>
 				</x-menu>
 			</x-slot:sidebar>
