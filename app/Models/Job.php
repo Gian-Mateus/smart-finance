@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $queue
  * @property string $payload
- * @property bool $attempts
+ * @property int $attempts
  * @property int|null $reserved_at
  * @property int $available_at
  * @property int $created_at
@@ -56,7 +56,7 @@ class Job extends Model
             'id' => 'integer',
             'queue' => 'string',
             'payload' => 'string',
-            'attempts' => 'boolean',
+            'attempts' => 'integer',
             'reserved_at' => 'integer',
             'available_at' => 'integer',
             'created_at' => 'integer',

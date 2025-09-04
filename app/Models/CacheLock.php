@@ -31,7 +31,7 @@ class CacheLock extends Model
      * @var list<string>
      */
     protected $fillable = [
-        '`key`',
+        '"key"',
         'owner',
         'expiration',
     ];

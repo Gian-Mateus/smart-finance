@@ -31,7 +31,7 @@ class Cache extends Model
      * @var list<string>
      */
     protected $fillable = [
-        '`key`',
+        '"key"',
         'value',
         'expiration',
     ];

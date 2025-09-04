@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class BanksAccount
@@ -21,13 +18,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int|null $account_number
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property Bank $bank
  * @property User $user
- * @property Collection|PaymentMethod[] $transactionsPaymentMethods
- * @property Collection|RecurrenceType[] $transactionsRecurrenceTypes
- * @property Collection|Subcategory[] $transactionsSubcategories
- * @property Collection|User[] $transactionsUsers
- * @property Collection|Transaction[] $transactions
+ * @property Bank $bank
  */
 class BanksAccount extends Model
 {
@@ -75,66 +67,10 @@ class BanksAccount extends Model
     }
 
     /**
-     * @return HasMany<Transaction, $this>
-     */
-    public function transactions(): HasMany
-    {
-        return $this->hasMany(Transaction::class, 'bank_account_id', 'id');
-    }
-
-    /**
      * @return BelongsTo<Bank, $this>
      */
     public function bank(): BelongsTo
     {
         return $this->belongsTo(Bank::class, 'bank_id');
-    }
-
-    /**
-     * @return BelongsTo<User, $this>
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * @return BelongsToMany<PaymentMethod, $this>
-     */
-    public function transactionsPaymentMethods(): BelongsToMany
-    {
-        return $this->belongsToMany(PaymentMethod::class, 'transactions', 'id', 'id')
-            ->withPivot('user_id', 'bank_account_id', 'subcategory_id', 'recurrence_types_id', 'payment_methods_id', 'value', 'date', 'description', 'observation', 'type')
-            ->withTimestamps();
-    }
-
-    /**
-     * @return BelongsToMany<RecurrenceType, $this>
-     */
-    public function transactionsRecurrenceTypes(): BelongsToMany
-    {
-        return $this->belongsToMany(RecurrenceType::class, 'transactions', 'id', 'id')
-            ->withPivot('user_id', 'bank_account_id', 'subcategory_id', 'recurrence_types_id', 'payment_methods_id', 'value', 'date', 'description', 'observation', 'type')
-            ->withTimestamps();
-    }
-
-    /**
-     * @return BelongsToMany<Subcategory, $this>
-     */
-    public function transactionsSubcategories(): BelongsToMany
-    {
-        return $this->belongsToMany(Subcategory::class, 'transactions', 'id', 'id')
-            ->withPivot('user_id', 'bank_account_id', 'subcategory_id', 'recurrence_types_id', 'payment_methods_id', 'value', 'date', 'description', 'observation', 'type')
-            ->withTimestamps();
-    }
-
-    /**
-     * @return BelongsToMany<User, $this>
-     */
-    public function transactionsUsers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'transactions', 'id', 'id')
-            ->withPivot('user_id', 'bank_account_id', 'subcategory_id', 'recurrence_types_id', 'payment_methods_id', 'value', 'date', 'description', 'observation', 'type')
-            ->withTimestamps();
     }
 }

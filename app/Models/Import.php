@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Import
@@ -22,8 +19,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property User $user
- * @property Collection|Transaction[] $transactions
- * @property Collection|ImportsTransaction[] $importsTransactions
  */
 class Import extends Model
 {
@@ -71,27 +66,10 @@ class Import extends Model
     }
 
     /**
-     * @return HasMany<ImportsTransaction, $this>
-     */
-    public function importsTransactions(): HasMany
-    {
-        return $this->hasMany(ImportsTransaction::class, 'import_id', 'id');
-    }
-
-    /**
      * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * @return BelongsToMany<Transaction, $this>
-     */
-    public function transactions(): BelongsToMany
-    {
-        return $this->belongsToMany(Transaction::class, 'imports_transactions', 'id', 'id')
-            ->withPivot('import_id', 'transaction_id');
     }
 }

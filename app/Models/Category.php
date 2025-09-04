@@ -6,11 +6,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Category
@@ -22,11 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property User $user
- * @property Collection|Subcategory[] $budgetsSubcategories
- * @property Collection|User[] $budgetsUsers
- * @property Collection|User[] $subcategoriesUsers
- * @property Collection|Budget[] $budgets
- * @property Collection|Subcategory[] $subcategories
  */
 class Category extends Model
 {
@@ -71,30 +62,14 @@ class Category extends Model
         ];
     }
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::deleting(function ($category) {
-            $category->budgets()->delete();
-        });
-    }
-
-    /**
-     * @return MorphMany<Budget, $this>
-     */
-    public function budgets(): MorphMany
-    {   
-        return $this->morphMany(Budget::class, 'budgetable');
-    }
-
-    /**
-     * @return HasMany<Subcategory, $this>
-     */
-    public function subcategories(): HasMany
-    {
-        return $this->hasMany(Subcategory::class, 'category_id', 'id');
-    }
+    //     static::deleting(function ($category) {
+    //         $category->budgets()->delete();
+    //     });
+    // }
 
     /**
      * @return BelongsTo<User, $this>
@@ -102,33 +77,5 @@ class Category extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * @return BelongsToMany<Subcategory, $this>
-     */
-    public function budgetsSubcategories(): BelongsToMany
-    {
-        return $this->belongsToMany(Subcategory::class, 'budgets', 'id', 'id')
-            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence', 'target_value', 'types', 'start_date', 'end_date');
-    }
-
-    /**
-     * @return BelongsToMany<User, $this>
-     */
-    public function budgetsUsers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'budgets', 'id', 'id')
-            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence', 'target_value', 'types', 'start_date', 'end_date');
-    }
-
-    /**
-     * @return BelongsToMany<User, $this>
-     */
-    public function subcategoriesUsers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'subcategories', 'id', 'id')
-            ->withPivot('category_id', 'user_id', 'name')
-            ->withTimestamps();
     }
 }

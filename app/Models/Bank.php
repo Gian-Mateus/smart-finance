@@ -7,7 +7,6 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -20,7 +19,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property Collection|User[] $accountsUsers
  * @property Collection|BanksAccount[] $banksAccounts
  */
 class Bank extends Model
@@ -74,15 +72,5 @@ class Bank extends Model
     public function banksAccounts(): HasMany
     {
         return $this->hasMany(BanksAccount::class, 'bank_id', 'id');
-    }
-
-    /**
-     * @return BelongsToMany<User, $this>
-     */
-    public function accountsUsers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'banks_accounts', 'id', 'id')
-            ->withPivot('user_id', 'bank_id', 'name', 'account_number')
-            ->withTimestamps();
     }
 }

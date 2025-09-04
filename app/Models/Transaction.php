@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
-use App\Models\Category;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Transaction
@@ -18,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int $id
  * @property int $user_id
  * @property int $bank_account_id
+ * @property int $category_id
  * @property int|null $subcategory_id
  * @property int $recurrence_types_id
  * @property int $payment_methods_id
@@ -28,12 +27,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property bool $type
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property BanksAccount $bankAccount
- * @property PaymentMethod $paymentMethods
- * @property RecurrenceType $recurrenceTypes
- * @property Subcategory $subcategory
  * @property User $user
- * @property Collection|Import[] $imports
+ * @property BanksAccount $bankAccount
+ * @property Category $category
+ * @property Subcategory $subcategory
+ * @property RecurrenceType $recurrenceTypes
+ * @property PaymentMethod $paymentMethods
  * @property Collection|ImportsTransaction[] $importsTransactions
  */
 class Transaction extends Model
@@ -104,59 +103,10 @@ class Transaction extends Model
     }
 
     /**
-     * @return BelongsTo<BanksAccount, $this>
-     */
-    public function bankAccount(): BelongsTo
-    {
-        return $this->belongsTo(BanksAccount::class, 'bank_account_id');
-    }
-
-    /**
      * @return BelongsTo<PaymentMethod, $this>
      */
     public function paymentMethods(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class, 'payment_methods_id');
-    }
-
-    /**
-     * @return BelongsTo<RecurrenceType, $this>
-     */
-    public function recurrenceTypes(): BelongsTo
-    {
-        return $this->belongsTo(RecurrenceType::class, 'recurrence_types_id');
-    }
-
-    /**
-     * @return BelongsTo<Category, $this>
-     */
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class, 'category_id');
-    }
-
-    /**
-     * @return BelongsTo<Subcategory, $this>
-     */
-    public function subcategory(): BelongsTo
-    {
-        return $this->belongsTo(Subcategory::class, 'subcategory_id');
-    }
-
-    /**
-     * @return BelongsTo<User, $this>
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * @return BelongsToMany<Import, $this>
-     */
-    public function imports(): BelongsToMany
-    {
-        return $this->belongsToMany(Import::class, 'imports_transactions', 'id', 'id')
-            ->withPivot('import_id', 'transaction_id');
     }
 }

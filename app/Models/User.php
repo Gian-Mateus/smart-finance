@@ -6,10 +6,8 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class User
@@ -22,21 +20,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property Collection|Bank[] $banksAccountsBanks
- * @property Collection|Subcategory[] $budgetsSubcategories
- * @property Collection|RecurrenceType[] $budgetsRecurrenceTypes
- * @property Collection|Category[] $budgetsCategories
- * @property Collection|Category[] $subcategoriesCategories
- * @property Collection|Subcategory[] $transactionsSubcategories
- * @property Collection|RecurrenceType[] $transactionsRecurrenceTypes
- * @property Collection|PaymentMethod[] $transactionsPaymentMethods
- * @property Collection|BanksAccount[] $transactionsBanksAccounts
- * @property Collection|BanksAccount[] $banksAccounts
- * @property Collection|Budget[] $budgets
  * @property Collection|Category[] $categories
  * @property Collection|Import[] $imports
+ * @property Collection|RecurrenceType[] $recurrenceTypes
  * @property Collection|Subcategory[] $subcategories
- * @property Collection|Transaction[] $transactions
  */
 class User extends Authenticatable
 {
@@ -90,22 +77,6 @@ class User extends Authenticatable
     }
 
     /**
-     * @return HasMany<BanksAccount, $this>
-     */
-    public function banksAccounts(): HasMany
-    {
-        return $this->hasMany(BanksAccount::class, 'user_id', 'id');
-    }
-
-    /**
-     * @return HasMany<Budget, $this>
-     */
-    public function budgets(): HasMany
-    {
-        return $this->hasMany(Budget::class, 'user_id', 'id');
-    }
-
-    /**
      * @return HasMany<Category, $this>
      */
     public function categories(): HasMany
@@ -122,105 +93,18 @@ class User extends Authenticatable
     }
 
     /**
+     * @return HasMany<RecurrenceType, $this>
+     */
+    public function recurrenceTypes(): HasMany
+    {
+        return $this->hasMany(RecurrenceType::class, 'user_id', 'id');
+    }
+
+    /**
      * @return HasMany<Subcategory, $this>
      */
     public function subcategories(): HasMany
     {
         return $this->hasMany(Subcategory::class, 'user_id', 'id');
-    }
-
-    /**
-     * @return HasMany<Transaction, $this>
-     */
-    public function transactions(): HasMany
-    {
-        return $this->hasMany(Transaction::class, 'user_id', 'id');
-    }
-
-    /**
-     * @return BelongsToMany<Bank, $this>
-     */
-    public function banksAccountsBanks(): BelongsToMany
-    {
-        return $this->belongsToMany(Bank::class, 'banks_accounts', 'id', 'id')
-            ->withPivot('user_id', 'bank_id', 'name', 'account_number')
-            ->withTimestamps();
-    }
-
-    /**
-     * @return BelongsToMany<Subcategory, $this>
-     */
-    public function budgetsSubcategories(): BelongsToMany
-    {
-        return $this->belongsToMany(Subcategory::class, 'budgets', 'id', 'id')
-            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
-    }
-
-    /**
-     * @return BelongsToMany<RecurrenceType, $this>
-     */
-    public function budgetsRecurrenceTypes(): BelongsToMany
-    {
-        return $this->belongsToMany(RecurrenceType::class, 'budgets', 'id', 'id')
-            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
-    }
-
-    /**
-     * @return BelongsToMany<Category, $this>
-     */
-    public function budgetsCategories(): BelongsToMany
-    {
-        return $this->belongsToMany(Category::class, 'budgets', 'id', 'id')
-            ->withPivot('user_id', 'category_id', 'subcategory_id', 'recurrence_type_id', 'target_value', 'types', 'start_date', 'end_date');
-    }
-
-    /**
-     * @return BelongsToMany<Category, $this>
-     */
-    public function subcategoriesCategories(): BelongsToMany
-    {
-        return $this->belongsToMany(Category::class, 'subcategories', 'id', 'id')
-            ->withPivot('category_id', 'user_id', 'name')
-            ->withTimestamps();
-    }
-
-    /**
-     * @return BelongsToMany<Subcategory, $this>
-     */
-    public function transactionsSubcategories(): BelongsToMany
-    {
-        return $this->belongsToMany(Subcategory::class, 'transactions', 'id', 'id')
-            ->withPivot('user_id', 'bank_account_id', 'subcategory_id', 'recurrence_types_id', 'payment_methods_id', 'value', 'date', 'description', 'observation', 'type')
-            ->withTimestamps();
-    }
-
-    /**
-     * @return BelongsToMany<RecurrenceType, $this>
-     */
-    public function transactionsRecurrenceTypes(): BelongsToMany
-    {
-        return $this->belongsToMany(RecurrenceType::class, 'transactions', 'id', 'id')
-            ->withPivot('user_id', 'bank_account_id', 'subcategory_id', 'recurrence_types_id', 'payment_methods_id', 'value', 'date', 'description', 'observation', 'type')
-            ->withTimestamps();
-    }
-
-    /**
-     * @return BelongsToMany<PaymentMethod, $this>
-     */
-    public function transactionsPaymentMethods(): BelongsToMany
-    {
-        return $this->belongsToMany(PaymentMethod::class, 'transactions', 'id', 'id')
-            ->withPivot('user_id', 'bank_account_id', 'subcategory_id', 'recurrence_types_id', 'payment_methods_id', 'value', 'date', 'description', 'observation', 'type')
-            ->withTimestamps();
-    }
-
-    /**
-     * @return BelongsToMany<BanksAccount, $this>
-     */
-    public function transactionsBanksAccounts(): BelongsToMany
-    {
-        return $this->belongsToMany(BanksAccount::class, 'transactions', 'id', 'id')
-            ->withPivot('user_id', 'bank_account_id', 'subcategory_id', 'recurrence_types_id', 'payment_methods_id', 'value', 'date', 'description', 'observation', 'type')
-            ->withTimestamps();
     }
 }

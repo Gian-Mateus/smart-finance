@@ -56,14 +56,6 @@ class ImportsTransaction extends Model
     }
 
     /**
-     * @return BelongsTo<Import, $this>
-     */
-    public function import(): BelongsTo
-    {
-        return $this->belongsTo(Import::class, 'import_id');
-    }
-
-    /**
      * @return BelongsTo<Transaction, $this>
      */
     public function transaction(): BelongsTo

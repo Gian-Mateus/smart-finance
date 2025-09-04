@@ -4,38 +4,33 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\MoneyBRL;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * Class Budget
  *
  * @property int $id
  * @property int $user_id
- * @property int $category_id
- * @property int $subcategory_id
+ * @property string $budgetable_type
+ * @property int $budgetable_id
  * @property string $recurrence
  * @property int $target_value
- * @property string $types
- * @property Carbon|null $start_date
- * @property Carbon|null $end_date
- * @property Category $category
- * @property Subcategory $subcategory
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int $recurrence_types_id
  * @property User $user
+ * @property RecurrenceType $recurrenceTypes
  */
 class Budget extends Model
 {
-    use MoneyBRL;
-    
     protected $table = 'budgets';
 
     protected $primaryKey = 'id';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     /**
      * The attributes that are mass assignable.
@@ -49,6 +44,7 @@ class Budget extends Model
         'budgetable_id',
         'recurrence',
         'target_value',
+        'recurrence_types_id',
     ];
 
     /**
@@ -67,46 +63,29 @@ class Budget extends Model
         return [
             'id' => 'integer',
             'user_id' => 'integer',
+            'budgetable_type' => 'string',
+            'budgetable_id' => 'integer',
             'recurrence' => 'string',
             'target_value' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'recurrence_types_id' => 'integer',
         ];
     }
 
     /**
-     * Get the parent budgetable model (category or subcategory).
-     *
-     * @return MorphTo
+     * @return BelongsTo<RecurrenceType, $this>
      */
-    public function budgetable(): MorphTo
+    public function recurrenceTypes(): BelongsTo
     {
-        return $this->morphTo();
+        return $this->belongsTo(RecurrenceType::class, 'recurrence_types_id');
     }
 
     /**
-     * @return BelongsTo<User, $this>
+     * @return MorphTo<Model, $this>
      */
-    public function user(): BelongsTo
+    public function budgetable(): MorphTo
     {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    protected function targetValue(): Attribute {
-        return Attribute::make(
-            get: fn ($value) => $this->showBRL($value),
-            set: fn ($value) => $this->toInteger($value),
-        );
-    }
-
-    protected function recurrence(): Attribute {
-        return Attribute::make(
-            get: fn ($value) => match ($value) {
-                'monthly' => 'Mensal',
-                'daily' => 'Diário',
-                'weekly' => 'Semanal',
-                'yearly' => 'Anual',
-                default => $value,
-            },
-            set: fn ($value) => $value,
-        );
+        return $this->morphTo(__FUNCTION__, 'budgetable_type', 'budgetable_id');
     }
 }
