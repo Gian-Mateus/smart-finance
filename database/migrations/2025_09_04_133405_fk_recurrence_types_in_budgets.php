@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('budgets', function (Blueprint $table) {
-            $table->foreignId('recurrence_types_id')->constrained('recurrence_types')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->foreignId('recurrence_types_id')
+                ->constrained('recurrence_types')
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

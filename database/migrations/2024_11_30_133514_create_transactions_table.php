@@ -13,13 +13,40 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->foreignId('user_id')->constrained('users'); // FOREIGN KEY usuario_id
-            $table->foreignId('bank_account_id')->constrained('banks_accounts')->cascadeOnDelete()->cascadeOnUpdate(); // FOREIGN KEY banco_id
-            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('subcategory_id')->nullable()->constrained('subcategories')->nullOnDelete(); // FOREIGN KEY subcategoria_id
-            $table->foreignId('recurrence_types_id')->nullable()->constrained('recurrence_types')->cascadeOnDelete()->cascadeOnUpdate(); // FOREIGN KEY periodicidade_id
-            $table->foreignId('payment_methods_id')->constrained('payment_methods'); // FOREIGN KEY forma_pagamento_id
-            $table->decimal('value', 10, 2); // valor DECIMAL(10,2) NOT NULL
+
+            $table->foreignId('user_id')
+            ->constrained('users')
+            ->cascadeOnDelete()
+            ->cascadeOnUpdate(); // FOREIGN KEY usuario_id
+
+            $table->foreignId('bank_account_id')
+            ->constrained('banks_accounts')
+            ->cascadeOnUpdate()
+            ->nullOnDelete(); // FOREIGN KEY banco_id
+
+            $table->foreignId('category_id')
+            ->constrained('categories')
+            ->cascadeOnUpdate()
+            ->nullOnDelete();
+
+            $table->foreignId('subcategory_id')
+            ->nullable()
+            ->constrained('subcategories')
+            ->cascadeOnUpdate()
+            ->nullOnDelete(); // FOREIGN KEY subcategoria_id
+
+            $table->foreignId('recurrence_types_id')
+            ->nullable()
+            ->constrained('recurrence_types')
+            ->cascadeOnUpdate()
+            ->nullOnDelete(); // FOREIGN KEY periodicidade_id
+
+            $table->foreignId('payment_methods_id')
+            ->constrained('payment_methods')
+            ->cascadeOnUpdate()
+            ->nullOnDelete(); // FOREIGN KEY forma_pagamento_id
+
+            $table->integer('value'); // valor INT() NOT NULL
             $table->date('date'); // data DATE NOT NULL
             $table->string('description', 255); // descricao VARCHAR(255) NOT NULL
             $table->text('observation')->nullable(); // observacao TEXT NULL

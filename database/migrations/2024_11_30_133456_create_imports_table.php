@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('imports', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->foreignId('user_id')->constrained('users')
+            
+            $table->foreignId('user_id')
+                ->constrained('users')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
+
             $table->string('file_name', 50); // nome_arquivo VARCHAR(50) NOT NULL
             $table->string('file_type', 50); // tipo_arquivo VARCHAR(50) NOT NULL
             $table->timestamp('imported_at');
