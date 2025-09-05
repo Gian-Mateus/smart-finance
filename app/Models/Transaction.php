@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Transaction
@@ -20,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int|null $subcategory_id
  * @property int|null $recurrence_types_id
  * @property int $payment_methods_id
- * @property float $value
+ * @property int $value
  * @property Carbon $date
  * @property string $description
  * @property string|null $observation
@@ -33,7 +31,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Subcategory $subcategory
  * @property RecurrenceType $recurrenceTypes
  * @property PaymentMethod $paymentMethods
- * @property Collection|ImportsTransaction[] $importsTransactions
  */
 class Transaction extends Model
 {
@@ -84,7 +81,7 @@ class Transaction extends Model
             'subcategory_id' => 'integer',
             'recurrence_types_id' => 'integer',
             'payment_methods_id' => 'integer',
-            'value' => 'float',
+            'value' => 'integer',
             'date' => 'datetime',
             'description' => 'string',
             'observation' => 'string',
@@ -92,14 +89,6 @@ class Transaction extends Model
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
-    }
-
-    /**
-     * @return HasMany<ImportsTransaction, $this>
-     */
-    public function importsTransactions(): HasMany
-    {
-        return $this->hasMany(ImportsTransaction::class, 'transaction_id', 'id');
     }
 
     /**
