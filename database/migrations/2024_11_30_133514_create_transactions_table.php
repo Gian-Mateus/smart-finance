@@ -25,6 +25,7 @@ return new class extends Migration
             ->nullOnDelete(); // FOREIGN KEY banco_id
 
             $table->foreignId('category_id')
+            ->nullable()
             ->constrained('categories')
             ->cascadeOnUpdate()
             ->nullOnDelete();
