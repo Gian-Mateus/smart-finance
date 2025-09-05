@@ -5,6 +5,11 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Import;
+use App\Models\Category;
+use App\Models\Subcategory;
+use App\Models\RecurrenceType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -97,5 +102,30 @@ class Transaction extends Model
     public function paymentMethods(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class, 'payment_methods_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function imports(): BelongsTo
+    {
+        return $this->belongsTo(Import::class);
+    }
+
+    public function recurrenceTypes(): BelongsTo
+    {
+        return $this->belongsTo(RecurrenceType::class);
+    }
+
+    public function categories(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function subcategories(): BelongsTo
+    {
+        return $this->belongsTo(Subcategory::class);
     }
 }

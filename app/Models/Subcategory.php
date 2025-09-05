@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Budget;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * Class Subcategory
@@ -63,14 +67,24 @@ class Subcategory extends Model
         ];
     }
 
-    // protected static function boot()
-    // {
-    //     parent::boot();
+    protected static function boot()
+    {
+        parent::boot();
 
-    //     static::deleting(function ($subcategory) {
-    //         $subcategory->budgets()->delete();
-    //     });
-    // }
+        static::deleting(function ($subcategory) {
+            $subcategory->budgets()->delete();
+        });
+    }
+
+    public function budgets(): MorphMany
+    {
+        return $this->morphMany(Budget::class, 'budgetable');
+    }
+
+    public function categories(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
 
     /**
      * @return BelongsTo<User, $this>
