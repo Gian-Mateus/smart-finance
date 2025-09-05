@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate(); // user_id INT NOT NULL
-                
+
             $table->string('name', 100); // name VARCHAR(100) NOT NULL
             $table->string('icon', 50)->nullable(); // icon VARCHAR(50) NOT NULL
             $table->timestamps();

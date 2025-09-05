@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('imports', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            
+
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->cascadeOnDelete()

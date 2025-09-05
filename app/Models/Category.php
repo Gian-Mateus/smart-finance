@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Budget;
-use App\Models\Subcategory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Category
@@ -92,5 +89,4 @@ class Category extends Model
     {
         return $this->morphMany(Budget::class, 'budgetable');
     }
-
 }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('subcategories', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            
+
             $table->foreignId('category_id')->constrained('categories') // FOREIGN KEY (categories_id)
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();

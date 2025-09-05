@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\RecurrenceType;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * Class Budget

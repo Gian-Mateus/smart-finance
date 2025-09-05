@@ -15,37 +15,37 @@ return new class extends Migration
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
 
             $table->foreignId('user_id')
-            ->constrained('users')
-            ->cascadeOnDelete()
-            ->cascadeOnUpdate(); // FOREIGN KEY usuario_id
+                ->constrained('users')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate(); // FOREIGN KEY usuario_id
 
             $table->foreignId('bank_account_id')
-            ->constrained('banks_accounts')
-            ->cascadeOnUpdate()
-            ->nullOnDelete(); // FOREIGN KEY banco_id
+                ->constrained('banks_accounts')
+                ->cascadeOnUpdate()
+                ->nullOnDelete(); // FOREIGN KEY banco_id
 
             $table->foreignId('category_id')
-            ->nullable()
-            ->constrained('categories')
-            ->cascadeOnUpdate()
-            ->nullOnDelete();
+                ->nullable()
+                ->constrained('categories')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
 
             $table->foreignId('subcategory_id')
-            ->nullable()
-            ->constrained('subcategories')
-            ->cascadeOnUpdate()
-            ->nullOnDelete(); // FOREIGN KEY subcategoria_id
+                ->nullable()
+                ->constrained('subcategories')
+                ->cascadeOnUpdate()
+                ->nullOnDelete(); // FOREIGN KEY subcategoria_id
 
             $table->foreignId('recurrence_types_id')
-            ->nullable()
-            ->constrained('recurrence_types')
-            ->cascadeOnUpdate()
-            ->nullOnDelete(); // FOREIGN KEY periodicidade_id
+                ->nullable()
+                ->constrained('recurrence_types')
+                ->cascadeOnUpdate()
+                ->nullOnDelete(); // FOREIGN KEY periodicidade_id
 
             $table->foreignId('payment_methods_id')
-            ->constrained('payment_methods')
-            ->cascadeOnUpdate()
-            ->nullOnDelete(); // FOREIGN KEY forma_pagamento_id
+                ->constrained('payment_methods')
+                ->cascadeOnUpdate()
+                ->nullOnDelete(); // FOREIGN KEY forma_pagamento_id
 
             $table->integer('value'); // valor INT() NOT NULL
             $table->date('date'); // data DATE NOT NULL

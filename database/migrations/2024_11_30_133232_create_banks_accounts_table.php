@@ -19,8 +19,8 @@ return new class extends Migration
                 ->cascadeOnUpdate();
 
             $table->foreignId('bank_id')->constrained('banks')
-            ->cascadeOnUpdate()
-            ->nullOnDelete();
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
 
             $table->string('name', 100);
             $table->integer('account_number')->nullable();
