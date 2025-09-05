@@ -2,20 +2,22 @@
 
 namespace App\Livewire\Pages\Settings\Budgets;
 
+use App\MoneyBRL;
 use App\Models\Budget;
-use App\Models\Category;
 /* Models */
-use App\Models\Subcategory;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
-use Livewire\Component;
 use Mary\Traits\Toast;
+use Livewire\Component;
+use App\Models\Category;
+use App\Models\Subcategory;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Computed;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class BudgetsIndex extends Component
 {
     use Toast;
+    use MoneyBRL;
 
     #[Computed]
     public function budgets()

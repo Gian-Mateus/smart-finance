@@ -25,7 +25,7 @@
                             <span>Recorrência:</span> {{ $budget->recurrence }}
                         </div>
                         <div>
-                            Valor: R$ {{ $budget->target_value }}
+                            Valor: R$ {{ $this->showBRL($budget->target_value) }}
                         </div>
                     </div>
                 </div>

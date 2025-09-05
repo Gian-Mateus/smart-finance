@@ -20,4 +20,9 @@ class BudgetsForm extends Form
     #[Validate('required', message: 'Campo é obrigatório.')]
     #[Validate('min:1', message: 'Defina o valor maior que zero.')]
     public $target_value;
+
+    public function mutateTargetValue(): void
+    {
+        $this->target_value = $this->toInteger($this->target_value);
+    }
 }
