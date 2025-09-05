@@ -2,100 +2,104 @@
 
 namespace App\Livewire\Pages\Settings\Budgets;
 
-use Livewire\Component;
-use Mary\Traits\Toast;
-
-/* Models */
 use App\Models\Budget;
 use App\Models\Category;
+/* Models */
 use App\Models\Subcategory;
-
-use Livewire\Attributes\On;
-use Livewire\Attributes\Computed;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
+use Livewire\Component;
+use Mary\Traits\Toast;
 
 class BudgetsIndex extends Component
 {
     use Toast;
 
     #[Computed]
-    public function budgets(){
+    public function budgets()
+    {
         $budgets = Budget::where('user_id', Auth::id())
-        ->with([
-            'budgetable' => function(MorphTo $morphto) {
-                $morphto->morphWith([
-                    Subcategory::class,
-                    Category::class
-                ]);
-            }
-            
-        ])
-        ->orderByDesc('created_at')
-        ->get();
+            ->with([
+                'budgetable' => function (MorphTo $morphto) {
+                    $morphto->morphWith([
+                        Subcategory::class,
+                        Category::class,
+                    ]);
+                },
+
+            ])
+            ->orderByDesc('created_at')
+            ->get();
 
         $organizedBudgets = collect();
         $subcategories = collect();
 
-       foreach($budgets as $budget){
-           if($budget->budgetable_type == 'App\Models\Category'){
-               $organizedBudgets->push($budget);
-           }
-           
-           if($budget->budgetable_type == 'App\Models\Subcategory'){
+        foreach ($budgets as $budget) {
+            if ($budget->budgetable_type == 'App\Models\Category') {
+                $organizedBudgets->push($budget);
+            }
+
+            if ($budget->budgetable_type == 'App\Models\Subcategory') {
                 $subcategories->push($budget);
-           }
+            }
         }
 
-        foreach($subcategories as $sb){
-            if(isset($organizedBudgets[$sb->budgetable->category_id - 1]->subcategories)){
+        foreach ($subcategories as $sb) {
+            if (isset($organizedBudgets[$sb->budgetable->category_id - 1]->subcategories)) {
                 $organizedBudgets[$sb->budgetable->category_id - 1]->subcategories->push($sb);
             } else {
                 $organizedBudgets[$sb->budgetable->category_id - 1]->subcategories = collect();
                 $organizedBudgets[$sb->budgetable->category_id - 1]->subcategories->push($sb);
-            };
+            }
         }
 
         return $organizedBudgets;
     }
 
-    public function hasSubcategories(int $category): bool{
+    public function hasSubcategories(int $category): bool
+    {
 
         $category = Category::find($category);
 
-        if(!$category){
+        if (! $category) {
             return false;
         }
-        
+
         return $category->subcategories()->exists();
     }
 
-    public function newBudget($type, $category = null){
+    public function newBudget($type, $category = null)
+    {
         $this->dispatch('openModal', [
             'type' => $type,
             'function' => 'create',
-            'data' => $category ?? null
+            'data' => $category ?? null,
         ]);
     }
 
-    public function deleteModal($type, $data){
+    public function deleteModal($type, $data)
+    {
         $this->dispatch('openModal', [
             'type' => $type,
             'function' => 'delete',
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
-    public function editModal($type, $data){
+    public function editModal($type, $data)
+    {
         $this->dispatch('openModal', [
             'type' => $type,
             'function' => 'edit',
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
     #[On('refresh')]
-    public function mount(){
+    public function mount()
+    {
         //
     }
 

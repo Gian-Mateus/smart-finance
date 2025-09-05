@@ -23,8 +23,8 @@ return new class extends Migration
             $table->integer('occurrences')->nullable(); // vezes que vão ocorrer, null = infinito/indeterminado
 
             $table->foreignId('user_id')->constrained('users')
-                                        ->cascadeOnDelete()
-                                        ->cascadeOnUpdate();
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->timestamps();
         });
     }

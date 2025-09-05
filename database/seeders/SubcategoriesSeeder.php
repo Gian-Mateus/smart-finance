@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Subcategory;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class SubcategoriesSeeder extends Seeder
 {
@@ -26,7 +25,7 @@ class SubcategoriesSeeder extends Seeder
                 'Resgate Investimentos',
                 'Transferência entre contas',
                 'Paizão',
-                'Mozão'
+                'Mozão',
             ],
             [
                 'Fundo de Emergência',
@@ -37,7 +36,7 @@ class SubcategoriesSeeder extends Seeder
                 'Renda Fixa',
                 'Renda Variável',
                 'Tesouro Direto',
-                'Outras Poupança & Investimento'
+                'Outras Poupança & Investimento',
             ],
             [
                 'Celular',
@@ -52,14 +51,14 @@ class SubcategoriesSeeder extends Seeder
                 'Prestação /Aluguel de imóvel',
                 'Serviço de Limpeza (diarista)',
                 'Telefone Fixo',
-                'Outras Moradias'
+                'Outras Moradias',
             ],
             [
                 'Feira  / Sacolão',
                 'Padaria',
                 'Restaurante',
                 'Supermercado',
-                'Outras (café, água, sorvetes, etc)'
+                'Outras (café, água, sorvetes, etc)',
             ],
             [
                 'Combustível',
@@ -74,14 +73,14 @@ class SubcategoriesSeeder extends Seeder
                 'Multa',
                 'Taxi / Uber',
                 'Outras Transporte',
-                'Seguro'
+                'Seguro',
             ],
             [
                 'Material Escolar',
                 'Matricula Escolar/ Mensalidade',
                 'Outros Cursos',
                 'Transporte Escolar',
-                'Outras Educacão'
+                'Outras Educacão',
             ],
             [
                 'Bares',
@@ -92,7 +91,7 @@ class SubcategoriesSeeder extends Seeder
                 'Restaurantes',
                 'Streaming (Netflix / Amazon / Disney)',
                 'Viagens / Férias',
-                'Outras Lazer'
+                'Outras Lazer',
             ],
             [
                 'Academia',
@@ -101,7 +100,7 @@ class SubcategoriesSeeder extends Seeder
                 'Manicure',
                 'Plano de Saúde',
                 'Outras Saúde & Beleza',
-                'Farmácia'
+                'Farmácia',
             ],
             [
                 'Empréstimos',
@@ -111,18 +110,18 @@ class SubcategoriesSeeder extends Seeder
                 'Previdência Privada',
                 'Seguros (vida/residencial)',
                 'Tarifas Bancárias',
-                'Outras Serviços Financeiros'
+                'Outras Serviços Financeiros',
             ],
             [
                 'Acessórios',
                 'Calçados',
                 'Roupas',
-                'Outras Vestuário'
+                'Outras Vestuário',
             ],
             [
                 'Doações',
                 'Presentes',
-                'Outras Doações  & Presentes'
+                'Outras Doações  & Presentes',
             ],
             [
                 'Acessórios Animal de Estimação',
@@ -132,18 +131,18 @@ class SubcategoriesSeeder extends Seeder
                 'Medicamento',
                 'Ração',
                 'Veterinário',
-                'Outras Animal de Estimação'
+                'Outras Animal de Estimação',
             ],
             [
                 'Outras',
                 'Tranferência entre contas',
                 'Cartão de crédito',
-                'Seguro Odonto'
-            ]
+                'Seguro Odonto',
+            ],
         ];
 
-        for($i = 0; $i < count($subcategories); $i++){
-            for($j = 0; $j < count($subcategories[$i]); $j++){
+        for ($i = 0; $i < count($subcategories); $i++) {
+            for ($j = 0; $j < count($subcategories[$i]); $j++) {
                 Subcategory::create([
                     'user_id' => 1,
                     'name' => $subcategories[$i][$j],

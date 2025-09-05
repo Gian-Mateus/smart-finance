@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class BudgetsSeeder extends Seeder
@@ -32,7 +31,7 @@ class BudgetsSeeder extends Seeder
                 'user_id' => 1, // User 1
                 'budgetable_id' => $loop,
                 'budgetable_type' => 'App\Models\Category',
-                'recurrence' => 3,
+                'recurrence_types_id' => 3,
                 'target_value' => $value,
             ]);
             $loop++;

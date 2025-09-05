@@ -5,13 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Database\Seeders\BanksSeeder;
-use Database\Seeders\IconsSeeder;
-use Database\Seeders\BudgetsSeeder;
-use Database\Seeders\CategoriesSeeder;
-use Database\Seeders\SubcategoriesSeeder;
-use Database\Seeders\PaymentMethodsSeeder;
-use Database\Seeders\RecurrenceTypeSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,20 +15,20 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-       User::create([
-           'name' => 'Test User',
-           'email' => 'gian.m.silver@gmail.com',
-           'password' => bcrypt('123456')
-       ]);
+        User::create([
+            'name' => 'Test User',
+            'email' => 'gian.m.silver@gmail.com',
+            'password' => bcrypt('123456'),
+        ]);
 
         $this->call([
             CategoriesSeeder::class,
             SubcategoriesSeeder::class,
-            //RecurrenceTypeSeeder::class,
+            RecurrenceTypeSeeder::class,
             BanksSeeder::class,
             IconsSeeder::class,
             PaymentMethodsSeeder::class,
             BudgetsSeeder::class,
         ]);
     }
-} 
+}

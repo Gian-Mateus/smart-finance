@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $bank_account_id
  * @property int $category_id
  * @property int|null $subcategory_id
- * @property int $recurrence_types_id
+ * @property int|null $recurrence_types_id
  * @property int $payment_methods_id
  * @property float $value
  * @property Carbon $date

@@ -12,16 +12,17 @@ trait MoneyBRL
      */
     public function showBRL($value)
     {
-        return number_format($this->toDecimal($value), 2, ",", ".");
+        return number_format($this->toDecimal($value), 2, ',', '.');
     }
-    
+
     /**
      * Converte um valor decimal para inteiro (multiplicando por 10000)
      */
     public function toInteger($value)
     {
-        $value = Str::replace([",", "."], "", $value);
+        $value = Str::replace([',', '.'], '', $value);
         $value = intval($value);
+
         return $value * 100;
     }
 

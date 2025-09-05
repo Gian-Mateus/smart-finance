@@ -2,23 +2,24 @@
 
 namespace App\Livewire\Auth;
 
-use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class Login extends Component
 {
     public $email;
+
     public $password;
 
     protected $rules = [
         'email' => 'required|email',
-        'password' => 'required'
+        'password' => 'required',
     ];
 
     protected $messages = [
         'email.required' => 'O e-mail é obrigatório',
         'email.email' => 'Digite um e-mail válido',
-        'password.required' => 'A senha é obrigatória'
+        'password.required' => 'A senha é obrigatória',
     ];
 
     public function login()
@@ -27,6 +28,7 @@ class Login extends Component
 
         if (Auth::attempt($credentials)) {
             session()->regenerate();
+
             return redirect()->intended(route('dashboard.index'));
         }
 

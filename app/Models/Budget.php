@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int $user_id
  * @property string $budgetable_type
  * @property int $budgetable_id
- * @property string $recurrence
  * @property int $target_value
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -42,7 +41,6 @@ class Budget extends Model
         'user_id',
         'budgetable_type',
         'budgetable_id',
-        'recurrence',
         'target_value',
         'recurrence_types_id',
     ];
@@ -65,7 +63,6 @@ class Budget extends Model
             'user_id' => 'integer',
             'budgetable_type' => 'string',
             'budgetable_id' => 'integer',
-            'recurrence' => 'string',
             'target_value' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',

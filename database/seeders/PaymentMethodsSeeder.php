@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PaymentMethodsSeeder extends Seeder
@@ -21,7 +20,7 @@ class PaymentMethodsSeeder extends Seeder
             ['name' => 'Cartão de Débito'],
             ['name' => 'Transferência Bancária'],
         ];
-        
+
         foreach ($paymentsMethods as $method) {
             \App\Models\PaymentMethod::create($method);
         }

@@ -2,27 +2,33 @@
 
 namespace App\Livewire\Pages\Settings\Banks\Partials;
 
+use App\Livewire\Forms\BanksAccountForm;
 use App\Models\Bank;
-use Mary\Traits\Toast;
-use Livewire\Component;
-use Livewire\Attributes\On;
 use App\Models\BanksAccount;
 use Illuminate\Support\Facades\Auth;
-use App\Livewire\Forms\BanksAccountForm;
+use Livewire\Attributes\On;
+use Livewire\Component;
+use Mary\Traits\Toast;
 
 class Modal extends Component
 {
     use Toast;
-    
+
     public BanksAccountForm $form;
+
     public $account;
+
     public $modalOpen = false;
-    public $title = "";
+
+    public $title = '';
+
     public $function;
+
     public $results = [];
 
     #[On('openModal')]
-    public function open($data){
+    public function open($data)
+    {
         $this->modalOpen = true;
         switch ($data['function']) {
             case 'create':
@@ -52,7 +58,8 @@ class Modal extends Component
         $this->search();
     }
 
-    public function search(string $value = ''){
+    public function search(string $value = '')
+    {
         switch ($this->function) {
             case 'create':
                 $this->results = Bank::where('name', 'like', '%'.$value.'%')
@@ -71,23 +78,25 @@ class Modal extends Component
                     ->get()
                     ->merge($selectedOption);
                 break;
-                    
+
         }
     }
 
-    public function close(){
+    public function close()
+    {
         $this->modalOpen = false;
         $this->reset();
     }
 
-    public function save(){
+    public function save()
+    {
 
         switch ($this->function) {
             case 'create':
                 $validated = $this->validate();
                 BanksAccount::create([
                     ...$validated,
-                    'user_id' => Auth::id()
+                    'user_id' => Auth::id(),
                 ]);
                 $this->success('Conta criada com sucesso');
                 $this->close();
@@ -106,7 +115,7 @@ class Modal extends Component
                 $this->success('Conta excluída com sucesso');
                 $this->close();
                 break;
-            
+
         }
 
         $this->dispatch('refresh');

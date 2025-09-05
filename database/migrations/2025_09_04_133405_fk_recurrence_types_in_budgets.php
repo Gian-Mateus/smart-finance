@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('budgets', function (Blueprint $table) {
             $table->foreignId('recurrence_types_id')->constrained('recurrence_types')
-                                                    ->onUpdate('cascade')
-                                                    ->onDelete('cascade');
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
