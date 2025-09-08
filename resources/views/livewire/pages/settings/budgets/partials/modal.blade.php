@@ -5,7 +5,6 @@
     <x-form wire:submit="save" class="flex flex-col gap-2">
         @if ($this->function == "delete")
             <p class="text-md">Tem certeza que deseja excluir este orçamento?</p>
-            
         @else
 
         @switch($this->type)
@@ -45,8 +44,9 @@
         <x-select
             icon="o-clock"
             label="Recorrência"
-            wire:model="form.recurrence"
-            :options="$recurrences"
+            placeholder="Selecione a recorrência"
+            wire:model="form.recurrence_types_id"
+            :options="$this->recurrences"
         />
 
         @endif

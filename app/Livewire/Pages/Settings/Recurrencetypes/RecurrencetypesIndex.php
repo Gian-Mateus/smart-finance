@@ -15,6 +15,11 @@ class RecurrencetypesIndex extends Component
         return RecurrenceType::where('user_id', Auth::id())->get();
     }
 
+    public function newRecurrence()
+    {
+        $this->dispatch('openModal', ['type' => 'create']);
+    }
+
     public function render()
     {
         return view('livewire.pages.settings.recurrencetypes.recurrencetypes-index');

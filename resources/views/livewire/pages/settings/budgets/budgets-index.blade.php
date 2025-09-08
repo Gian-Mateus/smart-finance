@@ -22,7 +22,7 @@
                     </div>
                     <div class="text-sm">
                         <div>
-                            <span>Recorrência:</span> {{ $budget->recurrence }}
+                            <span>Recorrência:</span> {{ $budget->recurrenceTypes->type == 'custom' ? 'Customizado: '.$budget->recurrenceTypes->name : $budget->recurrenceTypes->name }}
                         </div>
                         <div>
                             Valor: R$ {{ $this->showBRL($budget->target_value) }}

@@ -1,6 +1,6 @@
 <div>
     <x-header title="Transações recorrentes" subtitle="Aqui você define recorrências personalizadas para suas transações" separator/>
-    <x-button label="Nova Recorrência" icon="s-plus-small" class="btn-primary my-4" />
+    <x-button label="Nova Recorrência" icon="s-plus-small" class="btn-primary my-4" wire:click="newRecurrence" />
 
     <div class="container">
         <div class="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 mx-auto gap-8">
@@ -72,4 +72,6 @@
             @endforeach
         </div>
     </div>
+
+    <livewire:pages.settings.recurrencetypes.partials.modal />
 </div>
