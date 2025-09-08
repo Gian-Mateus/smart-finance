@@ -29,7 +29,7 @@ class BudgetsIndex extends Component
                         Subcategory::class,
                         Category::class,
                     ]);
-                },
+                }, 'recurrenceTypes:id,name,type'
 
             ])
             ->orderByDesc('created_at')

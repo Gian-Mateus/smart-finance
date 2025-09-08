@@ -2,19 +2,24 @@
 
 namespace App\Livewire\Pages\Settings\Budgets\Partials;
 
-use App\Livewire\Forms\BudgetsForm;
+use App\MoneyBRL;
 use App\Models\Budget;
+use Mary\Traits\Toast;
+use Livewire\Component;
 use App\Models\Category;
 use App\Models\Subcategory;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
-use Livewire\Component;
-use Mary\Traits\Toast;
+use App\Models\RecurrenceType;
+use Livewire\Attributes\Computed;
+use App\Livewire\Forms\BudgetsForm;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 
 class Modal extends Component
 {
     use Toast;
+
+    use MoneyBRL;
 
     public BudgetsForm $form;
 
@@ -26,14 +31,13 @@ class Modal extends Component
 
     public $title = '';
 
-    public array $recurrences = [
-        ['id' => 'monthly', 'name' => 'Mensal'],
-        ['id' => 'daily', 'name' => 'Diário'],
-        ['id' => 'weekly', 'name' => 'Semanal'],
-        ['id' => 'yearly', 'name' => 'Anual'],
-    ];
-
     public Collection $options; // Coleção genérica para categorias ou subcategorias
+
+    #[Computed]
+    public function recurrences()
+    {
+        return RecurrenceType::where('user_id', Auth::id())->get();
+    }
 
     #[On('openModal')]
     public function openModal($data)
@@ -46,7 +50,7 @@ class Modal extends Component
                 $this->function = $data['function'];
                 $this->type = $data['type'];
                 $this->form->budgetable_type = $data['type'] == 'category' ? Category::class : Subcategory::class;
-                $this->form->recurrence = $this->recurrences[0]['id']; // Define valor padrão
+                //$this->form->recurrence = $this->recurrences[0]['id'];
                 break;
 
             case 'edit':
@@ -54,8 +58,8 @@ class Modal extends Component
                 $this->title = $data['type'] == 'category' ? 'Editando Orçamento' : 'Editando Sub-Orçamento';
                 $this->function = $data['function'];
                 $this->type = $data['type'];
-                $this->form->recurrence = collect($this->recurrences)->firstWhere('name', $data['data']['recurrence'])['id'];
-                $this->form->target_value = $data['data']['target_value'];
+                $this->form->recurrence_types_id = $data['data']['recurrence_types_id'];
+                $this->form->target_value = $this->showBRL($data['data']['target_value']);
                 $this->form->budgetable_id = $data['data']['id'];
                 $this->form->budgetable_type = $data['data']['budgetable_type'];
                 break;
@@ -64,7 +68,7 @@ class Modal extends Component
                 $this->title = $data['type'] == 'category' ? 'Deletar Orçamento' : 'Deletar Sub-Orçamento';
                 $this->function = $data['function'];
                 $this->type = $data['type'];
-                $this->form->recurrence = collect($this->recurrences)->firstWhere('name', $data['data']['recurrence'])['id'];
+                $this->form->recurrence_types_id = $data['data']['recurrence_types_id'];
                 $this->form->target_value = $data['data']['target_value'];
                 $this->form->budgetable_id = $data['data']['id'];
                 $this->form->budgetable_type = $data['data']['budgetable_type'];
@@ -117,28 +121,21 @@ class Modal extends Component
     public function save()
     {
 
-        $validated = $this->validate();
-
         switch ($this->function) {
             case 'create':
-                // dd($validated);
-                Budget::create([
-                    ...$validated,
-                    'user_id' => Auth::id(),
-                ]);
+                $this->form->store();
                 $this->success('Orçamento criado com sucesso.');
                 $this->close();
                 break;
 
             case 'edit':
-                $budget = Budget::where('user_id', Auth::id())->where('id', $this->form->budgetable_id)->first();
-                $budget->update($validated);
+                $this->form->update();
                 $this->success('Orçamento atualizado com sucesso.');
                 $this->close();
                 break;
 
             case 'delete':
-                $budget = Budget::where('user_id', Auth::id())->where('id', $this->form->budgetable_id)->delete();
+                $this->form->delete();
                 $this->success('Orçamento deletado com sucesso.');
                 $this->close();
                 break;
