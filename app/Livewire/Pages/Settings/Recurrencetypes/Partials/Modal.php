@@ -12,10 +12,37 @@ class Modal extends Component
     public $type;
     public $title;
 
+    // public $selectsTypes = [
+    //     ['id' => 'interval', 'label' => 'Intervalo Customizado'],
+    //     ['id' => 'day_of_month', 'label' => 'Todo dia do mês'],
+    //     ['id' => 'week_day', 'label' => 'Todo dia da semana']
+    // ];
+
+
+    // ATUALIZE esta propriedade com os tipos que vamos usar
     public $selectsTypes = [
-        ['id' => 'interval', 'label' => 'Intervalo Customizado'],
-        ['id' => 'day_of_month', 'label' => 'Todo dia do mês'],
-        ['id' => 'week_day', 'label' => 'Todo dia da semana']
+        ['id' => 'monthly', 'label' => 'Mês'],
+        ['id' => 'weekly', 'label' => 'Semana'],
+        ['id' => 'interval', 'label' => 'Intervalo de dias'],
+        ['id' => 'yearly', 'label' => 'Ano'],
+    ];
+
+    // ADICIONE esta propriedade para os dias da semana
+    public $weekDays = [
+        ['id' => 'monday', 'label' => 'Segunda-feira'],
+        ['id' => 'tuesday', 'label' => 'Terça-feira'],
+        ['id' => 'wednesday', 'label' => 'Quarta-feira'],
+        ['id' => 'thursday', 'label' => 'Quinta-feira'],
+        ['id' => 'friday', 'label' => 'Sexta-feira'],
+        ['id' => 'saturday', 'label' => 'Sábado'],
+        ['id' => 'sunday', 'label' => 'Domingo'],
+    ];
+
+    // ADICIONE esta propriedade para as condições de término
+    public $endConditions = [
+        ['id' => 'never', 'label' => 'Nunca'],
+        ['id' => 'on_date', 'label' => 'Numa data específica'],
+        ['id' => 'after_occurrences', 'label' => 'Após um nº de ocorrências'],
     ];
 
     public RecurrenceTypeForm $form;
