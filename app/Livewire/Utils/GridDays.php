@@ -3,10 +3,15 @@
 namespace App\Livewire\Utils;
 
 use Livewire\Component;
+use Livewire\Attributes\Modelable;
 
 class GridDays extends Component
 {
     public array $days = [];
+
+    #[Modelable]
+    public $day;
+    public $label;
 
     public function mount()
     {
