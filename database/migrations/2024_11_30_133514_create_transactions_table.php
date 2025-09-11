@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
+            $table->string('id_transaction_external');
 
             $table->foreignId('user_id')
                 ->constrained('users')

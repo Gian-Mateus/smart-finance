@@ -45,11 +45,11 @@
 
 				{{-- MENU --}}
 				<x-menu activate-by-route>
-					<x-menu-item title="Dahsboard" icon="o-chart-pie" link="/" />
-					<x-menu-item title="Extrato" icon="c-arrows-up-down" link="/" />
-					<x-menu-item title="Recorrentes" icon="o-clock" link="/" />
+					<x-menu-item title="Dahsboard" icon="o-chart-pie" link="{{ route('dashboard.index') }}" />
+					<x-menu-item title="Extrato" icon="c-arrows-up-down" link="{{ route('statements') }}" />
+					<x-menu-item title="Recorrentes" icon="o-clock" link="####" />
 					<x-menu-item title="Importar arquivo" icon="o-document-arrow-up"
-						link="/" />
+						link="{{ route('imports') }}" />
 					<x-menu-item title="Perfil" icon="o-user-circle" />
 					<x-menu-sub title="Configurações" icon="o-cog-6-tooth">
 						<x-menu-item title="Bancos/Contas" icon="c-building-library" link="{{ route('banks') }}" />
