@@ -9,7 +9,7 @@
 
         <div class="col-span-1">
             <x-button label="Importar OFX" icon="o-arrow-down-tray" wire:click="openModal('ofx')"/>
-            <x-button label="Importar CSV" icon="o-table-cells" wire:click="openModal('csv')"/>
+            {{-- <x-button label="Importar CSV" icon="o-table-cells" wire:click="openModal('csv')"/> --}}
         </div>
     </div>
     <livewire:pages.imports.partials.modal />
