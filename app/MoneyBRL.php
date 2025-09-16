@@ -33,4 +33,14 @@ trait MoneyBRL
     {
         return $value / 10000;
     }
+
+    public function floatToInteger(float $value): int
+    {
+
+        $scaledValue = $value * 10000;
+
+        $roundedValue = intval($scaledValue);
+
+        return $roundedValue;
+    }
 }
