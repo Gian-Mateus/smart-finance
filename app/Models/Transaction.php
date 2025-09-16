@@ -47,12 +47,14 @@ class Transaction extends Model
      */
     protected $fillable = [
         'id',
+        'id_transaction_external',
         'user_id',
         'bank_account_id',
         'category_id',
         'subcategory_id',
         'recurrence_types_id',
         'payment_methods_id',
+        'imports_id',
         'value',
         'date',
         'description',
@@ -75,12 +77,14 @@ class Transaction extends Model
     {
         return [
             'id' => 'integer',
+            'id_transaction_external' => 'string',
             'user_id' => 'integer',
             'bank_account_id' => 'integer',
             'category_id' => 'integer',
             'subcategory_id' => 'integer',
             'recurrence_types_id' => 'integer',
             'payment_methods_id' => 'integer',
+            'imports_id' => 'integer',
             'value' => 'integer',
             'date' => 'datetime',
             'description' => 'string',

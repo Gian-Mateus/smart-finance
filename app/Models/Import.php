@@ -36,8 +36,12 @@ class Import extends Model
     protected $fillable = [
         'id',
         'user_id',
-        'file_name',
+        'file_original_name',
+        'file_locale_name',
+        'file_path',
         'file_type',
+        'banks_accounts_id',
+        'status',
         'imported_at',
     ];
 
@@ -57,7 +61,10 @@ class Import extends Model
         return [
             'id' => 'integer',
             'user_id' => 'integer',
-            'file_name' => 'string',
+            'banks_accounts_id' => 'integer',
+            'file_original_name' => 'string',
+            'file_locale_name' => 'string',
+            'file_path' => 'string',
             'file_type' => 'string',
             'imported_at' => 'datetime',
             'created_at' => 'datetime',
@@ -71,5 +78,10 @@ class Import extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function banksAccount(): BelongsTo
+    {
+        return $this->belongsTo(Bank::class, 'banks_accounts_id');
     }
 }

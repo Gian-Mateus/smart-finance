@@ -19,9 +19,15 @@ return new class extends Migration
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
 
-            $table->string('file_name', 50); // nome_arquivo VARCHAR(50) NOT NULL
+            $table->string('file_original_name', 50);
+            $table->string('file_locale_name', 50);
+            $table->string('file_path');
             $table->string('file_type', 50); // tipo_arquivo VARCHAR(50) NOT NULL
             $table->timestamp('imported_at');
+
+            $table->enum('status', ['pending', 'processing', 'completed', 'failed'])
+                ->default('pending');
+
             $table->timestamps();
         });
     }
