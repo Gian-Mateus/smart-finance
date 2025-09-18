@@ -19,6 +19,8 @@ class PaymentMethodsSeeder extends Seeder
             ['name' => 'Cartão de Crédito'],
             ['name' => 'Cartão de Débito'],
             ['name' => 'Transferência Bancária'],
+            ['name' => 'Débito em conta'],
+            ['name' => 'Débito automático'],
         ];
 
         foreach ($paymentsMethods as $method) {
