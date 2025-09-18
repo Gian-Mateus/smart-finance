@@ -44,6 +44,7 @@ return new class extends Migration
                 ->nullOnDelete(); // FOREIGN KEY periodicidade_id
 
             $table->foreignId('payment_methods_id')
+                ->nullable()
                 ->constrained('payment_methods')
                 ->cascadeOnUpdate()
                 ->nullOnDelete(); // FOREIGN KEY forma_pagamento_id
@@ -53,6 +54,9 @@ return new class extends Migration
             $table->string('description', 255); // descricao VARCHAR(255) NOT NULL
             $table->text('observation')->nullable(); // observacao TEXT NULL
             $table->boolean('type'); // 0 = débito / 1 = crédito
+
+            $table->integer('running_balance')->nullable();
+
             $table->timestamps();
         });
     }
