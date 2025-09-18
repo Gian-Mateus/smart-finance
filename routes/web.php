@@ -45,4 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/bancos-contas', BankIndex::class)->name('banks');
     Route::get('/orcamentos', BudgetsIndex::class)->name('budgets');
     Route::get('/transacoes-recorrentes', RecurrencetypesIndex::class)->name('recurrences');
+
+    // Route::get('/parser', function () {
+    //     $parser = new App\OFXParser();
+    //     return $parser->parse("/wiki/extrato.ofx");
+    // });
 });
