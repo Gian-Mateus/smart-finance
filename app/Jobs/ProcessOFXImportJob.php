@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Models\Import;
 use App\Models\Transaction;
 use App\MoneyBRL;
-use Endeken\OFX\OFX;
+use App\OFXParser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -39,30 +39,25 @@ class ProcessOFXImportJob implements ShouldQueue
                 throw new \Exception("Arquivo de importação não encontrado em: {$this->filePath}");
             }
 
-            $ofxContent = Storage::disk('local')->get($this->filePath);
-            $ofxContent = preg_replace('/\[0:(\w+)\]/', '[+0:$1]', $ofxContent);
-            $ofxContent = preg_replace('/\\[([-+]\\d+):BRT\\]/', '[$1:UTC]', $ofxContent);
-            $ofx = OFX::parse($ofxContent);
+            $file = file(storage_path('app/private/'.$this->filePath));
 
-            foreach ($ofx->bankAccounts as $bankAccount) {
-                
-                foreach ($bankAccount->statement->transactions as $ofxTransaction) {
-                    $ofxTransaction->amount = $this->toInteger($ofxTransaction->amount);
+            $parser = new OFXParser();
+            $ofx = $parser->parse($file);
 
-                    Transaction::updateOrCreate(
-                        [
-                            'id_transaction_external' => $ofxTransaction->uniqueId,
-                            'user_id' => $this->import->user_id,
-                            'bank_account_id' => $this->import->banks_accounts_id,
-                            'payment_methods_id' => $ofxTransaction->type,
-                            'imports_id' => $this->import->id,
-                            'value' => $this->floatToInteger($ofxTransaction->amount),
-                            'date' => $ofxTransaction->date,
-                            'description' => $ofxTransaction->memo,
-                            'type' => $ofxTransaction->type == 'CREDIT' ? 1 : 0,
-                        ]
-                    );
-                }
+            foreach ($ofx['transactions'] as $tr) {
+
+                Transaction::updateOrCreate(
+                    [
+                        'id_transaction_external' => $tr['id'],
+                        'user_id' => $this->import->user_id,
+                        'bank_account_id' => $this->import->banks_accounts_id,
+                        'imports_id' => $this->import->id,
+                        'value' => $this->floatToInteger($tr['amount']),
+                        'date' => $tr['date'],
+                        'description' => $tr['description'],
+                        'type' => $tr['type'] == 'CREDIT' ? 1 : 0,
+                    ]
+                );
             }
 
         } catch (Throwable $e) {
