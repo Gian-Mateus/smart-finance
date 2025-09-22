@@ -82,6 +82,6 @@ class Import extends Model
 
     public function banksAccount(): BelongsTo
     {
-        return $this->belongsTo(Bank::class, 'banks_accounts_id');
+        return $this->belongsTo(BanksAccount::class, 'banks_accounts_id');
     }
 }
