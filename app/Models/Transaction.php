@@ -59,7 +59,7 @@ class Transaction extends Model
         'date',
         'description',
         'observation',
-        'type',
+        'type', // 0 = débito / 1 = crédito
     ];
 
     /**
