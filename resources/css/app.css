@@ -3,7 +3,7 @@
  
 /* daisyUI */
 @plugin "daisyui" {         
-    themes: coffee --default, dark --prefersdark, light;   
+    themes: halloween --default, dark --prefersdark, light;   
 }   
  
 /* maryUI */
