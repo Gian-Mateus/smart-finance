@@ -30,6 +30,7 @@ class Index extends Component
     public $configDatePicker = ['mode' => 'range', 'altFormat' => 'd/m/Y'];
     public $initialDate;
     public $endDate;
+    public $currentFilter = "Últimos 15 dias";
 
     #[Computed]
     public function accounts()
@@ -105,16 +106,22 @@ class Index extends Component
             $dateRange = explode('até', $this->dateRange);
             $this->initialDate = $dateRange[0];
             $this->endDate = $dateRange[1];
+            $this->range = null;
+            $this->reset('year', 'month');
             $this->transactions();
-            $this->reset();
             return;
         }
 
         if($this->year != null && $this->month != null){
-            $this->initialDate = new Carbon($this->year, $this->month + 1, 1);
-            $this->endDate = new Carbon($this->year, $this->month + 1, 1);
+            $this->initialDate = Carbon::parse($this->year.'-'.$this->month + 1)->startOfMonth()->format('Y-m-d');
+            $this->endDate = Carbon::parse($this->year.'-'.$this->month + 1)->endOfMonth()->format('Y-m-d');
+            //dd($this->year, $this->month,$this->initialDate, $this->endDate);
+            $this->range = null;
+            $this->reset('dateRange');
+            $this->transactions();
+            return;
         }
-
+        //dd($this->range, $this->year, $this->month);
 
     }
 

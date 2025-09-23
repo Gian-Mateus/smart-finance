@@ -11,13 +11,13 @@
                 </x-slot:trigger>
 
                 <div class="p-4 grid grid-cols-2 gap-2">
-                    <x-button wire:click="$set('range', 7)" label="Últimos 7 dias" class="btn-neutral"/>
-                    <x-button wire:click="$set('range', 15)" label="Últimos 15 dias" class="btn-neutral" />
-                    <x-button wire:click="$set('range', 30)" label="Últimos 30 dias" class="btn-neutral" />
-                    <x-button wire:click="$set('range', 60)" label="Últimos 60 dias" class="btn-neutral" />
+                    <x-button wire:click="$set('range', 7); $wire.set('currentFilter', 'Últimos 7 dias')" label="Últimos 7 dias" class="btn-neutral"/>
+                    <x-button wire:click="$set('range', 15); $wire.set('currentFilter', 'Últimos 15 dias')" label="Últimos 15 dias" class="btn-neutral" />
+                    <x-button wire:click="$set('range', 30); $wire.set('currentFilter', 'Últimos 30 dias')" label="Últimos 30 dias" class="btn-neutral" />
+                    <x-button wire:click="$set('range', 60); $wire.set('currentFilter', 'Últimos 60 dias')" label="Últimos 60 dias" class="btn-neutral" />
 
                     <div class="col-span-2" @click.stop="">
-                        <x-datepicker label="Período personalizado" wire:model="dateRange" icon="o-calendar" :config="$configDatePicker"/>
+                        <x-datepicker label="Período personalizado" wire:model="dateRange" icon="o-calendar" :config="$configDatePicker" @click.stop=""/>
                     </div>
                     
                     <div class="flex-1">
@@ -31,11 +31,19 @@
                     <x-button label="Filtrar" class="btn-primary col-span-2" wire:click="filter"/>
                 </div>
             </x-dropdown>
+            <div class="flex items-center justify-center gap-1">
+                <span>Filtro atual: </span>
+                <span class="text-secondary">{{ $currentFilter }}.</span>
+            </div>
         </div>
 
         <div class="p-4 mt-4 border-1 rounded-xl">
             {{-- {{dd($rows)}} --}}
-            <x-table :rows="$this->transactions" :headers="$headers" striped />
+            <x-table :rows="$this->transactions" :headers="$headers" striped>
+                <x-slot:empty>
+                    <x-icon name="o-cube" label="Sem histórico de transações para esse período." />
+                </x-slot:empty>
+            </x-table>
         </div>
     </div>
 </div>
