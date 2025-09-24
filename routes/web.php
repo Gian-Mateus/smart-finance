@@ -11,6 +11,7 @@ use App\Livewire\Pages\Settings\Banks\BankIndex;
 use App\Livewire\Pages\Settings\Budgets\BudgetsIndex;
 use App\Livewire\Pages\Settings\Categories\CategoriesIndex;
 use App\Livewire\Pages\Settings\Recurrencetypes\RecurrencetypesIndex;
+use App\Livewire\Utils\Datepicker;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,4 +51,6 @@ Route::middleware('auth')->group(function () {
     //     $parser = new App\OFXParser();
     //     return $parser->parse("/wiki/extrato.ofx");
     // });
+
+    Route::get('/date-picker', Datepicker::class);
 });
