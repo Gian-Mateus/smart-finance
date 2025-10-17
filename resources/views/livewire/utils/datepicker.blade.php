@@ -1,5 +1,7 @@
 <div
-    x-data="{ open: false }"
+    x-data="{ 
+        open: false,
+    }"
 >
     @php
         $range = true;
@@ -35,9 +37,9 @@
             <ul class="grid grid-cols-7 gap-2 p-4 text-center">
                 @foreach ($this->calendarDays($now->month, $now->year) as $day)
                     <li @class([
+                        'p-1',
                         'opacity-50' => !$day['current'], // Dias fora do mês atual ficam "apagados"
-                        'font-bold' => $day['current'],   // Dias do mês atual em destaque
-                        'bg-primary text-primary-content rounded-md cursor-pointer hover:brightness-90' => $day['isToday'], // Hoje em destaque
+                        'font-bold bg-primary text-primary-content rounded-md cursor-pointer hover:brightness-90' => $day['isToday'], // Hoje em destaque
                     ])>
                         {{ $day['date']->format('d') }}
                     </li>
