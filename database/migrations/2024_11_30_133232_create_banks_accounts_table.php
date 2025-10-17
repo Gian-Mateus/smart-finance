@@ -4,26 +4,30 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('banks_accounts', function (Blueprint $table) {
+        Schema::create("banks_accounts", function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->constrained('users')
+            $table
+                ->foreignId("user_id")
+                ->constrained("users")
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
 
-            $table->foreignId('bank_id')->constrained('banks')
+            $table
+                ->foreignId("bank_id")
+                ->nullable()
+                ->constrained("banks")
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
 
-            $table->string('name', 100);
-            $table->integer('account_number')->nullable();
+            $table->string("name", 100);
+            $table->integer("account_number")->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('banks_accounts');
+        Schema::dropIfExists("banks_accounts");
     }
 };

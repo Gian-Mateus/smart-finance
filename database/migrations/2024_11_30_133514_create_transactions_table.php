@@ -4,58 +4,64 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create("transactions", function (Blueprint $table) {
             $table->id(); // id INT NOT NULL AUTO_INCREMENT
-            $table->string('id_transaction_external');
+            $table->string("id_transaction_external");
 
-            $table->foreignId('user_id')
-                ->constrained('users')
+            $table
+                ->foreignId("user_id")
+                ->constrained("users")
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate(); // FOREIGN KEY usuario_id
 
-            $table->foreignId('bank_account_id')
-                ->constrained('banks_accounts')
+            $table
+                ->foreignId("bank_account_id")
+                ->nullable()
+                ->constrained("banks_accounts")
                 ->cascadeOnUpdate()
                 ->nullOnDelete(); // FOREIGN KEY banco_id
 
-            $table->foreignId('category_id')
+            $table
+                ->foreignId("category_id")
                 ->nullable()
-                ->constrained('categories')
+                ->constrained("categories")
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
 
-            $table->foreignId('subcategory_id')
+            $table
+                ->foreignId("subcategory_id")
                 ->nullable()
-                ->constrained('subcategories')
+                ->constrained("subcategories")
                 ->cascadeOnUpdate()
                 ->nullOnDelete(); // FOREIGN KEY subcategoria_id
 
-            $table->foreignId('recurrence_types_id')
+            $table
+                ->foreignId("recurrence_types_id")
                 ->nullable()
-                ->constrained('recurrence_types')
+                ->constrained("recurrence_types")
                 ->cascadeOnUpdate()
                 ->nullOnDelete(); // FOREIGN KEY periodicidade_id
 
-            $table->foreignId('payment_methods_id')
+            $table
+                ->foreignId("payment_methods_id")
                 ->nullable()
-                ->constrained('payment_methods')
+                ->constrained("payment_methods")
                 ->cascadeOnUpdate()
                 ->nullOnDelete(); // FOREIGN KEY forma_pagamento_id
 
-            $table->integer('value'); // valor INT() NOT NULL
-            $table->date('date'); // data DATE NOT NULL
-            $table->string('description', 255); // descricao VARCHAR(255) NOT NULL
-            $table->text('observation')->nullable(); // observacao TEXT NULL
-            $table->boolean('type'); // 0 = débito / 1 = crédito
+            $table->integer("value"); // valor INT() NOT NULL
+            $table->date("date"); // data DATE NOT NULL
+            $table->string("description", 255); // descricao VARCHAR(255) NOT NULL
+            $table->text("observation")->nullable(); // observacao TEXT NULL
+            $table->boolean("type"); // 0 = débito / 1 = crédito
 
-            $table->integer('running_balance')->nullable();
+            $table->integer("running_balance")->nullable();
 
             $table->timestamps();
         });
@@ -66,6 +72,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists("transactions");
     }
 };
