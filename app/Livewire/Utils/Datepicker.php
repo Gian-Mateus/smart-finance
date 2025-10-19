@@ -12,22 +12,21 @@ class Datepicker extends Component
 {
     public $uuid;
     public $months = [
-        ['id' => '1', 'name' => 'Janeiro'],
-        ['id' => '2', 'name' => 'Fevereiro'],
-        ['id' => '3', 'name' => 'Março'],
-        ['id' => '4', 'name' => 'Abril'],
-        ['id' => '5', 'name' => 'Maio'],
-        ['id' => '6', 'name' => 'Junho'],
-        ['id' => '7', 'name' => 'Julho'],
-        ['id' => '8', 'name' => 'Agosto'],
-        ['id' => '9', 'name' => 'Setembro'],
-        ['id' => '10', 'name' => 'Outubro'],
-        ['id' => '11', 'name' => 'Novembro'],
-        ['id' => '12', 'name' => 'Dezembro'],
+        ["id" => "1", "name" => "Janeiro"],
+        ["id" => "2", "name" => "Fevereiro"],
+        ["id" => "3", "name" => "Março"],
+        ["id" => "4", "name" => "Abril"],
+        ["id" => "5", "name" => "Maio"],
+        ["id" => "6", "name" => "Junho"],
+        ["id" => "7", "name" => "Julho"],
+        ["id" => "8", "name" => "Agosto"],
+        ["id" => "9", "name" => "Setembro"],
+        ["id" => "10", "name" => "Outubro"],
+        ["id" => "11", "name" => "Novembro"],
+        ["id" => "12", "name" => "Dezembro"],
     ];
 
     public bool $range;
-
 
     #[Modelable]
     public $value;
@@ -37,32 +36,28 @@ class Datepicker extends Component
     #[Computed]
     public function period($month = null, $year = null)
     {
-        $month = $month ?? Carbon::now()->month;
-        $year = $year ?? Carbon::now()->year;
+        $month ??= Carbon::now()->month;
+        $year ??= Carbon::now()->year;
 
-        $start = Carbon::parse($year . '-' . $month - 1)->startOfMonth();
-        $end = Carbon::parse($year . '-' . $month)->endOfMonth();
+        $start = Carbon::parse($year . "-" . $month - 1)->startOfMonth();
+        $end = Carbon::parse("{$year}-{$month}")->endOfMonth();
 
         return CarbonPeriod::create($start, $end);
     }
 
     public function setMonth($direc)
     {
-        switch ($direc) {
-            case 'inc':
-                $this->now = $this->now->copy()->addMonth();
-                break;
-
-            case 'dec':
-                $this->now = $this->now->copy()->subMonth();
-            break;
-        }
+        $this->now = match ($direc) {
+            "inc" => $this->now->copy()->addMonth(),
+            "dec" => $this->now->copy()->subMonth(),
+            default => $this->now,
+        };
     }
 
     public function calendarDays($month = null, $year = null)
     {
-        $month = $month ?? Carbon::now()->month;
-        $year = $year ?? Carbon::now()->year;
+        $month ??= Carbon::now()->month;
+        $year ??= Carbon::now()->year;
 
         // Primeiro e último dia do mês atual
         $startOfMonth = Carbon::create($year, $month, 1);
@@ -78,9 +73,9 @@ class Datepicker extends Component
             $prevMonthEndDay = $prevMonth->daysInMonth;
             for ($i = $startDayOfWeek - 1; $i >= 0; $i--) {
                 $days[] = [
-                    'date' => $prevMonth->copy()->day($prevMonthEndDay - $i),
-                    'current' => false,
-                    'isToday' => false
+                    "date" => $prevMonth->copy()->day($prevMonthEndDay - $i),
+                    "current" => false,
+                    "isToday" => false,
                 ];
             }
         }
@@ -88,9 +83,9 @@ class Datepicker extends Component
         // Dias do mês atual
         for ($d = 1; $d <= $endOfMonth->day; $d++) {
             $days[] = [
-                'date' => $startOfMonth->copy()->day($d),
-                'current' => true,
-                'isToday' => $startOfMonth->copy()->day($d)->isToday()
+                "date" => $startOfMonth->copy()->day($d),
+                "current" => true,
+                "isToday" => $startOfMonth->copy()->day($d)->isToday(),
             ];
         }
 
@@ -100,9 +95,9 @@ class Datepicker extends Component
             $nextMonth = $startOfMonth->copy()->addMonth();
             for ($i = 1; $i <= $remaining; $i++) {
                 $days[] = [
-                    'date' => $nextMonth->copy()->day($i),
-                    'current' => false,
-                    'isToday' => false
+                    "date" => $nextMonth->copy()->day($i),
+                    "current" => false,
+                    "isToday" => false,
                 ];
             }
         }
@@ -118,6 +113,6 @@ class Datepicker extends Component
 
     public function render()
     {
-        return view('livewire.utils.datepicker');
+        return view("livewire.utils.datepicker");
     }
 }
