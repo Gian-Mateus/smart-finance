@@ -26,7 +26,7 @@ class Datepicker extends Component
         ["id" => "12", "name" => "Dezembro"],
     ];
 
-    public bool $range;
+    public ?bool $range = null;
 
     #[Modelable]
     public $value;
@@ -63,6 +63,11 @@ class Datepicker extends Component
         $startOfMonth = Carbon::create($year, $month, 1);
         $endOfMonth = $startOfMonth->copy()->endOfMonth();
 
+        // Se range ativo, incluir também o mês anterior completo
+        if ($this->range) {
+            $startOfMonth = $startOfMonth->copy()->subMonth(); // Começar do mês anterior
+        }
+
         // Dia da semana do primeiro dia (0 = domingo, 6 = sábado)
         $startDayOfWeek = $startOfMonth->dayOfWeek;
 
@@ -79,14 +84,16 @@ class Datepicker extends Component
                 ];
             }
         }
-
-        // Dias do mês atual
-        for ($d = 1; $d <= $endOfMonth->day; $d++) {
+        
+        // Dias do(s) mês(es) atual(is)
+        $currentDate = $startOfMonth->copy();
+        while ($currentDate <= $endOfMonth) {
             $days[] = [
-                "date" => $startOfMonth->copy()->day($d),
+                "date" => $currentDate->copy(),
                 "current" => true,
-                "isToday" => $startOfMonth->copy()->day($d)->isToday(),
+                "isToday" => $currentDate->isToday(),
             ];
+            $currentDate->addDay();
         }
 
         // Dias do mês seguinte para preencher o final
@@ -105,8 +112,9 @@ class Datepicker extends Component
         return $days;
     }
 
-    public function mount()
+    public function mount($range = true)
     {
+        $this->range = $range;
         $this->now = Carbon::now();
         $this->uuid = uniqid();
     }

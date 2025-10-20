@@ -1,6 +1,6 @@
 <div
     x-data="{
-        open: false,
+        open: true,
         startDate: null,
         endDate: null,
         maskDate(e, field) {
@@ -17,11 +17,11 @@
                        // Atualiza o valor do input e da propriedade correspondente
                        e.target.value = masked;
                        this[field] = masked;
-                       
+
                        // Encontra o fieldset pai do input
                         const fieldset = e.target.closest('fieldset');
                         const inputLabel = e.target.closest('label');
-                        
+
                         // Remove erro anterior
                         const existingError = fieldset.querySelector('.js-error-message');
                         if (existingError) existingError.remove();
@@ -33,7 +33,7 @@
                            if (!regex.test(masked)) {
                                 // Adiciona classe de erro ao input
                                 inputLabel.classList.add('!input-error');
-                                
+
                                 // Cria e adiciona mensagem de erro
                                 const errorDiv = document.createElement('div');
                                 errorDiv.className = 'text-error js-error-message';
@@ -42,6 +42,11 @@
                             }
                        }
         },
+        firstInput: false,
+        secondInput: false,
+        openPicker(){
+            this.open = true;
+        }
     }"
 >
     @php
@@ -49,14 +54,26 @@
     @endphp
     @if ($range)
     {{-- inputs --}}
-    <div class="flex gap-4" @click.prevent="open = !open" x-ref="trigger" id="trigger-{{ $uuid }}">
-        <x-input label="Dê:" icon="o-calendar" x-model="startDate" x-on:input="maskDate($event, 'startDate')" class="validator"/>
-        <x-input label="Até:" icon="o-calendar" x-model="endDate" x-on:input="maskDate($event, 'endDate')" class="validator"/>
+    <div class="flex gap-4" x-ref="trigger" id="trigger-{{ $uuid }}">
+        <x-input
+            label="Dê:"
+            icon="o-calendar"
+            x-model="startDate"
+            x-on:input="maskDate($event, 'startDate')"
+            @click="firstInput = true; openPicker()"
+        />
+        <x-input
+            label="Até:"
+            icon="o-calendar"
+            x-model="endDate"
+            x-on:input="maskDate($event, 'endDate')"
+            @click="secondInput = true; openPicker()"
+        />
     </div>
     @endif
     {{-- grid dates --}}
 
-    {{-- {{ dd($this->period) }} --}}
+    {{-- {{ dd($this->calendarDays($now->month, $now->year)[0]['date']->month) }} --}}
     <template x-teleport="main">
         <div
             id="{{ $uuid }}"
@@ -70,25 +87,30 @@
             <div class="flex items-center justify-between px-4 mt-2">
                 <x-button icon="o-arrow-left" class="btn-circle btn-ghost" @click="$wire.setMonth('dec')"/>
                 <div>
-                    {{ $months[$now->month - 1]['name'] }}
+                    {{ $months[$now->month - 2]['name'] }} - {{ $months[$now->month - 1]['name'] }}
                 </div>
                 <x-button icon="o-arrow-right" class="btn-circle btn-ghost" @click="$wire.setMonth('inc')"/>
             </div>
             <div class="h-1 bg-base-content w-[60%] mx-auto"></div>
             <ul class="grid grid-cols-7 gap-2 p-4 text-center">
                 @foreach ($this->calendarDays($now->month, $now->year) as $day)
-                    <li @class([
-                        'p-1',
-                        'opacity-50' => !$day['current'], // Dias fora do mês atual ficam "apagados"
-                        'font-bold bg-primary text-primary-content rounded-md cursor-pointer hover:brightness-90' => $day['isToday'], // Hoje em destaque
-                    ])>
-                        {{ $day['date']->format('d') }}
-                    </li>
-                @endforeach
+                @if (!$loop->first)
+                    @php
+                        $previousDay = $this->calendarDays($now->month, $now->year)[$loop->index - 1];
+                    @endphp
+                    @if ($day['date']->month == $previousDay['date']->month)
+                    @endif
+                @endif
+                <li @class([
+                    'p-1',
+                    'opacity-50' => !$day['current'], // Dias fora do mês atual ficam "apagados"
+                    'font-bold bg-primary text-primary-content rounded-md cursor-pointer hover:brightness-90' => $day['isToday'], // Hoje em destaque
+                ])>
+                    {{ $day['date']->format('d') }}
+                </li>
+            @endforeach
             </ul>
             @endif
         </div>
     </template>
-
-
 </div>
