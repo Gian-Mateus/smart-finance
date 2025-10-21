@@ -49,9 +49,21 @@
         }
     }"
 >
+
     @php
         $range = true;
+        
+        $days = collect($this->calendarDays($now->month, $now->year))->groupBy('date.month');
+        $teste = collect();
+        $startMonth = count($days) > 2 
+        ? $days->slice(0, 2)->flatten(1)
+        : $days->slice(0);
+        
+        $endMonth = count($days) > 2 
+        ? $days->slice(2)->flatten(1)
+        : $days->slice(1);
     @endphp
+    {{-- {{dd($startMonth)}} --}}
     @if ($range)
     {{-- inputs --}}
     <div class="flex gap-4" x-ref="trigger" id="trigger-{{ $uuid }}">
@@ -92,24 +104,30 @@
                 <x-button icon="o-arrow-right" class="btn-circle btn-ghost" @click="$wire.setMonth('inc')"/>
             </div>
             <div class="h-1 bg-base-content w-[60%] mx-auto"></div>
-            <ul class="grid grid-cols-7 gap-2 p-4 text-center">
-                @foreach ($this->calendarDays($now->month, $now->year) as $day)
-                @if (!$loop->first)
-                    @php
-                        $previousDay = $this->calendarDays($now->month, $now->year)[$loop->index - 1];
-                    @endphp
-                    @if ($day['date']->month == $previousDay['date']->month)
-                    @endif
-                @endif
-                <li @class([
-                    'p-1',
-                    'opacity-50' => !$day['current'], // Dias fora do mês atual ficam "apagados"
-                    'font-bold bg-primary text-primary-content rounded-md cursor-pointer hover:brightness-90' => $day['isToday'], // Hoje em destaque
-                ])>
-                    {{ $day['date']->format('d') }}
-                </li>
-            @endforeach
-            </ul>
+            <div class="flex">
+                <ul class="grid grid-cols-7 gap-2 p-4 text-center">
+                    @foreach ($startMonth as $day)
+                    <li @class([
+                        'p-1',
+                        'opacity-50' => !$day['current'], // Dias fora do mês atual ficam "apagados"
+                        'font-bold bg-primary text-primary-content rounded-md cursor-pointer hover:brightness-90' => $day['isToday'], // Hoje em destaque
+                    ])>
+                        {{ $day['date']->format('d') }}
+                    </li>
+                @endforeach
+                </ul>
+                <ul class="grid grid-cols-7 gap-2 p-4 text-center">
+                    @foreach ($endMonth as $day)
+                    <li @class([
+                        'p-1',
+                        'opacity-50' => !$day['current'], // Dias fora do mês atual ficam "apagados"
+                        'font-bold bg-primary text-primary-content rounded-md cursor-pointer hover:brightness-90' => $day['isToday'], // Hoje em destaque
+                    ])>
+                        {{ $day['date']->format('d') }}
+                    </li>
+                @endforeach
+                </ul>
+            </div>
             @endif
         </div>
     </template>
