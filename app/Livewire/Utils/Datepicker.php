@@ -63,11 +63,6 @@ class Datepicker extends Component
         $startOfMonth = Carbon::create($year, $month, 1);
         $endOfMonth = $startOfMonth->copy()->endOfMonth();
 
-        // Se range ativo, incluir também o mês anterior completo
-        if ($this->range) {
-            $startOfMonth = $startOfMonth->copy()->subMonth(); // Começar do mês anterior
-        }
-
         // Dia da semana do primeiro dia (0 = domingo, 6 = sábado)
         $startDayOfWeek = $startOfMonth->dayOfWeek;
 
