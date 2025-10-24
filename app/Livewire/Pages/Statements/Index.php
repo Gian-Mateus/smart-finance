@@ -29,7 +29,7 @@ class Index extends Component
 
     public $range = 15;
 
-    public $dateRange;
+    public ?array $dateRange = ['start' => null, 'end' => null];
 
     public $configDatePicker = ['mode' => 'range', 'altFormat' => 'd/m/Y'];
 
@@ -75,7 +75,7 @@ class Index extends Component
             'Maio',
             'Junho',
             'Julho',
-            'Agosto',
+            'Agosto', 
             'Setembro',
             'Outubro',
             'Novembro',
@@ -92,13 +92,18 @@ class Index extends Component
     public function transactions()
     {
         if ($this->range != null) {
-            $this->initialDate = Carbon::now();
-            $this->endDate = $this->initialDate->subDays($this->range);
+            $this->initialDate = Carbon::now()->subDays($this->range);
+            $this->endDate = Carbon::now();
+        }
+        
+        // Fallback in case dates are not set
+        if (!$this->initialDate || !$this->endDate) {
+            return [];
         }
 
         return Transaction::where('user_id', Auth::id())
             ->where('bank_account_id', $this->account->id)
-            ->whereBetween('date', [$this->initialDate, $this->endDate])
+            ->whereBetween('date', [$this->initialDate->startOfDay(), $this->endDate->endOfDay()])
             ->get()
             ->map(function ($i) {
                 $i->date_format = $i->date->format('d/m/Y');
@@ -111,31 +116,31 @@ class Index extends Component
 
     public function filter()
     {
-        // dd($this->dateRange);
+        //dd($this->dateRange); 
 
-        if ($this->dateRange) {
-            $dateRange = explode('até', $this->dateRange);
-            $this->initialDate = $dateRange[0];
-            $this->endDate = $dateRange[1];
+        if (!empty($this->dateRange['start']) && !empty($this->dateRange['end'])) {
+            $this->initialDate = Carbon::createFromFormat('d/m/Y', $this->dateRange['start']);
+            $this->endDate = Carbon::createFromFormat('d/m/Y', $this->dateRange['end']);
+            
+            $this->currentFilter = $this->initialDate->format('d/m/Y') . ' até ' . $this->endDate->format('d/m/Y');
             $this->range = null;
             $this->reset('year', 'month');
-            $this->transactions();
-
+            unset($this->transactions);
             return;
         }
 
         if ($this->year != null && $this->month != null) {
-            $this->initialDate = Carbon::parse($this->year.'-'.$this->month + 1)->startOfMonth()->format('Y-m-d');
-            $this->endDate = Carbon::parse($this->year.'-'.$this->month + 1)->endOfMonth()->format('Y-m-d');
-            // dd($this->year, $this->month,$this->initialDate, $this->endDate);
+            $this->initialDate = Carbon::parse($this->year.'-'.$this->month + 1)->startOfMonth();
+            $this->endDate = Carbon::parse($this->year.'-'.$this->month + 1)->endOfMonth();
+            $this->currentFilter = 'Mês de ' . $this->months[$this->month]['name'] . ' de ' . $this->year;
+            
             $this->range = null;
             $this->reset('dateRange');
-            $this->transactions();
-
+            unset($this->transactions);
             return;
         }
-        // dd($this->range, $this->year, $this->month);
 
+        unset($this->transactions);
     }
 
     public function mount()

@@ -34,13 +34,6 @@ class Datepicker extends Component
     #[Modelable]
     public $value;
 
-    // Propriedades específicas para entangle
-    public ?string $singleValue = null;
-    public array $rangeValue = [
-        "start" => null,
-        "end" => null,
-    ];
-
     public $now;
 
     // Controla qual view está sendo mostrada: 'days', 'months', 'years'
@@ -177,27 +170,16 @@ class Datepicker extends Component
         $this->view = "days";
         $this->yearRangeStart = floor($this->now->year / 9) * 9;
 
-        // Inicializa as propriedades baseado no tipo
+        // Inicializa a propriedade modelável com o tipo correto
         if ($this->range) {
-            $this->rangeValue = [
-                "start" => null,
-                "end" => null,
-            ];
-            $this->value = $this->rangeValue;
+            if (!is_array($this->value)) {
+                $this->value = ['start' => null, 'end' => null];
+            }
         } else {
-            $this->singleValue = null;
-            $this->value = $this->singleValue;
+            if (is_array($this->value)) {
+                $this->value = null;
+            }
         }
-    }
-
-    public function updatedSingleValue($value)
-    {
-        $this->value = $value;
-    }
-
-    public function updatedRangeValue($value)
-    {
-        $this->value = $value;
     }
 
     public function render()

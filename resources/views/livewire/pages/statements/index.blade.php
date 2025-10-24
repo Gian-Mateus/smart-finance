@@ -17,7 +17,7 @@
                     <x-button wire:click="$set('range', 60); $wire.set('currentFilter', 'Últimos 60 dias')" label="Últimos 60 dias" class="btn-neutral" />
 
                     <div class="col-span-2" @click.stop="">
-                        <x-datepicker label="Período personalizado" wire:model="dateRange" icon="o-calendar" :config="$configDatePicker" @click.stop=""/>
+                        <livewire:utils.datepicker label="Período personalizado" wire:model="dateRange" range/>
                     </div>
                     
                     <div class="flex-1">
@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div class="p-4 mt-4 border-1 rounded-xl">
+        <div class="p-4 mt-4 border rounded-xl">
             {{-- {{dd($rows)}} --}}
             <x-table :rows="$this->transactions" :headers="$headers" striped>
                 <x-slot:empty>

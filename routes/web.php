@@ -4,6 +4,7 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Pages\Dashboard\Index as Dashboard;
 use App\Livewire\Pages\Imports\Index as Imports;
+use App\Livewire\Pages\Profile\Index as Profile;
 use App\Livewire\Pages\Settings\Banks\BankIndex;
 use App\Livewire\Pages\Settings\Budgets\BudgetsIndex;
 use App\Livewire\Pages\Settings\Categories\CategoriesIndex;
@@ -38,17 +39,21 @@ Route::middleware('auth')->group(function () {
     /** Route Pages */
     Route::get('/extratos', Statements::class)->name('statements');
     Route::get('/importações', Imports::class)->name('imports');
+    //Route::get('/transacoes-recorrentes', RecurrenceTransactionsIndex::class)->name('trans-recurrences');
+
+    /** Route Profile */
+    Route::get('/perfil', Profile::class)->name('profile');
 
     /** Routes Settings */
     Route::get('/categorias-subcategorias', CategoriesIndex::class)->name('categories');
     Route::get('/bancos-contas', BankIndex::class)->name('banks');
     Route::get('/orcamentos', BudgetsIndex::class)->name('budgets');
-    Route::get('/transacoes-recorrentes', RecurrencetypesIndex::class)->name('recurrences');
+    Route::get('/recorrentes', RecurrencetypesIndex::class)->name('recurrences');
 
     // Route::get('/parser', function () {
     //     $parser = new App\OFXParser();
     //     return $parser->parse("/wiki/extrato.ofx");
     // });
 
-    Route::get('/date-picker', Datepicker::class);
+    // Route::get('/date-picker', Datepicker::class);
 });
