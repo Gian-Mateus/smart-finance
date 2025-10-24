@@ -2,10 +2,10 @@
 
 namespace App\Livewire\Pages\Settings\Recurrencetypes;
 
-use Livewire\Component;
 use App\Models\RecurrenceType;
-use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
+use Livewire\Component;
 
 class RecurrencetypesIndex extends Component
 {

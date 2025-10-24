@@ -2,24 +2,22 @@
 
 namespace App\Livewire\Pages\Settings\Budgets\Partials;
 
-use App\MoneyBRL;
-use App\Models\Budget;
-use Mary\Traits\Toast;
-use Livewire\Component;
-use App\Models\Category;
-use App\Models\Subcategory;
-use Livewire\Attributes\On;
-use App\Models\RecurrenceType;
-use Livewire\Attributes\Computed;
 use App\Livewire\Forms\BudgetsForm;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Category;
+use App\Models\RecurrenceType;
+use App\Models\Subcategory;
+use App\MoneyBRL;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
+use Livewire\Component;
+use Mary\Traits\Toast;
 
 class Modal extends Component
 {
-    use Toast;
-
     use MoneyBRL;
+    use Toast;
 
     public BudgetsForm $form;
 
@@ -50,7 +48,7 @@ class Modal extends Component
                 $this->function = $data['function'];
                 $this->type = $data['type'];
                 $this->form->budgetable_type = $data['type'] == 'category' ? Category::class : Subcategory::class;
-                //$this->form->recurrence = $this->recurrences[0]['id'];
+                // $this->form->recurrence = $this->recurrences[0]['id'];
                 break;
 
             case 'edit':

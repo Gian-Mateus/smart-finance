@@ -2,18 +2,15 @@
 
 namespace App\Livewire\Forms;
 
-use Carbon\Carbon;
-use Livewire\Form;
-use Endeken\OFX\OFX;
-use App\Models\Import;
 use App\Jobs\ProcessOFXImportJob;
-use Livewire\Attributes\Validate;
+use App\Models\Import;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Validate;
+use Livewire\Form;
 
 class ImportsForm extends Form
 {
-    
     public $file;
 
     #[Validate('required', message: 'Você precisa selecionar uma conta.')]

@@ -1,17 +1,16 @@
 <?php
+
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
-use Illuminate\Support\Facades\Route;
-
 use App\Livewire\Pages\Dashboard\Index as Dashboard;
-use App\Livewire\Pages\Statements\Index as Statements;
 use App\Livewire\Pages\Imports\Index as Imports;
-
 use App\Livewire\Pages\Settings\Banks\BankIndex;
 use App\Livewire\Pages\Settings\Budgets\BudgetsIndex;
 use App\Livewire\Pages\Settings\Categories\CategoriesIndex;
 use App\Livewire\Pages\Settings\Recurrencetypes\RecurrencetypesIndex;
+use App\Livewire\Pages\Statements\Index as Statements;
 use App\Livewire\Utils\Datepicker;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +34,6 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     /** Route Home */
     Route::get('/', [Dashboard::class, 'render'])->name('dashboard.index');
-
 
     /** Route Pages */
     Route::get('/extratos', Statements::class)->name('statements');

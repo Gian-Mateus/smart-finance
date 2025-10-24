@@ -21,9 +21,11 @@ class ProcessOFXImportJob implements ShouldQueue
     use MoneyBRL;
 
     protected string $filePath;
+
     protected Import $import;
 
     public $timeout = 300;
+
     public $tries = 3;
 
     public function __construct(string $filePath, Import $import)
@@ -35,13 +37,13 @@ class ProcessOFXImportJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            if (!Storage::disk('local')->exists($this->filePath)) {
+            if (! Storage::disk('local')->exists($this->filePath)) {
                 throw new \Exception("Arquivo de importação não encontrado em: {$this->filePath}");
             }
 
             $file = file(storage_path('app/private/'.$this->filePath));
 
-            $parser = new OFXParser();
+            $parser = new OFXParser;
             $ofx = $parser->parse($file);
 
             foreach ($ofx['transactions'] as $tr) {
@@ -72,10 +74,10 @@ class ProcessOFXImportJob implements ShouldQueue
         if ($import) {
             $import->update([
                 'status' => 'failed',
-                'error_message' => $exception->getMessage()
+                'error_message' => $exception->getMessage(),
             ]);
         }
 
-        Log::error("Falha ao processar importação #{$import->id}: " . $exception->getMessage());
+        Log::error("Falha ao processar importação #{$import->id}: ".$exception->getMessage());
     }
 }

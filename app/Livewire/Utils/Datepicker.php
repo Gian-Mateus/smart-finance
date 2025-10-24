@@ -3,14 +3,17 @@
 namespace App\Livewire\Utils;
 
 use Carbon\Carbon;
-use Livewire\Component;
 use Carbon\CarbonPeriod;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Modelable;
+use Livewire\Component;
 
 class Datepicker extends Component
 {
     public $uuid;
+
+    public $label;
+
     public $months = [
         ["id" => "1", "name" => "Janeiro"],
         ["id" => "2", "name" => "Fevereiro"],
@@ -30,6 +33,13 @@ class Datepicker extends Component
 
     #[Modelable]
     public $value;
+
+    // Propriedades específicas para entangle
+    public ?string $singleValue = null;
+    public array $rangeValue = [
+        "start" => null,
+        "end" => null,
+    ];
 
     public $now;
 
@@ -79,7 +89,7 @@ class Datepicker extends Component
                 ];
             }
         }
-        
+
         // Dias do(s) mês(es) atual(is)
         $currentDate = $startOfMonth->copy();
         while ($currentDate <= $endOfMonth) {
@@ -107,11 +117,34 @@ class Datepicker extends Component
         return $days;
     }
 
-    public function mount($range = true)
+    public function mount($label = "Data", $range = false)
     {
-        $this->range = $range;
-        $this->now = Carbon::now();
         $this->uuid = uniqid();
+        $this->now = Carbon::now();
+        $this->label = $label;
+        $this->range = $range;
+
+        // Inicializa as propriedades baseado no tipo
+        if ($this->range) {
+            $this->rangeValue = [
+                "start" => null,
+                "end" => null,
+            ];
+            $this->value = $this->rangeValue;
+        } else {
+            $this->singleValue = null;
+            $this->value = $this->singleValue;
+        }
+    }
+
+    public function updatedSingleValue($value)
+    {
+        $this->value = $value;
+    }
+
+    public function updatedRangeValue($value)
+    {
+        $this->value = $value;
     }
 
     public function render()

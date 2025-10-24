@@ -6,10 +6,10 @@ namespace App\Models;
 
 use App\MoneyBRL;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * Class Budget
@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Budget extends Model
 {
     use MoneyBRL;
-    
+
     protected $table = 'budgets';
 
     protected $primaryKey = 'id';

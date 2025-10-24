@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             $table->foreignId('imports_id')
-            ->constrained('imports')
-            ->cascadeOnDelete()
-            ->cascadeOnUpdate();
+                ->constrained('imports')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

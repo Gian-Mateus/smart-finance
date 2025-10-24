@@ -2,14 +2,16 @@
 
 namespace App\Livewire\Pages\Settings\Recurrencetypes\Partials;
 
-use Livewire\Component;
-use Livewire\Attributes\On;
 use App\Livewire\Forms\RecurrenceTypeForm;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 class Modal extends Component
 {
     public $modalOpen = false;
+
     public $type;
+
     public $title;
 
     // public $selectsTypes = [
@@ -17,7 +19,6 @@ class Modal extends Component
     //     ['id' => 'day_of_month', 'label' => 'Todo dia do mês'],
     //     ['id' => 'week_day', 'label' => 'Todo dia da semana']
     // ];
-
 
     // ATUALIZE esta propriedade com os tipos que vamos usar
     public $selectsTypes = [
@@ -54,11 +55,11 @@ class Modal extends Component
 
         switch ($data['type']) {
             case 'create':
-                $this->title = "Nova Recorrência";
+                $this->title = 'Nova Recorrência';
                 break;
-            
+
             default:
-                # code...
+                // code...
                 break;
         }
     }
@@ -67,7 +68,7 @@ class Modal extends Component
     {
         $this->modalOpen = false;
         $this->form->reset();
-        //$this->reset();
+        // $this->reset();
     }
 
     public function render()

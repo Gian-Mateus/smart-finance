@@ -24,17 +24,21 @@ class RecurrenceTypeForm extends Form
     public $type;
 
     public $day_of_month;
+
     public $week_day;
+
     public $interval;
+
     public $start_date;
+
     public $end_date;
+
     public $occurrences;
 
     // Propriedade auxiliar para controlar a condição de término
     #[Validate('required', message: 'Selecione uma condição de término.')]
     #[Validate('in:never,on_date,after_occurrences')]
     public $end_condition = 'never';
-
 
     /**
      * Regras de validação dinâmicas.
@@ -47,35 +51,35 @@ class RecurrenceTypeForm extends Form
                 Rule::requiredIf(in_array($this->type, ['monthly', 'yearly'])),
                 'integer',
                 'min:1',
-                'max:31'
+                'max:31',
             ],
             'week_day' => [
                 // Obrigatório se o tipo for 'weekly'
                 Rule::requiredIf($this->type === 'weekly'),
-                Rule::in(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
+                Rule::in(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']),
             ],
             'interval' => [
                 // Obrigatório se o tipo for 'interval' ou 'yearly'
                 Rule::requiredIf(in_array($this->type, ['interval', 'yearly'])),
                 'integer',
-                'min:1'
+                'min:1',
             ],
             'start_date' => [
                 'required',
-                'date'
+                'date',
             ],
             'end_date' => [
                 // Obrigatório se a condição de término for 'on_date'
                 Rule::requiredIf($this->end_condition === 'on_date'),
                 'date',
-                'after_or_equal:start_date' // Deve ser depois da data de início
+                'after_or_equal:start_date', // Deve ser depois da data de início
             ],
             'occurrences' => [
                 // Obrigatório se a condição de término for 'after_occurrences'
                 Rule::requiredIf($this->end_condition === 'after_occurrences'),
                 'integer',
-                'min:1'
-            ]
+                'min:1',
+            ],
         ];
     }
 
@@ -93,13 +97,13 @@ class RecurrenceTypeForm extends Form
         }
 
         // Zera campos de tipo de repetição que não foram escolhidos
-        if (!in_array($this->type, ['monthly', 'yearly'])) {
+        if (! in_array($this->type, ['monthly', 'yearly'])) {
             $this->day_of_month = null;
         }
         if ($this->type !== 'weekly') {
             $this->week_day = null;
         }
-        if (!in_array($this->type, ['interval', 'yearly'])) {
+        if (! in_array($this->type, ['interval', 'yearly'])) {
             $this->interval = null;
         }
     }
@@ -116,7 +120,7 @@ class RecurrenceTypeForm extends Form
         // Cria o registro no banco de dados
         RecurrenceType::create([
             ...$this->only(['name', 'type', 'day_of_month', 'week_day', 'interval', 'start_date', 'end_date', 'occurrences']),
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
         ]);
 
         $this->reset();
@@ -128,10 +132,10 @@ class RecurrenceTypeForm extends Form
     public function update(): void
     {
         // Garante que temos um ID para atualizar
-        if (!$this->id) {
+        if (! $this->id) {
             return;
         }
-        
+
         // Valida os dados e limpa os campos não utilizados
         $this->validate();
         $this->cleanupUnusedData();
@@ -151,10 +155,10 @@ class RecurrenceTypeForm extends Form
     public function delete(): void
     {
         // Garante que temos um ID para deletar
-        if (!$this->id) {
+        if (! $this->id) {
             return;
         }
-        
+
         // Encontra e deleta o registro
         RecurrenceType::where('id', $this->id)->where('user_id', Auth::id())->delete();
         $this->reset();

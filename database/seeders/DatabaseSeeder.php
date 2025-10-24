@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Database\Seeders\BanksAccountsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -30,7 +29,7 @@ class DatabaseSeeder extends Seeder
             IconsSeeder::class,
             PaymentMethodsSeeder::class,
             BudgetsSeeder::class,
-            BanksAccountsSeeder::class
+            BanksAccountsSeeder::class,
         ]);
     }
 }

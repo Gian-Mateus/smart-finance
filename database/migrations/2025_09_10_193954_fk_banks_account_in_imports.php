@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::table('imports', function (Blueprint $table) {
             $table->foreignId('banks_accounts_id')
-            ->nullable()
-            ->constrained('banks_accounts')
-            ->cascadeOnDelete()
-            ->cascadeOnUpdate();
+                ->nullable()
+                ->constrained('banks_accounts')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

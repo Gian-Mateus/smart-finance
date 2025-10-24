@@ -1,10 +1,13 @@
 <div x-data="{
     open: false,
-    @if ($range) startDate: null,
-        endDate: null,
-        hoverDate: null,
-        @else
-        date: null, @endif
+    @if ($range)
+    startDate: $wire.entangle('rangeValue.start'),
+    endDate: $wire.entangle('rangeValue.end'),
+    hoverDate: null,
+    @else
+    date: $wire.entangle('singleValue'),
+    @endif
+
 
     maskDate(e, field) {
         let digits = e.target.value.replace(/\D/g, '');
@@ -18,13 +21,13 @@
         this[field] = masked;
     },
 
-    @if($range)
     parseDate(str) {
         if (!str) return null;
         const [day, month, year] = str.split('/').map(Number);
         return new Date(year, month - 1, day);
     },
 
+    @if($range)
     isBetween(date, start, end) {
         const d = this.parseDate(date);
         const s = this.parseDate(start);
@@ -48,7 +51,6 @@
         }
         return false;
     },
-    @endif
 
     setInput(date) {
         const clickedDate = this.parseDate(date);
@@ -66,15 +68,17 @@
             }
         }
     },
+    @else
+    setInput(date) {
+        this.date = date;
+        this.open = false;
+    },
+    @endif
 
     togglePicker() {
         this.open = !this.open;
     }
 }">
-
-    @php
-        $range = false;
-    @endphp
 
     @if ($range)
         <div class="flex gap-4" x-ref="trigger">
@@ -85,7 +89,7 @@
         </div>
     @else
         <div class="flex gap-4" x-ref="trigger">
-            <x-input label="Data" icon="o-calendar" x-model="startDate" x-on:input="maskDate($event, 'date')"
+            <x-input label="{{ $label }}" icon="o-calendar" x-model="date" x-on:input="maskDate($event, 'date')"
                 @click="togglePicker()" />
         </div>
     @endif
@@ -111,9 +115,9 @@
                             $dateString = $day['date']->format('d/m/Y');
                         @endphp
                         <li>
-                            @if ($range) 
-                            <button 
-                                type="button" 
+                            @if ($range)
+                            <button
+                                type="button"
                                 @click="setInput('{{ $dateString }}')"
                                 @mouseenter="hoverDate = '{{ $dateString }}'"
                                 :class="{
@@ -121,22 +125,23 @@
                                     'font-bold': {{ $day['isToday'] ? 'true' : 'false' }},
                                     'bg-primary text-primary-content rounded-full': startDate === '{{ $dateString }}' || endDate === '{{ $dateString }}' || (startDate && !endDate && hoverDate === '{{ $dateString }}'),
                                     'bg-primary/30': isInRange('{{ $dateString }}'),
-                                    'rounded-l-full': startDate === '{{ $dateString }}' || (hoverDate && parseDate(hoverDate) < parseDate(startDate) && '{{ $dateString }}' === hoverDate),
-                                    'rounded-r-full': endDate === '{{ $dateString }}' || (hoverDate && parseDate(hoverDate) > parseDate(startDate) && '{{ $dateString }}' === hoverDate)
-
+                                    'rounded-r-full': startDate === '{{ $dateString }}' || (hoverDate && parseDate(hoverDate) < parseDate(startDate) && '{{ $dateString }}' === hoverDate),
+                                    'rounded-l-full': endDate === '{{ $dateString }}' || (hoverDate && parseDate(hoverDate) > parseDate(startDate) && '{{ $dateString }}' === hoverDate)
                                 }"
+                                class="p-1 btn btn-ghost h-9 w-9"
                             >
                                 {{ $day['date']->format('d') }}
                             </button>
                             @else
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 @click="setInput('{{ $dateString }}')"
-                                @class([
-                                    'p-1 btn btn-ghost h-9 w-9',
-                                    'opacity-50' => !$day['current'],
-                                    'font-bold bg-primary text-primary-content rounded-full' => $day['isToday'],
-                                ])
+                                :class="{
+                                    'opacity-50': !{{ $day['current'] ? 'true' : 'false' }},
+                                    'font-bold bg-primary text-primary-content rounded-full': {{ $day['isToday'] ? 'true' : 'false' }},
+                                    'bg-primary text-primary-content rounded-full': date === '{{ $dateString }}'
+                                }"
+                                class="p-1 btn btn-ghost h-9 w-9"
                             >
                                 {{ $day['date']->format('d') }}
                             </button>

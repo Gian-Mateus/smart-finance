@@ -3,10 +3,9 @@
 namespace App\Livewire\Pages\Imports;
 
 use App\Models\Import;
-use Livewire\Component;
-use Illuminate\Support\Carbon;
-use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
+use Livewire\Component;
 
 class Index extends Component
 {
@@ -25,10 +24,10 @@ class Index extends Component
     public function lastImports()
     {
         $lastImports = Import::with('banksAccount')
-        ->where('user_id', Auth::id())
-        ->latest('imported_at')
-        ->take(10)
-        ->get();
+            ->where('user_id', Auth::id())
+            ->latest('imported_at')
+            ->take(10)
+            ->get();
 
         $lastImports->map(function ($l) {
             $l->imported_at_formated = $l->imported_at->format('d/m/Y H:i');
@@ -36,7 +35,7 @@ class Index extends Component
 
         return $lastImports;
     }
-    
+
     public function render()
     {
         return view('livewire.pages.imports.index');

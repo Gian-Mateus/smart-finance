@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Utils;
 
-use Livewire\Component;
 use Livewire\Attributes\Modelable;
+use Livewire\Component;
 
 class GridDays extends Component
 {
@@ -11,6 +11,7 @@ class GridDays extends Component
 
     #[Modelable]
     public $day;
+
     public $label;
 
     public function mount()
@@ -21,7 +22,6 @@ class GridDays extends Component
             return ['value' => $day];
         }, $range);
     }
-
 
     public function render()
     {

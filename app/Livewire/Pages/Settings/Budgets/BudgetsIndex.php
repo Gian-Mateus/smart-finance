@@ -2,22 +2,22 @@
 
 namespace App\Livewire\Pages\Settings\Budgets;
 
-use App\MoneyBRL;
 use App\Models\Budget;
-/* Models */
-use Mary\Traits\Toast;
-use Livewire\Component;
 use App\Models\Category;
+/* Models */
 use App\Models\Subcategory;
-use Livewire\Attributes\On;
-use Livewire\Attributes\Computed;
-use Illuminate\Support\Facades\Auth;
+use App\MoneyBRL;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
+use Livewire\Component;
+use Mary\Traits\Toast;
 
 class BudgetsIndex extends Component
 {
-    use Toast;
     use MoneyBRL;
+    use Toast;
 
     #[Computed]
     public function budgets()
@@ -29,7 +29,7 @@ class BudgetsIndex extends Component
                         Subcategory::class,
                         Category::class,
                     ]);
-                }, 'recurrenceTypes:id,name,type'
+                }, 'recurrenceTypes:id,name,type',
 
             ])
             ->orderByDesc('created_at')
