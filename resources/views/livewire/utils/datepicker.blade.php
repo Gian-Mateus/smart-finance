@@ -1,5 +1,10 @@
+@php
+    $range = true;
+@endphp
+
 <div x-data="{
     open: false,
+    view: $wire.entangle('view'),
     @if ($range)
     startDate: $wire.entangle('rangeValue.start'),
     endDate: $wire.entangle('rangeValue.end'),
@@ -7,7 +12,6 @@
     @else
     date: $wire.entangle('singleValue'),
     @endif
-
 
     maskDate(e, field) {
         let digits = e.target.value.replace(/\D/g, '');
@@ -17,9 +21,36 @@
         } else if (digits.length > 4) {
             masked = digits.slice(0, 2) + '/' + digits.slice(2, 4) + '/' + digits.slice(4, 8);
         }
+
+        // Encontra o fieldset pai do input
+        const fieldset = e.target.closest('fieldset');
+        const inputLabel = e.target.closest('label');
+
+        // Remove erro anterior
+        const existingError = fieldset.querySelector('.js-error-message');
+        if (existingError) existingError.remove();
+        inputLabel.classList.remove('!input-error');
+
+        // Se o valor completo for inserido, valida com a regex
+        if (masked.length === 10) {
+            const regex = /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)(?:0?2)\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))$)|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/;
+            if (!regex.test(masked)) {
+                // Adiciona classe de erro ao input
+                inputLabel.classList.add('!input-error');
+
+                // Cria e adiciona mensagem de erro
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'text-error js-error-message';
+                errorDiv.textContent = 'Data inválida';
+                fieldset.appendChild(errorDiv);
+            }
+        }
+
         e.target.value = masked;
         this[field] = masked;
     },
+
+
 
     parseDate(str) {
         if (!str) return null;
@@ -96,15 +127,39 @@
 
     <template x-teleport="main">
         <div x-show="open" @click.outside="open = false"
-            class="bg-base-100 max-w-lg w-fit flex flex-col rounded-md shadow-lg" x-transition
+            class="bg-base-100 w-fit flex flex-col rounded-md shadow-lg max-w-lg min-w-[300px]" x-transition
             x-anchor.bottom-start.offset.10="$refs.trigger">
             <div class="flex items-center justify-between px-4 mt-2">
-                <x-button icon="o-arrow-left" class="btn-circle btn-ghost" @click="$wire.setMonth('dec')" />
-                <div class="font-semibold">{{ $months[$now->month - 1]['name'] }} de {{ $now->year }}</div>
-                <x-button icon="o-arrow-right" class="btn-circle btn-ghost" @click="$wire.setMonth('inc')" />
+                <x-button icon="o-arrow-left" class="btn-circle btn-ghost" @click="$wire.navigate('dec')" />
+
+                <!-- Header para Days View -->
+                <div x-show="view === 'days'" class="font-semibold text-center">
+                    <span class="cursor-pointer hover:text-primary" @click="$wire.setView('months')">
+                        {{ $months[$now->month - 1]['name'] }}
+                    </span>
+                    de
+                    <span class="cursor-pointer hover:text-primary" @click="$wire.setView('years')">
+                        {{ $now->year }}
+                    </span>
+                </div>
+
+                <!-- Header para Months View -->
+                <div x-show="view === 'months'" class="font-semibold text-center">
+                    <span class="cursor-pointer hover:text-primary" @click="$wire.setView('years')">
+                        {{ $now->year }}
+                    </span>
+                </div>
+
+                <!-- Header para Years View -->
+                <div x-show="view === 'years'" class="font-semibold text-center">
+                    {{ $this->yearRangeStart }} - {{ $this->yearRangeStart + 8 }}
+                </div>
+
+                <x-button icon="o-arrow-right" class="btn-circle btn-ghost" @click="$wire.navigate('inc')" />
             </div>
 
-            <div @mouseleave="hoverDate = null">
+            <!-- Days View -->
+            <div x-show="view === 'days'" @mouseleave="hoverDate = null">
                 <ul class="grid grid-cols-7 gap-0.5 p-4 text-center text-sm">
                     @foreach (['D', 'S', 'T', 'Q', 'Q', 'S', 'S'] as $weekday)
                         <li class="font-medium text-xs text-base-content/50">{{ $weekday }}</li>
@@ -148,6 +203,48 @@
                             @endif
                         </li>
                     @endforeach
+                </ul>
+            </div>
+
+            <!-- Months View -->
+            <div x-show="view === 'months'" class="p-4">
+                <ul class="grid grid-cols-3 gap-2 text-center text-sm">
+                    @foreach ($months as $month)
+                        <li>
+                            <button
+                                type="button"
+                                @click="$wire.selectMonth({{ $month['id'] }})"
+                                :class="{
+                                    'bg-primary text-primary-content': {{ $now->month }} === {{ $month['id'] }},
+                                    'font-bold': {{ $now->month }} === {{ $month['id'] }}
+                                }"
+                                class="p-2 btn btn-ghost w-full rounded-md hover:bg-base-200 transition-colors"
+                            >
+                                {{ $month['name'] }}
+                            </button>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
+            <!-- Years View -->
+            <div x-show="view === 'years'" class="p-4">
+                <ul class="grid grid-cols-3 gap-2 text-center text-sm">
+                    @for ($year = $this->yearRangeStart; $year < $this->yearRangeStart + 9; $year++)
+                        <li>
+                            <button
+                                type="button"
+                                @click="$wire.selectYear({{ $year }})"
+                                :class="{
+                                    'bg-primary text-primary-content': {{ $now->year }} === {{ $year }},
+                                    'font-bold': {{ $now->year }} === {{ $year }}
+                                }"
+                                class="p-2 btn btn-ghost w-full rounded-md hover:bg-base-200 transition-colors"
+                            >
+                                {{ $year }}
+                            </button>
+                        </li>
+                    @endfor
                 </ul>
             </div>
         </div>

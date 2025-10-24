@@ -43,6 +43,12 @@ class Datepicker extends Component
 
     public $now;
 
+    // Controla qual view está sendo mostrada: 'days', 'months', 'years'
+    public string $view = "days";
+
+    // Range de anos para a view de anos (ex: 2020-2029)
+    public int $yearRangeStart = 2020;
+
     #[Computed]
     public function period($month = null, $year = null)
     {
@@ -62,6 +68,51 @@ class Datepicker extends Component
             "dec" => $this->now->copy()->subMonth(),
             default => $this->now,
         };
+    }
+
+    public function setYear($direc)
+    {
+        $this->now = match ($direc) {
+            "inc" => $this->now->copy()->addYear(),
+            "dec" => $this->now->copy()->subYear(),
+            default => $this->now,
+        };
+    }
+
+    public function setYearRange($direc)
+    {
+        $this->yearRangeStart = match ($direc) {
+            "inc" => $this->yearRangeStart + 9,
+            "dec" => $this->yearRangeStart - 9,
+            default => $this->yearRangeStart,
+        };
+    }
+
+    public function navigate($direction)
+    {
+        match ($this->view) {
+            "days" => $this->setMonth($direction),
+            "months" => $this->setYear($direction),
+            "years" => $this->setYearRange($direction),
+            default => null,
+        };
+    }
+
+    public function setView($view)
+    {
+        $this->view = $view;
+    }
+
+    public function selectMonth($month)
+    {
+        $this->now = $this->now->copy()->month($month);
+        $this->view = "days";
+    }
+
+    public function selectYear($year)
+    {
+        $this->now = $this->now->copy()->year($year);
+        $this->view = "months";
     }
 
     public function calendarDays($month = null, $year = null)
@@ -123,6 +174,8 @@ class Datepicker extends Component
         $this->now = Carbon::now();
         $this->label = $label;
         $this->range = $range;
+        $this->view = "days";
+        $this->yearRangeStart = floor($this->now->year / 9) * 9;
 
         // Inicializa as propriedades baseado no tipo
         if ($this->range) {
