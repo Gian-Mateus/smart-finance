@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('recurring_transactions', function (Blueprint $table){
+            $table->id();
+            $table->string('name', 50);
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignId('bank_account_id')
+                ->constrained('banks_accounts')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->morphs('catorsub');
+            $table->foreignId('recurrence_id')
+                ->constrained('recurrence_types')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('recurring_transactions');
+    }
+};
