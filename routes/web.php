@@ -10,7 +10,6 @@ use App\Livewire\Pages\Settings\Budgets\BudgetsIndex;
 use App\Livewire\Pages\Settings\Categories\CategoriesIndex;
 use App\Livewire\Pages\Settings\Recurrencetypes\RecurrencetypesIndex;
 use App\Livewire\Pages\Statements\Index as Statements;
-use App\Livewire\Utils\Datepicker;
 use Illuminate\Support\Facades\Route;
 
 /*

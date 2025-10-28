@@ -1,23 +1,26 @@
 /* Tailwind */
-@import "tailwindcss";      
- 
+@import "tailwindcss";
+
 /* daisyUI */
-@plugin "daisyui" {         
-    themes: halloween --default, dark --prefersdark, light;   
-}   
- 
+@plugin "daisyui" {
+    themes:
+        halloween --default,
+        dark --prefersdark,
+        light;
+}
+
 /* maryUI */
-@source "../../vendor/robsontenorio/mary/src/View/Components/**/*.php"; 
- 
+@source "../../vendor/robsontenorio/mary/src/View/Components/**/*.php";
+
 /* Dark theme variant support */
-@custom-variant dark (&:where(.dark, .dark *)); 
- 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Laravel 12 defaults */
-@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php"; 
-@source "../../storage/framework/views/*.php"; 
-@source "../**/*.blade.php"; 
-@source "../**/*.js"; 
-@source "../**/*.vue"; 
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../storage/framework/views/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../**/*.vue";
 
 /* Custom styles */
 @utility modal-box {

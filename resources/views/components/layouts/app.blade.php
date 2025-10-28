@@ -12,18 +12,6 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 
-		{{-- Flatpickr  --}}
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-		
-		{{-- It will not apply locale yet  --}}
-		<script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
-		
-		{{-- You need to set here the default locale or any global flatpickr settings--}}
-		<script>
-			flatpickr.localize(flatpickr.l10ns.pt);
-		</script>
-		
 		@livewireStyles
 		@vite(['resources/css/app.css', 'resources/js/app.js'])
 	</head>
@@ -53,28 +41,51 @@
 				</div>
 
 				{{-- MENU --}}
-				<x-menu activate-by-route>
-					<x-menu-item title="Dahsboard" icon="o-chart-pie" link="{{ route('dashboard.index') }}" />
-					<x-menu-item title="Extratos" icon="c-arrows-up-down" link="{{ route('statements') }}" />
-					<x-menu-item title="Trans. Recorrentes" icon="o-clock" link="####" />
-					<x-menu-item title="Importar arquivo" icon="o-document-arrow-up"
-						link="{{ route('imports') }}" />
-					<x-menu-item title="Perfil" icon="o-user-circle" />
+				<x-menu activate-by-route class="flex h-[calc(100%-3.5rem)] [&>li:last-child]:mt-auto">
+					<x-menu-item
+					    title="Dashboard"
+						icon="o-chart-pie"
+						link="{{ route('dashboard.index') }}"
+					/>
+					<x-menu-item
+					    title="Extratos"
+						icon="c-arrows-up-down"
+						link="{{ route('statements') }}"
+					/>
+					<x-menu-item
+					    title="Trans. Recorrentes"
+						icon="o-clock"
+						link="{{ route('recurrences') }}"
+					/>
+					<x-menu-item
+					    title="Importar arquivo"
+						icon="o-document-arrow-up"
+						link="{{ route('imports') }}"
+					/>
+					<x-menu-item
+					    title="Perfil"
+						icon="o-user-circle"
+						link="{{ route('profile') }}"
+					/>
 					<x-menu-sub title="Configurações" icon="o-cog-6-tooth">
 						<x-menu-item title="Bancos/Contas" icon="c-building-library" link="{{ route('banks') }}" />
 						<x-menu-item title="Categorias/Subcategorias" icon="c-squares-plus" link="{{ route('categories') }}" />
 						<x-menu-item title="Orçamentos" icon="o-document-currency-dollar" link="{{ route('budgets') }}" />
 						<x-menu-item title="Recorrentes" icon="m-calendar" link="{{ route('recurrences') }}" />
 					</x-menu-sub>
+                    <x-menu-item
+                        title="Sair"
+                        icon="o-arrow-right-end-on-rectangle"
+                    />
 				</x-menu>
 			</x-slot:sidebar>
 
 			{{-- The `$slot` goes here --}}
 			<x-slot:content>
-				{{ isset($slot) ? $slot : 'Nada aqui' }}
+			    {{ $slot ?? 'Nada aqui' }}
 			</x-slot:content>
 		</x-main>
-		
+
 		{{-- Toast --}}
 		<x-toast />
 
