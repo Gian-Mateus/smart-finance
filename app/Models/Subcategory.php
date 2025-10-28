@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -64,6 +65,7 @@ class Subcategory extends Model
         ];
     }
 
+
     protected static function boot()
     {
         parent::boot();
@@ -73,12 +75,18 @@ class Subcategory extends Model
         });
     }
 
+    /**
+     * @return MorphMany<Budget, $this>
+     */
     public function budgets(): MorphMany
     {
         return $this->morphMany(Budget::class, 'budgetable');
     }
 
-    public function categories(): BelongsTo
+    /**
+     * @return BelongsTo<Category, $this>
+     */
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
@@ -89,5 +97,21 @@ class Subcategory extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * @return HasMany<Transaction, $this>
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'subcategory_id');
+    }
+    
+     /**
+     * @return MorphMany<RecurringTransaction, $this>
+     */
+    public function recurringTransactions(): MorphMany
+    {
+        return $this->morphMany(RecurringTransaction::class, 'catorsub');
     }
 }

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class BanksAccount
@@ -20,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $updated_at
  * @property User $user
  * @property Bank $bank
+ * @property Collection|Import[] $imports
  */
 class BanksAccount extends Model
 {
@@ -67,10 +70,43 @@ class BanksAccount extends Model
     }
 
     /**
+     * @return HasMany<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return HasMany<Import, $this>
+     */
+    public function imports(): HasMany
+    {
+        return $this->hasMany(Import::class, 'banks_accounts_id', 'id');
+    }
+
+    /**
+     * @return HasMany<Transaction, $this>
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'bank_account_id');
+    }
+
+    /**
+     * @return HasMany<RecurringTransaction, $this>
+     */
+    public function recurringTransactions(): HasMany
+    {
+        return $this->hasMany(RecurringTransaction::class, 'bank_account_id');
+    }
+
+    /**
      * @return BelongsTo<Bank, $this>
      */
     public function bank(): BelongsTo
     {
         return $this->belongsTo(Bank::class, 'bank_id');
     }
+
 }

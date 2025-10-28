@@ -107,4 +107,28 @@ class User extends Authenticatable
     {
         return $this->hasMany(Subcategory::class, 'user_id', 'id');
     }
+
+    /**
+     * @return HasMany<BankAccount, $this>
+     */
+    public function banksAccounts(): HasMany
+    {
+        return $this->hasMany(BanksAccount::class, 'user_id');
+    }
+
+    /**
+     * @return HasMany<Transaction, $this>
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
+
+    /**
+     * @return HasMany<RecurringTransaction, $this>
+     */
+    public function recurringTransactions(): HasMany
+    {
+        return $this->hasMany(RecurringTransaction::class, 'user_id');
+    }
 }

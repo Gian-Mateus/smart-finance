@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\MoneyBRL;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -27,8 +25,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Budget extends Model
 {
-    use MoneyBRL;
-
     protected $table = 'budgets';
 
     protected $primaryKey = 'id';
@@ -75,14 +71,6 @@ class Budget extends Model
     }
 
     /**
-     * @return BelongsTo<User, $this>
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
      * @return BelongsTo<RecurrenceType, $this>
      */
     public function recurrenceTypes(): BelongsTo
@@ -97,11 +85,4 @@ class Budget extends Model
     {
         return $this->morphTo(__FUNCTION__, 'budgetable_type', 'budgetable_id');
     }
-
-    // protected function targetValue(): Attribute {
-    //     return Attribute::make(
-    //         get: fn ($value) => $this->showBRL($value),
-    //         set: fn ($value) => $this->toInteger($value),
-    //     );
-    // }
 }

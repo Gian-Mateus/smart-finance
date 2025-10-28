@@ -40,14 +40,14 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('subcategories')
                 ->cascadeOnUpdate()
-                ->nullOnDelete(); // FOREIGN KEY subcategoria_id
+                ->nullOnDelete();
 
             $table
                 ->foreignId('recurrence_types_id')
                 ->nullable()
                 ->constrained('recurrence_types')
                 ->cascadeOnUpdate()
-                ->nullOnDelete(); // FOREIGN KEY periodicidade_id
+                ->nullOnDelete();
 
             $table
                 ->foreignId('payment_methods_id')

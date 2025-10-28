@@ -6,8 +6,8 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -81,13 +81,27 @@ class Category extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * @return HasMany<Subcategory, $this>
+     */
     public function subcategories(): HasMany
     {
         return $this->hasMany(Subcategory::class, 'category_id');
     }
 
-    public function budgets(): MorphMany
+    /**
+     * @return HasMany<Transaction, $this>
+     */
+    public function transactions(): HasMany
     {
-        return $this->morphMany(Budget::class, 'budgetable');
+        return $this->hasMany(Transaction::class, 'category_id');
+    }
+
+    /**
+     * @return MorphMany<RecurringTransaction, $this>
+     */
+    public function recurringTransactions(): MorphMany
+    {
+        return $this->morphMany(RecurringTransaction::class, 'catorsub');
     }
 }

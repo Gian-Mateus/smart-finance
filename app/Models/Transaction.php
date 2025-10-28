@@ -12,25 +12,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class Transaction
  *
  * @property int $id
+ * @property string $id_transaction_external
  * @property int $user_id
  * @property int $bank_account_id
- * @property int $category_id
+ * @property int|null $category_id
  * @property int|null $subcategory_id
  * @property int|null $recurrence_types_id
- * @property int $payment_methods_id
+ * @property int|null $payment_methods_id
  * @property int $value
  * @property Carbon $date
  * @property string $description
  * @property string|null $observation
  * @property bool $type
+ * @property int|null $running_balance
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property User $user
- * @property BanksAccount $bankAccount
- * @property Category $category
- * @property Subcategory $subcategory
- * @property RecurrenceType $recurrenceTypes
+ * @property int $imports_id
  * @property PaymentMethod $paymentMethods
+ * @property RecurrenceType $recurrenceTypes
+ * @property Subcategory $subcategory
+ * @property Category $category
+ * @property BanksAccount $bankAccount
+ * @property User $user
+ * @property Import $imports
  */
 class Transaction extends Model
 {
@@ -54,12 +58,13 @@ class Transaction extends Model
         'subcategory_id',
         'recurrence_types_id',
         'payment_methods_id',
-        'imports_id',
         'value',
         'date',
         'description',
         'observation',
-        'type', // 0 = débito / 1 = crédito
+        'type',
+        'running_balance',
+        'imports_id',
     ];
 
     /**
@@ -84,47 +89,71 @@ class Transaction extends Model
             'subcategory_id' => 'integer',
             'recurrence_types_id' => 'integer',
             'payment_methods_id' => 'integer',
-            'imports_id' => 'integer',
             'value' => 'integer',
             'date' => 'datetime',
             'description' => 'string',
             'observation' => 'string',
             'type' => 'boolean',
+            'running_balance' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+            'imports_id' => 'integer',
         ];
     }
 
     /**
-     * @return BelongsTo<PaymentMethod, $this>
+     * @return BelongsTo<User, $this>
      */
-    public function paymentMethods(): BelongsTo
-    {
-        return $this->belongsTo(PaymentMethod::class, 'payment_methods_id');
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
-    public function imports(): BelongsTo
+    
+    /**
+     * @return BelongsTo<BanksAccount, $this>
+     */
+    public function bankAccount(): BelongsTo
     {
-        return $this->belongsTo(Import::class);
+        return $this->belongsTo(BanksAccount::class, 'bank_account_id');
     }
-
-    public function recurrenceTypes(): BelongsTo
-    {
-        return $this->belongsTo(RecurrenceType::class);
-    }
-
-    public function categories(): BelongsTo
+    
+    /**
+     * @return BelongsTo<Category, $this>
+     */
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function subcategories(): BelongsTo
+    /**
+     * @return BelongsTo<Subcategory, $this>
+     */
+    public function subcategory(): BelongsTo
     {
         return $this->belongsTo(Subcategory::class);
+    }
+    
+    /**
+     * @return BelongsTo<RecurrenceType, $this>
+     */
+    public function recurrenceType(): BelongsTo
+    {
+        return $this->belongsTo(RecurrenceType::class, 'recurrence_types_id');
+    }
+    
+    /**
+     * @return BelongsTo<PaymentMethod, $this>
+     */
+    public function paymentMethod(): BelongsTo
+    {
+        return $this->belongsTo(PaymentMethod::class, 'payment_methods_id');
+    }
+
+    /**
+     * @return BelongsTo<Import, $this>
+     */
+    public function import(): BelongsTo
+    {
+        return $this->belongsTo(Import::class, 'imports_id');
     }
 }
