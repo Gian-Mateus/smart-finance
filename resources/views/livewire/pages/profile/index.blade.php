@@ -1,12 +1,7 @@
 <div>
-    <x-avatar  class="!w-22">
-        <x-slot:title class="text-3xl !font-bold pl-2">
-            {{ Auth::user()->name }}
-        </x-slot:title>
-     
-        <x-slot:subtitle class="grid gap-1 mt-2 pl-2 text-xs">
-            Meu nome de usuário
-        </x-slot:subtitle>
-     
-    </x-avatar>
+    <div class="flex gap-4 mt-4">
+        <img src="" alt="" class="rounded-full max-w-sm max-h-sm h-24 w-24 ">
+        <h1 class="font-bold text-2xl">Teste</h1>
+    </div>
+    <x-menu-separator />
 </div>
