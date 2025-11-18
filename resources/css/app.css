@@ -26,3 +26,13 @@
 @utility modal-box {
     @apply overflow-y-visible;
 }
+
+@utility drawer{
+    @apply flex-1;
+}
+
+main{
+    @apply flex-1 flex flex-col;
+}
+
+

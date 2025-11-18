@@ -16,7 +16,7 @@
 		@vite(['resources/css/app.css', 'resources/js/app.js'])
 	</head>
 
-	<body class="min-h-screen bg-base-200/50 font-sans antialiased dark:bg-base-200">
+	<body class="min-h-screen bg-base-200/50 font-sans antialiased dark:bg-base-200 flex flex-col">
 		{{-- NAVBAR mobile only --}}
 		<x-nav sticky class="lg:hidden">
 			<x-slot:brand>

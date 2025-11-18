@@ -1,10 +1,11 @@
-<div>
+<div class="flex flex-col h-full">
     <div class="flex gap-4 mt-4">
         <img src="https://picsum.photos/200/300" alt="" class="rounded-full max-w-sm max-h-sm h-24 w-24 ">
         <h1 class="font-bold text-2xl flex items-center">{{ $name }}</h1>
     </div>
     <x-menu-separator />
-    <div>
+
+    <div class="flex flex-col w-full h-full">
         <div class="flex flex-col">
             <div x-data="{ isEditing: false, originalName: @js($name) }">
                 <x-input
@@ -48,7 +49,12 @@
         </div>
 
         <div class="mt-10">
-            <x-button label="Redefinir senha" class="btn-primary" icon="o-key" wire:click="$set('modalResetPassword', true)"/>
+            <x-button
+                label="Redefinir senha"
+                class="btn-primary"
+                icon="o-key"
+                wire:click="$set('modalResetPassword', true)"
+            />
         </div>
 
         <div class="mt-10">
@@ -66,6 +72,10 @@
             </div>
         </div>
 
+        <div class="mt-auto">
+            <x-button label="Excluir conta" icon="o-trash" class="btn-error" />
+        </div>
+
         <x-modal
             wire:model="modalResetPassword"
             title="Redefinir senha"
@@ -78,13 +88,13 @@
                 checkPasswords() {
                     if (this.confirmPassword !== '') {
                         this.passwordsMatch = this.newPassword === this.confirmPassword;
-                        $set('newPassword', this.newPassword);
+                        $wire.set('newPassword', this.newPassword);
                     }
                 }
             }">
-                <x-password 
-                    label="Senha atual" 
-                    type="password" 
+                <x-password
+                    label="Senha atual"
+                    type="password"
                     only-password
                     wire:model="currentPassword"
                 />
@@ -106,8 +116,9 @@
                     ::class="{ 'input-error': !passwordsMatch && confirmPassword !== '' }"
                 />
 
-                <div 
-                    x-show="!passwordsMatch && confirmPassword !== ''" class="text-error text-sm mt-1"
+                <div
+                    x-show="!passwordsMatch && confirmPassword !== ''"
+                    class="text-error text-sm mt-1"
                 >
                     As senhas não coincidem
                 </div>
