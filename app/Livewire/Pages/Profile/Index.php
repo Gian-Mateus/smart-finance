@@ -15,10 +15,13 @@ class Index extends Component
 
     public $name;
     public $email;
+    public $avatar;
     public $accounts;
-    public $modalResetPassword = false;
-    public $currentPassword;
-    public $newPassword;
+
+    public function modalResetPassword($value)
+    {
+        $this->dispatch("modalResetPassword", $value);
+    }
 
     public function updateName()
     {
@@ -44,7 +47,7 @@ class Index extends Component
         $user = Auth::user();
         $user->password = Hash::make($this->newPassword);
         $user->save();
-        $this->modalResetPassword = false;
+        $this->modalResetPassword(false);
         $this->success("Senha redefinida com sucesso!");
     }
 
@@ -52,6 +55,7 @@ class Index extends Component
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->avatar = Auth::user()->avatar;
         $this->accounts = BanksAccount::where("user_id", Auth::id())
             ->with("bank")
             ->get();
