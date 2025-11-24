@@ -65,7 +65,7 @@
                                    alt="Avatar"
                                    @click.stop="handleDrop($event)"
                                >
-</div>
+                            </div>
 
                            <!-- Overlay circular -->
                            <div class="absolute -top-3 -left-3 -right-3 -bottom-3 rounded-[50%] pointer-events-none blur-sm bg-gray-500/10" @click.stop="handleDrop($event)"></div>
