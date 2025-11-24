@@ -8,7 +8,7 @@ use Livewire\Component;
 class ModalChangeAvatar extends Component
 {
 
-    public $openModal = false;
+    public $openModal = true;
     
     #[On('openModal')]
     public function openModal()

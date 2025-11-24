@@ -84,5 +84,6 @@
         </div>
 
         <livewire:pages.profile.partials.modal-reset-password />
+        <livewire:pages.profile.partials.modal-change-avatar />
     </div>
 </div>
