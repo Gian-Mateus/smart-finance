@@ -2,7 +2,7 @@
     <div class="flex gap-4 mt-4">
         <div class="relative">
             @if($avatar)
-            <img src="{{ $avatar }}" alt="" class="rounded-full max-w-sm max-h-sm h-24 w-24 ">
+            <img src="{{ public_path($avatar) }}" alt="" class="rounded-full max-w-sm max-h-sm h-24 w-24 ">
             @else
             <div class="rounded-full bg-base-300 h-24 w-24 flex items-center justify-center text-4xl font-bold text-base-content">
                 {{ strtoupper(substr($name, 0, 1)) }}
