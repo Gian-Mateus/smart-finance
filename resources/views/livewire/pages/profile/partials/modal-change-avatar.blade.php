@@ -23,7 +23,7 @@
                     'border-solid border-primary': hasFile,
                     'border-gray-300 hover:border-gray-400': !isDragActive && !hasFile
                 }"
-                class="relative border-2 border-dashed rounded-lg p-8 cursor-pointer transition-all duration-200 ease-in-out"
+                class="relative border-2 border-dashed rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out"
             >
                 <input
                     type="file"
@@ -53,40 +53,51 @@
 
                 <!-- Preview da imagem selecionada -->
                 <div x-show="hasFile" class="text-center" @click.stop="handleDrop($event)">
-                    <div class="overflow-hidden relative rounded-[50%] size-42 object-cover mx-auto">
-                           <div class="relative rounded-[50%] w-full h-full">
-                               <img
-                                   :src="previewUrl"
-                                   x-ref="image"
-                                   @mousedown="startDrag($event)"
-                                   @touchstart="startDrag($event)"
-                                   :style="`transform: translate(${position.x}px, ${position.y}px) scale(${scale})`"
-                                   class="active:cursor-grabbing absolute cursor-grab object-cover select-none w-full"
-                                   alt="Avatar"
-                                   @click.stop="handleDrop($event)"
-                               >
-                            </div>
+                    <!-- Imagem completa com overlay escuro -->
+                    <div class="relative w-full aspect-square overflow-hidden">
+                        <img
+                            :src="previewUrl"
+                            x-ref="image"
+                            @mousedown="startDrag($event)"
+                            @touchstart="startDrag($event)"
+                            :style="`transform: translate(${position.x}px, ${position.y}px) scale(${scale})`"
+                            class="active:cursor-grabbing absolute cursor-grab object-cover select-none w-full"
+                            alt="Avatar"
+                            @click.stop="handleDrop($event)"
+                        >
+                        
+                        <!-- Overlay escuro que cobre tudo menos o círculo central -->
+                        <div 
+                            class="absolute inset-0 pointer-events-none backdrop-blur-sm bg-black/60"
+                            @click.stop="handleDrop($event)"
+                        ></div>
+                        
+                        <!-- Borda circular vermelha -->
+                        <div 
+                            class="absolute right-0 top-0 left-0 bottom-0 border-4 border-red-500 rounded-[50%] pointer-events-none"
+                            @click.stop="handleDrop($event)"
+                        ></div>
+                    </div>
 
-                           <!-- Overlay circular -->
-                           <div class="absolute -top-3 -left-3 -right-3 -bottom-3 rounded-[50%] pointer-events-none blur-sm bg-gray-500/10" @click.stop="handleDrop($event)"></div>
-                       </div>
+                    <!-- Controles -->
+                    <div>
+                        <label>Zoom:</label>
+                        <x-range
+                            class="range-primary range-xs"
+                            x-model="scale"
+                            min="0.5"
+                            max="3"
+                            step="0.1"
+                            @input="updatePreview()"
+                            @click.stop="handleDrop($event)"
+                        />
+                    </div>
 
-                       <!-- Controles -->
-                       <div>
-                            <label>Zoom:</label>
-                            <x-range
-                                x-model="scale"
-                                min="0.5"
-                                max="3"
-                                step="0.1"
-                                @input="updatePreview()"
-                                @click.stop="handleDrop($event)"
-                            />
-                       </div>
                     <div class="space-y-1">
                         <p class="text-sm font-mediu" x-text="fileName"></p>
                         <p class="text-xs text-gray-500" x-text="fileSize"></p>
                     </div>
+
                 </div>
             </div>
         </div>
