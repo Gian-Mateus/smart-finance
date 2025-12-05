@@ -59,7 +59,8 @@
                             :style="`transform: translate(${position.x}px, ${position.y}px) scale(${scale})`"
                             class="active:cursor-grabbing absolute cursor-grab object-cover select-none w-full"
                             alt="Avatar"
-                            @click.stop="handleDrop($event)">
+                            @click.stop="handleDrop($event)"
+                        >
 
                         <!-- Overlay com blur escuro apenas fora do círculo -->
                         <svg class="absolute inset-0 w-full h-full pointer-events-none" @click.stop="handleDrop($event)">
@@ -109,7 +110,7 @@
         </div>
 
         <!-- Botões de ação -->
-        <div class="flex justify-end space-x-3 pt-4">
+        <x-slot:actions>
             <x-button
                 @click.stop="removeFile()"
                 type="button"
@@ -133,6 +134,11 @@
                 class="btn"
                 label="Confirmar"
                 @click="cropAvatar()" />
+        </x-slot:actions>
+        
+        {{-- Preview do Avatar --}}
+        <div x-ref="previewAvatar">
+            
         </div>
     </div>
 </x-modal>
@@ -290,10 +296,6 @@
                 ctx.arc(outputSize / 2, outputSize / 2, outputSize / 2, 0, 2 * Math.PI);
                 ctx.clip();
 
-                // Preencher fundo branco
-                ctx.fillStyle = '#FFFFFF';
-                ctx.fillRect(0, 0, outputSize, outputSize);
-
                 // Obter dimensões do container
                 const containerRect = container.getBoundingClientRect();
                 const containerWidth = containerRect.width;
@@ -316,93 +318,7 @@
                 const containerAspect = containerWidth / containerHeight;
                 const imageAspect = imgNaturalWidth / imgNaturalHeight;
 
-                let renderedWidth, renderedHeight;
-                let offsetX = 0,
-                    offsetY = 0;
-
-                // object-cover: a imagem preenche o container mantendo proporção
-                if (imageAspect > containerAspect) {
-                    // Imagem mais larga - altura preenche, largura é cortada
-                    renderedHeight = containerHeight;
-                    renderedWidth = imgNaturalWidth * (containerHeight / imgNaturalHeight);
-                    offsetX = (containerWidth - renderedWidth) / 2;
-                } else {
-                    // Imagem mais alta - largura preenche, altura é cortada
-                    renderedWidth = containerWidth;
-                    renderedHeight = imgNaturalHeight * (containerWidth / imgNaturalWidth);
-                    offsetY = (containerHeight - renderedHeight) / 2;
-                }
-
-                // Agora calcular a área do círculo em relação à imagem original
-                // Considerando transformações (translate e scale)
-
-                // Posição do círculo em relação ao container
-                const circleLeft = centerX - circleRadius;
-                const circleTop = centerY - circleRadius;
-
-                // Converter para posição na imagem renderizada (antes das transformações)
-                const imgPosX = circleLeft - offsetX;
-                const imgPosY = circleTop - offsetY;
-
-                // Aplicar transformações inversas (scale e translate)
-                // A imagem está com transform: translate(position.x, position.y) scale(scale)
-                const scaledImgPosX = (imgPosX - this.position.x) / this.scale;
-                const scaledImgPosY = (imgPosY - this.position.y) / this.scale;
-                const scaledDiameter = circleDiameter / this.scale;
-
-                // Converter para coordenadas da imagem original
-                const scaleToOriginal = imgNaturalWidth / renderedWidth;
-                const sourceX = scaledImgPosX * scaleToOriginal;
-                const sourceY = scaledImgPosY * scaleToOriginal;
-                const sourceSize = scaledDiameter * scaleToOriginal;
-
-                // Criar nova imagem
-                const image = new Image();
-                image.onload = () => {
-                    // Desenhar no canvas
-                    ctx.drawImage(
-                        image,
-                        sourceX,
-                        sourceY,
-                        sourceSize,
-                        sourceSize,
-                        0,
-                        0,
-                        outputSize,
-                        outputSize
-                    );
-
-                    // Converter para blob
-                    canvas.toBlob((blob) => {
-                        const file = new File([blob], 'avatar.jpg', {
-                            type: 'image/jpeg'
-                        });
-
-                        // Enviar para Livewire
-                        this.$wire.upload('avatar', file, (uploadedFilename) => {
-                            this.$wire.openModal = false;
-                        }, (error) => {
-                            this.errorMessage = 'Erro ao fazer upload do avatar.';
-                            console.error('Erro:', error);
-                        });
-                    }, 'image/jpeg', 0.95);
-                };
-
-                image.src = this.previewUrl;
             },
-
-            showResult(dataUrl) {
-                // Criar preview do resultado
-                const result = document.createElement('img');
-                result.src = dataUrl;
-                result.style.width = '100px';
-                result.style.height = '100px';
-                result.style.borderRadius = '50%';
-                result.style.margin = '10px';
-                result.style.border = '2px solid #10b981';
-
-                document.body.appendChild(result);
-            }
         }
     }
 </script>
