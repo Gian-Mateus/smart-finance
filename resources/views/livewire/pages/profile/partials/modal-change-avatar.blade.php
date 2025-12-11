@@ -14,11 +14,11 @@
 
             handleDrop(event) {
                 this.isDragActive = false;
-                
+
                 // Segurança: event.dataTransfer pode ser undefined (p.ex. se chamado por click)
                 const dt = event && (event.dataTransfer || event.clipboardData);
                 if (!dt) return;
-            
+
                 const files = dt.files || [];
 
                 if (files.length > 0) {
@@ -60,6 +60,7 @@
                 reader.onload = (e) => {
                     this.previewUrl = e.target.result;
                     this.hasFile = true;
+                    this.$nextTick(() => this.cropAvatar());
                 };
                 reader.readAsDataURL(file);
             },
@@ -131,9 +132,9 @@
             },
 
             updatePreview() {
-                // Atualização automática via Alpine.js binding
+                this.$nextTick(() => this.cropAvatar());
             },
-            
+
             init(){
                 document.addEventListener('mousemove', (e) => this.drag(e));
                 document.addEventListener('mouseup', () => this.endDrag());
@@ -148,7 +149,7 @@
                 // Criar canvas
                 const canvas = this.$refs.previewAvatar;
                 let context = canvas.getContext('2d');
-                
+
                 let imgPreview = new Image();
                 imgPreview.onload = () => {
                     // Definir dimensões reais do canvas
@@ -156,39 +157,67 @@
                     canvas.height = container.clientHeight;
                     canvas.style.width = container.clientWidth + 'px';
                     canvas.style.height = container.clientHeight + 'px';
-                    
+
                     // Calcular offset entre container e imagem na tela
                     const containerRect = container.getBoundingClientRect();
                     const imgRect = img.getBoundingClientRect();
                     const offsetX = containerRect.left - imgRect.left;
                     const offsetY = containerRect.top - imgRect.top;
-                    
+
                     // Converter para coordenadas da imagem natural
                     const scaleX = imgPreview.naturalWidth / imgRect.width;
                     const scaleY = imgPreview.naturalHeight / imgRect.height;
-                    
+
                     const sx = Math.max(0, offsetX * scaleX);
                     const sy = Math.max(0, offsetY * scaleY);
                     const sWidth = container.clientWidth * scaleX;
                     const sHeight = container.clientHeight * scaleY;
-                    
+
                     // Criar clipping path circular (mesmo tamanho do SVG: r=40%)
                     const centerX = canvas.width / 2;
                     const centerY = canvas.height / 2;
                     const radius = Math.min(canvas.width, canvas.height) * 0.4; // 40% como no SVG
-                    
+
                     context.save();
                     context.beginPath();
                     context.arc(centerX, centerY, radius, 0, Math.PI * 2);
                     context.clip();
-                    
+
                     context.drawImage(
                         imgPreview,
                         sx, sy, sWidth, sHeight,  // source
                         0, 0, canvas.width, canvas.height  // destination
                     );
+
+                    context.restore();
                 };
                 imgPreview.src = this.previewUrl;
+            },
+
+            saveAvatar() {
+                const canvas = this.$refs.previewAvatar;
+
+                if (!canvas) {
+                    this.errorMessage = 'Erro: Canvas não encontrado';
+                    return;
+                }
+
+                canvas.toBlob((blob) => {
+                    if (!blob) {
+                        this.errorMessage = 'Erro ao processar imagem';
+                        return;
+                    }
+
+                    const file = new File([blob], 'avatar.jpg', { type: 'image/jpeg' });
+
+                    // Upload via Livewire
+                    this.$wire.uploadMultiple('avatar', [file], () => {
+                        // Após upload, chamar método para salvar
+                        this.$wire.call('saveProcessedAvatar');
+                    }, (error) => {
+                        this.errorMessage = 'Erro no upload: ' + error;
+                    });
+                }, 'image/jpeg', 0.9);
             },
             log(){
                 console.log($refs.containerAvatar.getBoundingClientRect());
@@ -325,14 +354,14 @@
                 }"
                 class="btn"
                 label="Confirmar"
-                @click="" />
+                @click="saveAvatar()" />
         </div>
-        
+
         {{-- Preview do Avatar --}}
-        <canvas 
-            x-ref="previewAvatar" 
+        <canvas
+            x-ref="previewAvatar"
         >
-            
+
         </canvas>
     </div>
 </x-modal>

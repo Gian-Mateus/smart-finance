@@ -2,14 +2,14 @@
     <div class="flex gap-4 mt-4">
         <div class="relative">
             @if($avatar)
-            <img src="{{ public_path($avatar) }}" alt="" class="rounded-full max-w-sm max-h-sm h-24 w-24 ">
+            <img src="{{ asset('storage/' . $avatar) }}" alt="" class="rounded-full max-w-sm max-h-sm h-24 w-24 ">
             @else
             <div class="rounded-full bg-base-300 h-24 w-24 flex items-center justify-center text-4xl font-bold text-base-content">
                 {{ strtoupper(substr($name, 0, 1)) }}
             </div>
             @endif
             <x-button
-                icon="o-pencil" 
+                icon="o-pencil"
                 class="btn-ghost rounded-full p-2 absolute -top-2 -right-4"
                 wire:click="$dispatch('openModal')"
             />
