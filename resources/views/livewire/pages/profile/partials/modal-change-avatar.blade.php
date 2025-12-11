@@ -3,149 +3,7 @@
     title="Alterar avatar"
     class="backdrop-blur">
     <div
-        x-data="avatarUpload()"
-        class="flex flex-col w-full space-y-4">
-        <!-- Área de Upload -->
-        <div class="space-y-2">
-            <label class="block font-bold text-md">
-                Escolha uma imagem:
-            </label>
-
-            <div
-                @dragover.prevent="isDragActive = true"
-                @dragleave.prevent="isDragActive = false"
-                @drop.prevent="handleDrop($event)"
-                @click="$refs.fileInput.click()"
-                :class="{
-                    'border-base-content bg-neutral-content': isDragActive,
-                    'border-solid border-primary': hasFile,
-                    'border-gray-300 hover:border-gray-400': !isDragActive && !hasFile
-                }"
-                class="relative border-2 border-dashed rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out">
-                <input
-                    type="file"
-                    x-ref="fileInput"
-                    @change="handleFileSelect($event)"
-                    accept="image/*"
-                    class="hidden">
-
-                <!-- Ícone e texto quando não há arquivo -->
-                <div x-show="!hasFile" class="text-center">
-                    <x-icon name="o-cloud-arrow-up" class="w-18 h-18" />
-
-                    <div class="space-y-2">
-                        <p class="text-lg font-medium">
-                            <span x-show="isDragActive">Solte a imagem aqui</span>
-                            <span x-show="!isDragActive">Clique para selecionar</span>
-                        </p>
-                        <p class="text-sm text-gray-500">
-                            ou arraste e solte uma imagem
-                        </p>
-                        <p class="text-xs text-gray-400">
-                            PNG, JPG até 5MB
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Preview da imagem selecionada -->
-                <div x-show="hasFile" class="text-center" @click.stop="handleDrop($event)">
-                    <!-- Imagem completa com overlay escuro -->
-                    <div class="relative w-full aspect-square overflow-hidden">
-                        <img
-                            :src="previewUrl"
-                            x-ref="image"
-                            @mousedown="startDrag($event)"
-                            @touchstart="startDrag($event)"
-                            :style="`transform: translate(${position.x}px, ${position.y}px) scale(${scale})`"
-                            class="active:cursor-grabbing absolute cursor-grab object-cover select-none w-full"
-                            alt="Avatar"
-                            @click.stop="handleDrop($event)"
-                        >
-
-                        <!-- Overlay com blur escuro apenas fora do círculo -->
-                        <svg class="absolute inset-0 w-full h-full pointer-events-none" @click.stop="handleDrop($event)">
-                            <defs>
-                                <filter id="blur-filter">
-                                    <feGaussianBlur stdDeviation="4" />
-                                </filter>
-                                <mask id="circle-mask">
-                                    <rect width="100%" height="100%" fill="white" />
-                                    <circle cx="50%" cy="50%" r="40%" fill="black" />
-                                </mask>
-                            </defs>
-                            <rect width="100%" height="100%" fill="rgba(0, 0, 0, 0.7)" filter="url(#blur-filter)" mask="url(#circle-mask)" />
-
-                            <!-- Borda circular -->
-                            <circle cx="50%" cy="50%" r="40%" fill="none" stroke="currentColor" stroke-width="4" class="text-neutral-content" />
-                        </svg>
-                    </div>
-
-                    <!-- Controles -->
-                    <div>
-                        <label>Zoom:</label>
-                        <x-range
-                            class="range-primary range-xs"
-                            x-model="scale"
-                            min="0.5"
-                            max="3"
-                            step="0.1"
-                            @input="updatePreview()"
-                            @click.stop="handleDrop($event)" />
-                    </div>
-
-                    <div class="space-y-1">
-                        <p class="text-sm font-mediu" x-text="fileName"></p>
-                        <p class="text-xs text-gray-500" x-text="fileSize"></p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Mensagem de erro -->
-        <div x-show="errorMessage">
-            <x-alert class="alert-error" icon="o-exclamation-triangle">
-                <p x-text="errorMessage"></p>
-            </x-alert>
-        </div>
-
-        <!-- Botões de ação -->
-        <x-slot:actions>
-            <x-button
-                @click.stop="removeFile()"
-                type="button"
-                label="Remover"
-                icon="o-trash"
-                class="btn btn-error"
-                x-show="hasFile" />
-
-            <x-button
-                type="button"
-                @click="$wire.openModal = false"
-                class="btn btn-secondary"
-                label="Cancelar" />
-
-            <x-button
-                type="button"
-                x-bind:disabled="!hasFile"
-                x-bind:class="{
-                    'cursor-not-allowed': !hasFile
-                }"
-                class="btn"
-                label="Confirmar"
-                @click="cropAvatar()" />
-        </x-slot:actions>
-        
-        {{-- Preview do Avatar --}}
-        <div x-ref="previewAvatar">
-            
-        </div>
-    </div>
-</x-modal>
-
-<script>
-    function avatarUpload() {
-        return {
+        x-data="{
             isDragActive: false,
             hasFile: false,
             previewUrl: '',
@@ -156,7 +14,12 @@
 
             handleDrop(event) {
                 this.isDragActive = false;
-                const files = event.dataTransfer.files;
+                
+                // Segurança: event.dataTransfer pode ser undefined (p.ex. se chamado por click)
+                const dt = event && (event.dataTransfer || event.clipboardData);
+                if (!dt) return;
+            
+                const files = dt.files || [];
 
                 if (files.length > 0) {
                     this.processFile(files[0]);
@@ -232,14 +95,6 @@
                 y: 0
             },
 
-            init() {
-                // Eventos globais para drag
-                document.addEventListener('mousemove', (e) => this.drag(e));
-                document.addEventListener('mouseup', () => this.endDrag());
-                document.addEventListener('touchmove', (e) => this.drag(e));
-                document.addEventListener('touchend', () => this.endDrag());
-            },
-
             startDrag(e) {
                 this.isDragging = true;
                 const clientX = e.clientX || e.touches[0].clientX;
@@ -272,53 +127,212 @@
 
             endDrag() {
                 this.isDragging = false;
+                this.$nextTick(() => this.cropAvatar());
             },
 
             updatePreview() {
                 // Atualização automática via Alpine.js binding
             },
+            
+            init(){
+                document.addEventListener('mousemove', (e) => this.drag(e));
+                document.addEventListener('mouseup', () => this.endDrag());
+                document.addEventListener('touchmove', (e) => this.drag(e));
+                document.addEventListener('touchend', () => this.endDrag());
+            },
 
             cropAvatar() {
                 const img = this.$refs.image;
-                const container = img.parentElement;
-
-                // Tamanho final do avatar
-                const outputSize = 400;
+                const container = this.$refs.containerAvatar;
 
                 // Criar canvas
-                const canvas = document.createElement('canvas');
-                canvas.width = outputSize;
-                canvas.height = outputSize;
-                const ctx = canvas.getContext('2d');
-
-                // Criar máscara circular
-                ctx.beginPath();
-                ctx.arc(outputSize / 2, outputSize / 2, outputSize / 2, 0, 2 * Math.PI);
-                ctx.clip();
-
-                // Obter dimensões do container
-                const containerRect = container.getBoundingClientRect();
-                const containerWidth = containerRect.width;
-                const containerHeight = containerRect.height;
-
-                // Raio do círculo (40%)
-                const circleRadius = containerWidth * 0.4;
-                const circleDiameter = circleRadius * 2;
-
-                // Centro do container
-                const centerX = containerWidth / 2;
-                const centerY = containerHeight / 2;
-
-                // Dimensões da imagem original
-                const imgNaturalWidth = img.naturalWidth;
-                const imgNaturalHeight = img.naturalHeight;
-
-                // Como a imagem tem object-cover e width: 100%, ela preenche o container
-                // Calcular proporção da imagem original para o container
-                const containerAspect = containerWidth / containerHeight;
-                const imageAspect = imgNaturalWidth / imgNaturalHeight;
-
+                const canvas = this.$refs.previewAvatar;
+                let context = canvas.getContext('2d');
+                
+                let imgPreview = new Image();
+                imgPreview.onload = () => {
+                    // Definir dimensões reais do canvas
+                    canvas.width = container.clientWidth;
+                    canvas.height = container.clientHeight;
+                    canvas.style.width = container.clientWidth + 'px';
+                    canvas.style.height = container.clientHeight + 'px';
+                    
+                    // Calcular offset entre container e imagem na tela
+                    const containerRect = container.getBoundingClientRect();
+                    const imgRect = img.getBoundingClientRect();
+                    const offsetX = containerRect.left - imgRect.left;
+                    const offsetY = containerRect.top - imgRect.top;
+                    
+                    // Converter para coordenadas da imagem natural
+                    const scaleX = imgPreview.naturalWidth / imgRect.width;
+                    const scaleY = imgPreview.naturalHeight / imgRect.height;
+                    
+                    const sx = Math.max(0, offsetX * scaleX);
+                    const sy = Math.max(0, offsetY * scaleY);
+                    const sWidth = container.clientWidth * scaleX;
+                    const sHeight = container.clientHeight * scaleY;
+                    
+                    // Criar clipping path circular (mesmo tamanho do SVG: r=40%)
+                    const centerX = canvas.width / 2;
+                    const centerY = canvas.height / 2;
+                    const radius = Math.min(canvas.width, canvas.height) * 0.4; // 40% como no SVG
+                    
+                    context.save();
+                    context.beginPath();
+                    context.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                    context.clip();
+                    
+                    context.drawImage(
+                        imgPreview,
+                        sx, sy, sWidth, sHeight,  // source
+                        0, 0, canvas.width, canvas.height  // destination
+                    );
+                };
+                imgPreview.src = this.previewUrl;
             },
-        }
-    }
-</script>
+            log(){
+                console.log($refs.containerAvatar.getBoundingClientRect());
+            }
+        }"
+        x-init="log()"
+        class="flex flex-col w-full space-y-4">
+
+        <!-- Área de Upload -->
+        <div class="space-y-2">
+            <label class="block font-bold text-md">
+                Escolha uma imagem:
+            </label>
+
+            <div
+                @dragover.prevent="isDragActive = true"
+                @dragleave.prevent="isDragActive = false"
+                @drop.prevent="handleDrop($event)"
+                @click="$refs.fileInput.click()"
+                :class="{
+                    'border-base-content bg-neutral-content': isDragActive,
+                    'border-solid border-primary': hasFile,
+                    'border-gray-300 hover:border-gray-400': !isDragActive && !hasFile
+                }"
+                class="relative border-2 border-dashed rounded-lg p-2 cursor-pointer transition-all duration-200 ease-in-out">
+                <input
+                    type="file"
+                    x-ref="fileInput"
+                    @change="handleFileSelect($event)"
+                    accept="image/*"
+                    class="hidden">
+
+                <!-- Ícone e texto quando não há arquivo -->
+                <div x-show="!hasFile" class="text-center">
+                    <x-icon name="o-cloud-arrow-up" class="w-18 h-18" />
+
+                    <div class="space-y-2">
+                        <p class="text-lg font-medium">
+                            <span x-show="isDragActive">Solte a imagem aqui</span>
+                            <span x-show="!isDragActive">Clique para selecionar</span>
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            ou arraste e solte uma imagem
+                        </p>
+                        <p class="text-xs text-gray-400">
+                            PNG, JPG até 5MB
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Preview da imagem selecionada -->
+                <div x-show="hasFile" class="text-center" @click.stop="handleDrop($event)">
+                    <!-- Imagem completa com overlay escuro -->
+                    <div class="relative w-full aspect-square overflow-hidden border-2 border-red-500" x-ref="containerAvatar">
+                        <img
+                            :src="previewUrl"
+                            x-ref="image"
+                            @mousedown="startDrag($event)"
+                            @touchstart="startDrag($event)"
+                            :style="`transform: translate(${position.x}px, ${position.y}px) scale(${scale})`"
+                            class="active:cursor-grabbing absolute cursor-grab object-cover select-none w-full"
+                            alt="Avatar"
+                            @click.stop="handleDrop($event)"
+                        >
+
+                        <!-- Overlay com blur escuro apenas fora do círculo -->
+                        <svg class="absolute inset-0 w-full h-full pointer-events-none" @click.stop="handleDrop($event)">
+                            <defs>
+                                <filter id="blur-filter">
+                                    <feGaussianBlur stdDeviation="4" />
+                                </filter>
+                                <mask id="circle-mask">
+                                    <rect width="100%" height="100%" fill="white" />
+                                    <circle cx="50%" cy="50%" r="40%" fill="black" />
+                                </mask>
+                            </defs>
+                            <rect width="100%" height="100%" fill="rgba(0, 0, 0, 0.7)" filter="url(#blur-filter)" mask="url(#circle-mask)" />
+
+                            <!-- Borda circular -->
+                            <circle cx="50%" cy="50%" r="40%" fill="none" stroke="currentColor" stroke-width="4" class="text-neutral-content" />
+                        </svg>
+                    </div>
+
+                    <!-- Controles -->
+                    <div>
+                        <label>Zoom:</label>
+                        <x-range
+                            class="range-primary range-xs"
+                            x-model="scale"
+                            min="0.5"
+                            max="3"
+                            step="0.1"
+                            @input="updatePreview()"
+                            @click.stop="handleDrop($event)" />
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-sm font-mediu" x-text="fileName"></p>
+                        <p class="text-xs text-gray-500" x-text="fileSize"></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensagem de erro -->
+        <div x-show="errorMessage">
+            <x-alert class="alert-error" icon="o-exclamation-triangle">
+                <p x-text="errorMessage"></p>
+            </x-alert>
+        </div>
+
+        <!-- Botões de ação -->
+        <div>
+            <x-button
+                @click.stop="removeFile()"
+                type="button"
+                label="Remover"
+                icon="o-trash"
+                class="btn btn-error"
+                x-show="hasFile" />
+
+            <x-button
+                type="button"
+                @click="$wire.openModal = false"
+                class="btn btn-secondary"
+                label="Cancelar" />
+
+            <x-button
+                type="button"
+                x-bind:disabled="!hasFile"
+                x-bind:class="{
+                    'cursor-not-allowed': !hasFile
+                }"
+                class="btn"
+                label="Confirmar"
+                @click="" />
+        </div>
+        
+        {{-- Preview do Avatar --}}
+        <canvas 
+            x-ref="previewAvatar" 
+        >
+            
+        </canvas>
+    </div>
+</x-modal>
