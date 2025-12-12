@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * Class RecurringTransaction
@@ -23,9 +24,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class RecurringTransaction extends Model
 {
-    protected $table = 'recurring_transactions';
+    protected $table = "recurring_transactions";
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = "id";
 
     public $timestamps = false;
 
@@ -35,13 +36,14 @@ class RecurringTransaction extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'id',
-        'name',
-        'user_id',
-        'bank_account_id',
-        'catorsub_type',
-        'catorsub_id',
-        'recurrence_id',
+        "id",
+        "name",
+        "user_id",
+        "bank_account_id",
+        "catorsub_type",
+        "catorsub_id",
+        "recurrence_id",
+        "transaction_id",
     ];
 
     /**
@@ -49,8 +51,7 @@ class RecurringTransaction extends Model
      *
      * @var array<string, mixed>
      */
-    protected $attributes = [
-    ];
+    protected $attributes = [];
 
     /**
      * @return array<string, string>
@@ -58,14 +59,30 @@ class RecurringTransaction extends Model
     protected function casts(): array
     {
         return [
-            'id' => 'integer',
-            'name' => 'string',
-            'user_id' => 'integer',
-            'bank_account_id' => 'integer',
-            'catorsub_type' => 'string',
-            'catorsub_id' => 'integer',
-            'recurrence_id' => 'integer',
+            "id" => "integer",
+            "name" => "string",
+            "user_id" => "integer",
+            "bank_account_id" => "integer",
+            "catorsub_type" => "string",
+            "catorsub_id" => "integer",
+            "recurrence_id" => "integer",
+            "transaction_id" => "integer",
         ];
+    }
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, "user_id");
+    }
+
+    /**
+     * @return BelongsTo<BanksAccount, $this>
+     */
+    public function bankAccount(): BelongsTo
+    {
+        return $this->belongsTo(BanksAccount::class, "bank_account_id");
     }
 
     /**
@@ -73,6 +90,22 @@ class RecurringTransaction extends Model
      */
     public function recurrence(): BelongsTo
     {
-        return $this->belongsTo(RecurrenceType::class, 'recurrence_id');
+        return $this->belongsTo(RecurrenceType::class, "recurrence_id");
+    }
+
+    /**
+     * @return MorphTo<Model, $this>
+     */
+    public function catorsub(): MorphTo
+    {
+        return $this->morphTo(__FUNCTION__, 'catorsub_type', 'catorsub_id');
+    }
+
+    /**
+     * @return BelongsTo<Transaction, $this>
+     */
+    public function transaction(): BelongsTo
+    {
+        return $this->belongsTo(Transaction::class, "transaction_id");
     }
 }

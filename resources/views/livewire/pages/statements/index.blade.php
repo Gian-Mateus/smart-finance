@@ -28,7 +28,20 @@
                         <x-select label="Ano" wire:model="year" :options="$this->years" @click.stop="" class="flex-1" />
                     </div>
 
-                    <x-button label="Filtrar" class="btn-primary col-span-2" wire:click="filter"/>
+                    <div class="col-span-2 flex gap-2">
+                        <x-button 
+                            label="Limpar"
+                            icon="o-x-circle"
+                            class="btn-secondary flex-1"
+                            wire:click="$set('range', 15); $wire.set('currentFilter', 'Últimos 15 dias')"
+                        />
+                        <x-button 
+                            label="Filtrar" 
+                            icon="o-funnel"
+                            class="btn-primary flex-1"
+                            wire:click="filter"
+                        />
+                    </div>
                 </div>
             </x-dropdown>
             <div class="flex items-center justify-center gap-1">

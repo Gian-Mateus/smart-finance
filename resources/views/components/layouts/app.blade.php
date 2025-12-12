@@ -55,7 +55,7 @@
 					<x-menu-item
 					    title="Trans. Recorrentes"
 						icon="o-clock"
-						link="{{ route('recurrences') }}"
+						link="{{ route('recurring-transactions') }}"
 					/>
 					<x-menu-item
 					    title="Importar arquivo"
