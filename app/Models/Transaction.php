@@ -108,7 +108,7 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     /**
      * @return BelongsTo<BanksAccount, $this>
      */
@@ -116,7 +116,7 @@ class Transaction extends Model
     {
         return $this->belongsTo(BanksAccount::class, 'bank_account_id');
     }
-    
+
     /**
      * @return BelongsTo<Category, $this>
      */
@@ -132,7 +132,7 @@ class Transaction extends Model
     {
         return $this->belongsTo(Subcategory::class);
     }
-    
+
     /**
      * @return BelongsTo<RecurrenceType, $this>
      */
@@ -140,7 +140,7 @@ class Transaction extends Model
     {
         return $this->belongsTo(RecurrenceType::class, 'recurrence_types_id');
     }
-    
+
     /**
      * @return BelongsTo<PaymentMethod, $this>
      */

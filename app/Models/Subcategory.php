@@ -6,8 +6,8 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -65,7 +65,6 @@ class Subcategory extends Model
         ];
     }
 
-
     protected static function boot()
     {
         parent::boot();
@@ -106,8 +105,8 @@ class Subcategory extends Model
     {
         return $this->hasMany(Transaction::class, 'subcategory_id');
     }
-    
-     /**
+
+    /**
      * @return MorphMany<RecurringTransaction, $this>
      */
     public function recurringTransactions(): MorphMany

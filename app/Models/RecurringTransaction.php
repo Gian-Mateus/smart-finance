@@ -24,9 +24,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class RecurringTransaction extends Model
 {
-    protected $table = "recurring_transactions";
+    protected $table = 'recurring_transactions';
 
-    protected $primaryKey = "id";
+    protected $primaryKey = 'id';
 
     public $timestamps = false;
 
@@ -36,14 +36,14 @@ class RecurringTransaction extends Model
      * @var list<string>
      */
     protected $fillable = [
-        "id",
-        "name",
-        "user_id",
-        "bank_account_id",
-        "catorsub_type",
-        "catorsub_id",
-        "recurrence_id",
-        "transaction_id",
+        'id',
+        'name',
+        'user_id',
+        'bank_account_id',
+        'catorsub_type',
+        'catorsub_id',
+        'recurrence_id',
+        'transaction_id',
     ];
 
     /**
@@ -59,22 +59,23 @@ class RecurringTransaction extends Model
     protected function casts(): array
     {
         return [
-            "id" => "integer",
-            "name" => "string",
-            "user_id" => "integer",
-            "bank_account_id" => "integer",
-            "catorsub_type" => "string",
-            "catorsub_id" => "integer",
-            "recurrence_id" => "integer",
-            "transaction_id" => "integer",
+            'id' => 'integer',
+            'name' => 'string',
+            'user_id' => 'integer',
+            'bank_account_id' => 'integer',
+            'catorsub_type' => 'string',
+            'catorsub_id' => 'integer',
+            'recurrence_id' => 'integer',
+            'transaction_id' => 'integer',
         ];
     }
+
     /**
      * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, "user_id");
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -82,7 +83,7 @@ class RecurringTransaction extends Model
      */
     public function bankAccount(): BelongsTo
     {
-        return $this->belongsTo(BanksAccount::class, "bank_account_id");
+        return $this->belongsTo(BanksAccount::class, 'bank_account_id');
     }
 
     /**
@@ -90,7 +91,7 @@ class RecurringTransaction extends Model
      */
     public function recurrence(): BelongsTo
     {
-        return $this->belongsTo(RecurrenceType::class, "recurrence_id");
+        return $this->belongsTo(RecurrenceType::class, 'recurrence_id');
     }
 
     /**
@@ -106,6 +107,6 @@ class RecurringTransaction extends Model
      */
     public function transaction(): BelongsTo
     {
-        return $this->belongsTo(Transaction::class, "transaction_id");
+        return $this->belongsTo(Transaction::class, 'transaction_id');
     }
 }

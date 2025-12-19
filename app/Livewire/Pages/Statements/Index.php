@@ -75,7 +75,7 @@ class Index extends Component
             'Maio',
             'Junho',
             'Julho',
-            'Agosto', 
+            'Agosto',
             'Setembro',
             'Outubro',
             'Novembro',
@@ -95,9 +95,9 @@ class Index extends Component
             $this->initialDate = Carbon::now()->subDays($this->range);
             $this->endDate = Carbon::now();
         }
-        
+
         // Fallback in case dates are not set
-        if (!$this->initialDate || !$this->endDate) {
+        if (! $this->initialDate || ! $this->endDate) {
             return [];
         }
 
@@ -116,27 +116,29 @@ class Index extends Component
 
     public function filter()
     {
-        //dd($this->dateRange); 
+        // dd($this->dateRange);
 
-        if (!empty($this->dateRange['start']) && !empty($this->dateRange['end'])) {
+        if (! empty($this->dateRange['start']) && ! empty($this->dateRange['end'])) {
             $this->initialDate = Carbon::createFromFormat('d/m/Y', $this->dateRange['start']);
             $this->endDate = Carbon::createFromFormat('d/m/Y', $this->dateRange['end']);
-            
-            $this->currentFilter = $this->initialDate->format('d/m/Y') . ' até ' . $this->endDate->format('d/m/Y');
+
+            $this->currentFilter = $this->initialDate->format('d/m/Y').' até '.$this->endDate->format('d/m/Y');
             $this->range = null;
             $this->reset('year', 'month');
             unset($this->transactions);
+
             return;
         }
 
         if ($this->year != null && $this->month != null) {
             $this->initialDate = Carbon::parse($this->year.'-'.$this->month + 1)->startOfMonth();
             $this->endDate = Carbon::parse($this->year.'-'.$this->month + 1)->endOfMonth();
-            $this->currentFilter = 'Mês de ' . $this->months[$this->month]['name'] . ' de ' . $this->year;
-            
+            $this->currentFilter = 'Mês de '.$this->months[$this->month]['name'].' de '.$this->year;
+
             $this->range = null;
             $this->reset('dateRange');
             unset($this->transactions);
+
             return;
         }
 

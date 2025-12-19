@@ -15,18 +15,18 @@ class Datepicker extends Component
     public $label;
 
     public $months = [
-        ["id" => "1", "name" => "Janeiro"],
-        ["id" => "2", "name" => "Fevereiro"],
-        ["id" => "3", "name" => "Março"],
-        ["id" => "4", "name" => "Abril"],
-        ["id" => "5", "name" => "Maio"],
-        ["id" => "6", "name" => "Junho"],
-        ["id" => "7", "name" => "Julho"],
-        ["id" => "8", "name" => "Agosto"],
-        ["id" => "9", "name" => "Setembro"],
-        ["id" => "10", "name" => "Outubro"],
-        ["id" => "11", "name" => "Novembro"],
-        ["id" => "12", "name" => "Dezembro"],
+        ['id' => '1', 'name' => 'Janeiro'],
+        ['id' => '2', 'name' => 'Fevereiro'],
+        ['id' => '3', 'name' => 'Março'],
+        ['id' => '4', 'name' => 'Abril'],
+        ['id' => '5', 'name' => 'Maio'],
+        ['id' => '6', 'name' => 'Junho'],
+        ['id' => '7', 'name' => 'Julho'],
+        ['id' => '8', 'name' => 'Agosto'],
+        ['id' => '9', 'name' => 'Setembro'],
+        ['id' => '10', 'name' => 'Outubro'],
+        ['id' => '11', 'name' => 'Novembro'],
+        ['id' => '12', 'name' => 'Dezembro'],
     ];
 
     public ?bool $range = null;
@@ -37,7 +37,7 @@ class Datepicker extends Component
     public $now;
 
     // Controla qual view está sendo mostrada: 'days', 'months', 'years'
-    public string $view = "days";
+    public string $view = 'days';
 
     // Range de anos para a view de anos (ex: 2020-2029)
     public int $yearRangeStart = 2020;
@@ -48,7 +48,7 @@ class Datepicker extends Component
         $month ??= Carbon::now()->month;
         $year ??= Carbon::now()->year;
 
-        $start = Carbon::parse($year . "-" . $month - 1)->startOfMonth();
+        $start = Carbon::parse($year.'-'.$month - 1)->startOfMonth();
         $end = Carbon::parse("{$year}-{$month}")->endOfMonth();
 
         return CarbonPeriod::create($start, $end);
@@ -57,8 +57,8 @@ class Datepicker extends Component
     public function setMonth($direc)
     {
         $this->now = match ($direc) {
-            "inc" => $this->now->copy()->addMonth(),
-            "dec" => $this->now->copy()->subMonth(),
+            'inc' => $this->now->copy()->addMonth(),
+            'dec' => $this->now->copy()->subMonth(),
             default => $this->now,
         };
     }
@@ -66,8 +66,8 @@ class Datepicker extends Component
     public function setYear($direc)
     {
         $this->now = match ($direc) {
-            "inc" => $this->now->copy()->addYear(),
-            "dec" => $this->now->copy()->subYear(),
+            'inc' => $this->now->copy()->addYear(),
+            'dec' => $this->now->copy()->subYear(),
             default => $this->now,
         };
     }
@@ -75,8 +75,8 @@ class Datepicker extends Component
     public function setYearRange($direc)
     {
         $this->yearRangeStart = match ($direc) {
-            "inc" => $this->yearRangeStart + 9,
-            "dec" => $this->yearRangeStart - 9,
+            'inc' => $this->yearRangeStart + 9,
+            'dec' => $this->yearRangeStart - 9,
             default => $this->yearRangeStart,
         };
     }
@@ -84,9 +84,9 @@ class Datepicker extends Component
     public function navigate($direction)
     {
         match ($this->view) {
-            "days" => $this->setMonth($direction),
-            "months" => $this->setYear($direction),
-            "years" => $this->setYearRange($direction),
+            'days' => $this->setMonth($direction),
+            'months' => $this->setYear($direction),
+            'years' => $this->setYearRange($direction),
             default => null,
         };
     }
@@ -99,13 +99,13 @@ class Datepicker extends Component
     public function selectMonth($month)
     {
         $this->now = $this->now->copy()->month($month);
-        $this->view = "days";
+        $this->view = 'days';
     }
 
     public function selectYear($year)
     {
         $this->now = $this->now->copy()->year($year);
-        $this->view = "months";
+        $this->view = 'months';
     }
 
     public function calendarDays($month = null, $year = null)
@@ -127,9 +127,9 @@ class Datepicker extends Component
             $prevMonthEndDay = $prevMonth->daysInMonth;
             for ($i = $startDayOfWeek - 1; $i >= 0; $i--) {
                 $days[] = [
-                    "date" => $prevMonth->copy()->day($prevMonthEndDay - $i),
-                    "current" => false,
-                    "isToday" => false,
+                    'date' => $prevMonth->copy()->day($prevMonthEndDay - $i),
+                    'current' => false,
+                    'isToday' => false,
                 ];
             }
         }
@@ -138,9 +138,9 @@ class Datepicker extends Component
         $currentDate = $startOfMonth->copy();
         while ($currentDate <= $endOfMonth) {
             $days[] = [
-                "date" => $currentDate->copy(),
-                "current" => true,
-                "isToday" => $currentDate->isToday(),
+                'date' => $currentDate->copy(),
+                'current' => true,
+                'isToday' => $currentDate->isToday(),
             ];
             $currentDate->addDay();
         }
@@ -151,9 +151,9 @@ class Datepicker extends Component
             $nextMonth = $startOfMonth->copy()->addMonth();
             for ($i = 1; $i <= $remaining; $i++) {
                 $days[] = [
-                    "date" => $nextMonth->copy()->day($i),
-                    "current" => false,
-                    "isToday" => false,
+                    'date' => $nextMonth->copy()->day($i),
+                    'current' => false,
+                    'isToday' => false,
                 ];
             }
         }
@@ -161,18 +161,18 @@ class Datepicker extends Component
         return $days;
     }
 
-    public function mount($label = "Data", $range = false)
+    public function mount($label = 'Data', $range = false)
     {
         $this->uuid = uniqid();
         $this->now = Carbon::now();
         $this->label = $label;
         $this->range = $range;
-        $this->view = "days";
+        $this->view = 'days';
         $this->yearRangeStart = floor($this->now->year / 9) * 9;
 
         // Inicializa a propriedade modelável com o tipo correto
         if ($this->range) {
-            if (!is_array($this->value)) {
+            if (! is_array($this->value)) {
                 $this->value = ['start' => null, 'end' => null];
             }
         } else {
@@ -184,6 +184,6 @@ class Datepicker extends Component
 
     public function render()
     {
-        return view("livewire.utils.datepicker");
+        return view('livewire.utils.datepicker');
     }
 }

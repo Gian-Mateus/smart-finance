@@ -17,10 +17,10 @@ class Index extends Component
     public $account;
 
     public $headers = [
-        ["key" => "date_format", "label" => "Data"],
-        ["key" => "description", "label" => "Descrição"],
-        ["key" => "type_format", "label" => "Tipo"],
-        ["key" => "value_format", "label" => "Valor"],
+        ['key' => 'date_format', 'label' => 'Data'],
+        ['key' => 'description', 'label' => 'Descrição'],
+        ['key' => 'type_format', 'label' => 'Tipo'],
+        ['key' => 'value_format', 'label' => 'Valor'],
     ];
 
     public $month;
@@ -29,20 +29,20 @@ class Index extends Component
 
     public $range = 15;
 
-    public ?array $dateRange = ["start" => null, "end" => null];
+    public ?array $dateRange = ['start' => null, 'end' => null];
 
-    public $configDatePicker = ["mode" => "range", "altFormat" => "d/m/Y"];
+    public $configDatePicker = ['mode' => 'range', 'altFormat' => 'd/m/Y'];
 
     public $initialDate;
 
     public $endDate;
 
-    public $currentFilter = "Últimos 15 dias";
+    public $currentFilter = 'Últimos 15 dias';
 
     #[Computed]
     public function accounts()
     {
-        $accounts = BanksAccount::where("user_id", Auth::id())->get();
+        $accounts = BanksAccount::where('user_id', Auth::id())->get();
 
         if (count($accounts) == 1) {
             $this->account = $accounts[0];
@@ -58,8 +58,8 @@ class Index extends Component
         $years = [];
         for ($i = 0; $i <= 10; $i++) {
             $years[$i] = [
-                "id" => $currentYear - $i,
-                "name" => $currentYear - $i,
+                'id' => $currentYear - $i,
+                'name' => $currentYear - $i,
             ];
         }
 
@@ -71,21 +71,21 @@ class Index extends Component
     {
         $months = [];
         $labels = [
-            "Janeiro",
-            "Fevereiro",
-            "Março",
-            "Abril",
-            "Maio",
-            "Junho",
-            "Julho",
-            "Agosto",
-            "Setembro",
-            "Outubro",
-            "Novembro",
-            "Dezembro",
+            'Janeiro',
+            'Fevereiro',
+            'Março',
+            'Abril',
+            'Maio',
+            'Junho',
+            'Julho',
+            'Agosto',
+            'Setembro',
+            'Outubro',
+            'Novembro',
+            'Dezembro',
         ];
         for ($i = 0; $i <= 11; $i++) {
-            $months[$i] = ["id" => $i, "name" => $labels[$i]];
+            $months[$i] = ['id' => $i, 'name' => $labels[$i]];
         }
 
         return $months;
@@ -100,23 +100,23 @@ class Index extends Component
         }
 
         // Fallback in case dates are not set
-        if (!$this->initialDate || !$this->endDate) {
+        if (! $this->initialDate || ! $this->endDate) {
             return [];
         }
 
-        return RecurringTransaction::where("user_id", Auth::id())
+        return RecurringTransaction::where('user_id', Auth::id())
             ->with([
-                "bank_account_id" => function ($query) {
-                    $query->whereBetween("date", [
+                'bank_account_id' => function ($query) {
+                    $query->whereBetween('date', [
                         $this->initialDate->startOfDay(),
                         $this->endDate->endOfDay(),
                     ]);
-                }
+                },
             ])
             ->get()
             ->map(function ($i) {
-                $i->date_format = $i->date->format("d/m/Y");
-                $i->type_format = $i->type == 1 ? "C" : "D";
+                $i->date_format = $i->date->format('d/m/Y');
+                $i->type_format = $i->type == 1 ? 'C' : 'D';
                 $i->value_format = $this->showBRL($i->value);
 
                 return $i;
@@ -125,47 +125,49 @@ class Index extends Component
 
     public function filter()
     {
-        //dd($this->dateRange);
+        // dd($this->dateRange);
 
         if (
-            !empty($this->dateRange["start"]) &&
-            !empty($this->dateRange["end"])
+            ! empty($this->dateRange['start']) &&
+            ! empty($this->dateRange['end'])
         ) {
             $this->initialDate = Carbon::createFromFormat(
-                "d/m/Y",
-                $this->dateRange["start"],
+                'd/m/Y',
+                $this->dateRange['start'],
             );
             $this->endDate = Carbon::createFromFormat(
-                "d/m/Y",
-                $this->dateRange["end"],
+                'd/m/Y',
+                $this->dateRange['end'],
             );
 
             $this->currentFilter =
-                $this->initialDate->format("d/m/Y") .
-                " até " .
-                $this->endDate->format("d/m/Y");
+                $this->initialDate->format('d/m/Y').
+                ' até '.
+                $this->endDate->format('d/m/Y');
             $this->range = null;
-            $this->reset("year", "month");
+            $this->reset('year', 'month');
             unset($this->transactions);
+
             return;
         }
 
         if ($this->year != null && $this->month != null) {
             $this->initialDate = Carbon::parse(
-                $this->year . "-" . $this->month + 1,
+                $this->year.'-'.$this->month + 1,
             )->startOfMonth();
             $this->endDate = Carbon::parse(
-                $this->year . "-" . $this->month + 1,
+                $this->year.'-'.$this->month + 1,
             )->endOfMonth();
             $this->currentFilter =
-                "Mês de " .
-                $this->months[$this->month]["name"] .
-                " de " .
+                'Mês de '.
+                $this->months[$this->month]['name'].
+                ' de '.
                 $this->year;
 
             $this->range = null;
-            $this->reset("dateRange");
+            $this->reset('dateRange');
             unset($this->transactions);
+
             return;
         }
 
@@ -180,6 +182,6 @@ class Index extends Component
 
     public function render()
     {
-        return view("livewire.pages.recurring-transactions.index");
+        return view('livewire.pages.recurring-transactions.index');
     }
 }

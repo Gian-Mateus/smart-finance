@@ -14,13 +14,16 @@ class Index extends Component
     use Toast;
 
     public $name;
+
     public $email;
+
     public $avatar;
+
     public $accounts;
 
     public function modalResetPassword($value)
     {
-        $this->dispatch("modalResetPassword", $value);
+        $this->dispatch('modalResetPassword', $value);
     }
 
     public function updateName()
@@ -34,11 +37,11 @@ class Index extends Component
     public function resetPassword()
     {
         $this->validate([
-            "currentPassword" => [
-                "required",
+            'currentPassword' => [
+                'required',
                 function ($attribute, $value, $fail) {
-                    if (!Hash::check($value, Auth::user()->password)) {
-                        $fail("A senha atual está incorreta.");
+                    if (! Hash::check($value, Auth::user()->password)) {
+                        $fail('A senha atual está incorreta.');
                     }
                 },
             ],
@@ -48,7 +51,7 @@ class Index extends Component
         $user->password = Hash::make($this->newPassword);
         $user->save();
         $this->modalResetPassword(false);
-        $this->success("Senha redefinida com sucesso!");
+        $this->success('Senha redefinida com sucesso!');
     }
 
     public function mount()
@@ -56,16 +59,13 @@ class Index extends Component
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
         $this->avatar = Auth::user()->avatar;
-        $this->accounts = BanksAccount::where("user_id", Auth::id())
-            ->with("bank")
+        $this->accounts = BanksAccount::where('user_id', Auth::id())
+            ->with('bank')
             ->get();
     }
 
-    /**
-     * @return View
-     */
     public function render(): View
     {
-        return \view("livewire.pages.profile.index");
+        return \view('livewire.pages.profile.index');
     }
 }
