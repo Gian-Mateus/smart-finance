@@ -22,7 +22,10 @@ class Login extends Component
         'password.required' => 'A senha é obrigatória',
     ];
 
-    public function login()
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function login(): \Illuminate\Http\RedirectResponse
     {
         $credentials = $this->validate();
 
@@ -33,9 +36,11 @@ class Login extends Component
         }
 
         $this->addError('email', 'Credenciais inválidas');
+
+        return redirect()->back();
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
         return view('livewire.auth.login')->layout('components.layouts.empty');
     }

@@ -33,8 +33,6 @@ class Index extends Component
 
     public ?array $dateRange = ["start" => null, "end" => null];
 
-    public $configDatePicker = ["mode" => "range", "altFormat" => "d/m/Y"];
-
     public $initialDate;
 
     public $endDate;
@@ -114,7 +112,7 @@ class Index extends Component
      * @return array|\Illuminate\Support\Collection
      */
     #[Computed]
-    public function transactions()
+    public function transactions(): array|\Illuminate\Support\Collection
     {
         if ($this->range != null) {
             $this->initialDate = Carbon::now()->subDays($this->range);
@@ -126,7 +124,8 @@ class Index extends Component
             return [];
         }
 
-        return RecurringTransaction::query()->where("user_id", Auth::id())
+        return RecurringTransaction::query()
+            ->where("user_id", Auth::id())
             ->with([
                 "bank_account_id" => function ($query) {
                     $query->whereBetween("date", [
@@ -137,6 +136,7 @@ class Index extends Component
             ])
             ->get()
             ->map(function ($i) {
+                /** @var \App\Models\RecurringTransaction $i */
                 $i->date_format = $i->date->format("d/m/Y");
                 $i->type_format = $i->type == 1 ? "C" : "D";
                 $i->value_format = $this->showBRL($i->value);
