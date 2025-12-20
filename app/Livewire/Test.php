@@ -6,7 +6,12 @@ use Livewire\Component;
 
 class Test extends Component
 {
-    public function render()
+    /**
+     * Render the component.
+     *
+     * @return string
+     */
+    public function render(): string
     {
         return <<<'HTML'
         <div>

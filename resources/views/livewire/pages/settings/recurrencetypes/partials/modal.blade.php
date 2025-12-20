@@ -50,7 +50,7 @@
 
         {{-- 3. Limites da Repetição (Quando?) --}}
         @if($form->type)
-            <x-datepicker label="Começa em" wire:model="form.start_date" icon="o-calendar" class="mb-4" />
+            <x-utils.date-picker label="Começa em" wire:model="form.start_date" icon="o-calendar" class="mb-4" />
 
             <x-select
                 label="Termina"
@@ -62,7 +62,7 @@
             />
 
             @if($form->end_condition == 'on_date')
-                <x-datepicker label="Em" wire:model="form.end_date" icon="o-calendar-days" class="mt-3" />
+                <x-utils.date-picker  label="Em" wire:model="form.end_date" icon="o-calendar-days" class="mt-3" />
             @endif
 
             @if($form->end_condition == 'after_occurrences')
