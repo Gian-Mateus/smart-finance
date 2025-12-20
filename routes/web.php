@@ -55,5 +55,5 @@ Route::middleware('auth')->group(function () {
     //     return $parser->parse("/wiki/extrato.ofx");
     // });
 
-    // Route::get('/date-picker', Datepicker::class);
+    Route::get('/test', App\Livewire\Test::class)->name('test');
 });
