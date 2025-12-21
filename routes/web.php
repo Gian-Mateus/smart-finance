@@ -6,6 +6,7 @@ use App\Livewire\Pages\Dashboard\Index as Dashboard;
 use App\Livewire\Pages\Imports\Index as Imports;
 use App\Livewire\Pages\Profile\Index as Profile;
 use App\Livewire\Pages\RecurringTransactions\Index as RecurringTransactions;
+use App\Livewire\Pages\RecurringTransactions\Partials\Add as AddRecurringTransaction;
 use App\Livewire\Pages\Settings\Banks\BankIndex;
 use App\Livewire\Pages\Settings\Budgets\BudgetsIndex;
 use App\Livewire\Pages\Settings\Categories\CategoriesIndex;
@@ -40,7 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/extratos', Statements::class)->name('statements');
     Route::get('/importações', Imports::class)->name('imports');
     Route::get('/transacoes-recorrentes', RecurringTransactions::class)->name('recurring-transactions');
-
+    Route::get('/transacoes-recorrentes/adicionar', AddRecurringTransaction::class)->name('recurring-transactions.add');
+    
     /** Route Profile */
     Route::get('/perfil', Profile::class)->name('profile');
 
