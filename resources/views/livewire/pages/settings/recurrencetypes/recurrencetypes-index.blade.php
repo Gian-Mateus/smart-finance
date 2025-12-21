@@ -1,5 +1,5 @@
 <div>
-    <x-header title="Transações recorrentes" subtitle="Aqui você define recorrências personalizadas para suas transações" separator/>
+    <x-header title="Recorrências" subtitle="Aqui você define recorrências personalizadas para suas transações" separator/>
     <x-button label="Nova Recorrência" icon="s-plus-small" class="btn-primary my-4" wire:click="newRecurrence" />
 
     <div class="container">
