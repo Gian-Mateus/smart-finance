@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/categorias-subcategorias', CategoriesIndex::class)->name('categories');
     Route::get('/bancos-contas', BankIndex::class)->name('banks');
     Route::get('/orcamentos', BudgetsIndex::class)->name('budgets');
-    Route::get('/recorrencias', RecurrencetypesIndex::class)->name('recurrences');
+    //Route::get('/recorrencias', RecurrencetypesIndex::class)->name('recurrences');
 
     // Route::get('/parser', function () {
     //     $parser = new App\OFXParser();

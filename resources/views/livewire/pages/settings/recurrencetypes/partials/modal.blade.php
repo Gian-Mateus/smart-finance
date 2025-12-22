@@ -2,7 +2,7 @@
     <x-form wire:submit="save">
 
         {{-- 1. Identificação (O quê?) - Campo sempre visível --}}
-        <x-input label="Nome" placeholder="Ex: Aluguel, Assinatura Spotify" wire:model="form.name" />
+        <x-input label="Nome" placeholder="Ex: Todo dia 10; 1 vez por semana; etc..." wire:model="form.name" />
         <hr class="my-4" />
 
         {{-- 2. Padrão da Repetição (Como?) - O Maestro --}}

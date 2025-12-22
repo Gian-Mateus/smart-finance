@@ -71,7 +71,7 @@
 						<x-menu-item title="Bancos/Contas" icon="c-building-library" link="{{ route('banks') }}" />
 						<x-menu-item title="Categorias/Subcategorias" icon="c-squares-plus" link="{{ route('categories') }}" />
 						<x-menu-item title="Orçamentos" icon="o-document-currency-dollar" link="{{ route('budgets') }}" />
-						<x-menu-item title="Recorrentes" icon="m-calendar" link="{{ route('recurrences') }}" />
+						{{-- <x-menu-item title="Recorrentes" icon="m-calendar" link="{{ route('recurrences') }}" /> --}}
 					</x-menu-sub>
                     <x-menu-item
                         title="Sair"

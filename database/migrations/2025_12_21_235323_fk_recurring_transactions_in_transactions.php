@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->foreignId('imports_id')
-                ->constrained('imports')
+            $table->foreignId('recurring_transactions_id')
+                ->nullable()
+                ->constrained('recurring_transactions')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
         });
@@ -25,8 +26,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->dropForeign(['imports_id']);
-            $table->dropColumn('imports_id');
+            $table->dropForeign(['recurring_transactions_id']);
+            $table->dropColumn('recurring_transactions_id');
         });
     }
 };
