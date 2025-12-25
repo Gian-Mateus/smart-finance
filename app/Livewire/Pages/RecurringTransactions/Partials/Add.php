@@ -2,15 +2,38 @@
 
 namespace App\Livewire\Pages\RecurringTransactions\Partials;
 
-use App\Models\RecurrenceType;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class Add extends Component
 {    
+    public $selectedType = 'monthly';
+    
     public function render()
     {
-        return view('livewire.pages.recurring-transactions.partials.add');
+        
+        $selectsTypes = [
+            ['id'=>'daily','label'=>'Diária'],
+            ['id'=>'weekly','label'=>'Semanal'],
+            ['id'=>'monthly','label'=>'Mensal'],
+            ['id'=>'yearly','label'=>'Anual'],
+            ['id'=>'custom','label'=>'Personalizado'],
+        ];
+        
+        $weekDays = [
+            ['id'=>'mon','label'=>'Segunda'],
+            ['id'=>'tue','label'=>'Terça'],
+            ['id'=>'wed','label'=>'Quarta'],
+            ['id'=>'thu','label'=>'Quinta'],
+            ['id'=>'fri','label'=>'Sexta'],
+            ['id'=>'sat','label'=>'Sábado'],
+            ['id'=>'sun','label'=>'Domingo'],
+        
+        ];
+        
+        return view('livewire.pages.recurring-transactions.partials.add',
+        [
+            'selectsTypes' => $selectsTypes,
+            'weekDays' => $weekDays,
+        ]);
     }
 }

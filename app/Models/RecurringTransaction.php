@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\RecurrenceJson;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -39,6 +40,7 @@ class RecurringTransaction extends Model
         'id',
         'name',
         'user_id',
+        'recurrence',
         'bank_account_id',
         'catorsub_type',
         'catorsub_id',
@@ -62,6 +64,7 @@ class RecurringTransaction extends Model
             'id' => 'integer',
             'name' => 'string',
             'user_id' => 'integer',
+            'recurrence' => RecurrenceJson::class,
             'bank_account_id' => 'integer',
             'catorsub_type' => 'string',
             'catorsub_id' => 'integer',
