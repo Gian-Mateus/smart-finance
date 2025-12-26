@@ -2,11 +2,31 @@
 
 namespace App\Livewire\Pages\RecurringTransactions\Partials;
 
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class Add extends Component
 {    
     public $selectedType = 'monthly';
+    
+    #[Computed]
+    public function daysInMonth($month = null)
+    {
+        if($month == null){
+            return $days = CarbonPeriod::create(
+                Carbon::now()->firstOfMonth(),
+                Carbon::now()->lastOfMonth()
+            );
+        }
+        
+        $days = CarbonPeriod::create(
+            Carbon::create(month: $month)->firstOfMonth(),
+            Carbon::create(month: $month)->lastOfMonth()
+        );
+        return $days;
+    }
     
     public function render()
     {
@@ -27,13 +47,18 @@ class Add extends Component
             ['id'=>'fri','label'=>'Sexta'],
             ['id'=>'sat','label'=>'Sábado'],
             ['id'=>'sun','label'=>'Domingo'],
+        ];
         
+        $optionsMonth = [
+            ['id'=>'fixedDay','label'=>'Dia fixo'],
+            ['id'=>'dayOfWeek','label'=>'Dia da semana'],
         ];
         
         return view('livewire.pages.recurring-transactions.partials.add',
         [
             'selectsTypes' => $selectsTypes,
             'weekDays' => $weekDays,
+            'optionsMonth' => $optionsMonth,
         ]);
     }
 }

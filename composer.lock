@@ -4156,16 +4156,16 @@
         },
         {
             "name": "robsontenorio/mary",
-            "version": "2.4.10",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/robsontenorio/mary.git",
-                "reference": "a2c6933a00b664184b3a47364d8569dcd676037d"
+                "reference": "3971e466b947fee5b270e8f8a2ec7449b2866fa3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/robsontenorio/mary/zipball/a2c6933a00b664184b3a47364d8569dcd676037d",
-                "reference": "a2c6933a00b664184b3a47364d8569dcd676037d",
+                "url": "https://api.github.com/repos/robsontenorio/mary/zipball/3971e466b947fee5b270e8f8a2ec7449b2866fa3",
+                "reference": "3971e466b947fee5b270e8f8a2ec7449b2866fa3",
                 "shasum": ""
             },
             "require": {
@@ -4231,7 +4231,7 @@
             ],
             "support": {
                 "issues": "https://github.com/robsontenorio/mary/issues",
-                "source": "https://github.com/robsontenorio/mary/tree/2.4.10"
+                "source": "https://github.com/robsontenorio/mary/tree/2.5.0"
             },
             "funding": [
                 {
@@ -4239,7 +4239,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-01T16:01:09+00:00"
+            "time": "2025-12-26T14:19:12+00:00"
         },
         {
             "name": "spatie/laravel-package-tools",
